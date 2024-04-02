@@ -4,14 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="793e324b-0506-48a5-8aba-2f4613ee5db3" name="Changes" comment="">
+    <list default="true" id="793e324b-0506-48a5-8aba-2f4613ee5db3" name="Changes" comment="cambio color background">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/VentanaPrueba.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/VentanaPrueba.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/VentanaPrueba.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/codebusters/smarttradefrontend/VentanaPrueba.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -23,9 +31,12 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2daHeIfKXfjgAkXA8e6hTj0gHM9" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -35,8 +46,12 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.HelloApplication.executor": "Run",
+    "Application.VentanaPrueba.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "65",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "139",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/javichr11/Desktop/SceneBuilder.lnk",
@@ -64,12 +79,46 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1710239366210</updated>
-      <workItem from="1710239367277" duration="424000" />
+      <workItem from="1710239367277" duration="1583000" />
+      <workItem from="1710268368046" duration="869000" />
+      <workItem from="1710269392104" duration="81000" />
+      <workItem from="1710317814200" duration="1798000" />
+      <workItem from="1710319627705" duration="5058000" />
+      <workItem from="1710400051741" duration="3888000" />
+      <workItem from="1710419542776" duration="541000" />
+      <workItem from="1710434528018" duration="1142000" />
+      <workItem from="1710497423198" duration="1345000" />
+      <workItem from="1710500792788" duration="1170000" />
+      <workItem from="1711102078423" duration="620000" />
+      <workItem from="1711107265860" duration="82000" />
     </task>
+    <task id="LOCAL-00001" summary="Creacion Ventana de prueba">
+      <option name="closed" value="true" />
+      <created>1710262941110</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710262941110</updated>
+    </task>
+    <task id="LOCAL-00002" summary="cambio color background">
+      <option name="closed" value="true" />
+      <created>1710266884798</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710266884798</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="creacion front" />
+    <MESSAGE value="Creacion Ventana de prueba" />
+    <MESSAGE value="cambio color background" />
+    <option name="LAST_COMMIT_MESSAGE" value="cambio color background" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
