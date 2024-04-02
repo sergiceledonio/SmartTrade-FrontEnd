@@ -67,6 +67,11 @@ public class InicioSesion extends JFrame{
                 loginButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 
+            @Override
+            public void mouseClicked(MouseEvent e){
+                logIn();
+            }
+
         });
 
 
@@ -83,14 +88,7 @@ public class InicioSesion extends JFrame{
         registrateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e){
-                RegistroUsuario registroUsuario = new RegistroUsuario();
-                JFrame registro = new JFrame("Smart Trade");
-                registro.setContentPane(registroUsuario.getPanel());
-                registro.pack();
-                registro.setVisible(true);
-
-                JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(registrateButton); // Obtener el marco actual
-                ventanaActual.dispose();
+                accessRegister();
             }
 
             @Override
@@ -121,6 +119,28 @@ public class InicioSesion extends JFrame{
 
     public JPanel getPanel(){
         return panelInicioSesion;
+    }
+    public void logIn(){
+        String email = userTF.getText();
+        String password = new String(passTF.getPassword());
+        /*
+        *
+        *
+        * COMPROBAR SI EL USUARIO EXISTE Y LA CONTRASEÑA ES CORRECTA
+        *
+        * AL COMPROBAR USAR EL MÉTODO accessRegister();
+        * */
+
+    }
+
+    public void accessRegister(){
+        RegistroUsuario registroUsuario = new RegistroUsuario();
+        JFrame registro = new JFrame("Smart Trade");
+        registro.setContentPane(registroUsuario.getPanel());
+        registro.pack();
+        registro.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(registrateButton); // Obtener el marco actual
+        ventanaActual.dispose();
     }
 
 

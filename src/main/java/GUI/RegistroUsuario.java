@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.CropImageFilter;
 
 public class RegistroUsuario extends JFrame{
     private JPanel panelRegistro;
@@ -92,6 +93,13 @@ public class RegistroUsuario extends JFrame{
                 crearCuentaButton.setBackground(new Color(198, 232, 251));
                 crearCuentaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
+
+            @Override
+            public void mouseClicked(MouseEvent e){
+                String[] datos = createUser();
+                /*CONECTAR CON ELEMENTOS DEL SERVICIO PARA CREAR UN USUARIO NUEVO*/
+                //nombreLabel.setText(String.join(" ", datos));
+            }
         });
 
         /*ATRASBUTTON*/
@@ -108,14 +116,7 @@ public class RegistroUsuario extends JFrame{
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                InicioSesion inicioSesion = new InicioSesion();
-                JFrame ventanaAtras = new JFrame("Smart Trade");
-                ventanaAtras.setContentPane(inicioSesion.getPanel());
-                ventanaAtras.pack();
-                ventanaAtras.setVisible(true);
-
-                JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton); // Obtener el marco actual
-                ventanaActual.dispose();
+                accessLogIn();
             }
         });
 
@@ -140,6 +141,19 @@ public class RegistroUsuario extends JFrame{
         return panelRegistro;
     }
 
+    public String[] createUser(){
+        String[] newUser = {nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(), ibanTF.getText(), cifTF.getText()};
+        return newUser;
+    }
+    public void accessLogIn(){
+        InicioSesion inicioSesion = new InicioSesion();
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(inicioSesion.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton); // Obtener el marco actual
+        ventanaActual.dispose();
+    }
 }
 
 
