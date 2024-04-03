@@ -82,7 +82,7 @@
                     <properties>
                       <font name="JetBrains Mono" size="14" style="0"/>
                       <foreground color="-16777216"/>
-                      <text value="Nombre y apellidos"/>
+                      <text value="Nombre y apellidos(*)"/>
                       <verticalAlignment value="0"/>
                     </properties>
                   </component>
@@ -93,7 +93,7 @@
                     <properties>
                       <font name="JetBrains Mono" size="14" style="0"/>
                       <foreground color="-16777216"/>
-                      <text value="Contraseña"/>
+                      <text value="Contraseña(*)"/>
                     </properties>
                   </component>
                   <component id="d1fe" class="javax.swing.JLabel">
@@ -103,7 +103,7 @@
                     <properties>
                       <font name="JetBrains Mono" size="14" style="0"/>
                       <foreground color="-16777216"/>
-                      <text value="DNI"/>
+                      <text value="DNI(*)"/>
                     </properties>
                   </component>
                   <component id="a76cc" class="javax.swing.JTextField" binding="emailTF">
@@ -124,7 +124,7 @@
                     <properties>
                       <font name="JetBrains Mono" size="14" style="0"/>
                       <foreground color="-16777216"/>
-                      <text value="Correo electrónico"/>
+                      <text value="Correo electrónico(*)"/>
                     </properties>
                   </component>
                   <component id="192d9" class="javax.swing.JLabel">
@@ -134,7 +134,7 @@
                     <properties>
                       <font name="JetBrains Mono" size="14" style="0"/>
                       <foreground color="-16777216"/>
-                      <text value="Repetir contraseña"/>
+                      <text value="Repetir contraseña(*)"/>
                     </properties>
                   </component>
                   <component id="79971" class="javax.swing.JTextField" binding="repetirContraseñaTF">
@@ -206,9 +206,9 @@
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
               </hspacer>
-              <component id="a4d86" class="javax.swing.JLabel">
+              <component id="a4d86" class="javax.swing.JLabel" binding="cifLabel">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font name="JetBrains Mono" size="14" style="0"/>
@@ -216,7 +216,7 @@
                   <text value="CIF"/>
                 </properties>
               </component>
-              <component id="ecbce" class="javax.swing.JLabel">
+              <component id="ecbce" class="javax.swing.JLabel" binding="ibanLabel">
                 <constraints>
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

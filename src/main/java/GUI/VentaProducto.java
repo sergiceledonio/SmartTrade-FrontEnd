@@ -116,8 +116,30 @@ public class VentaProducto {
             @Override
             public void keyTyped(KeyEvent e) {
                 int key = e.getKeyChar();
-                boolean numero = key >= 48 && key <= 57;
+                boolean numero = key >= 48 && key <= 57 || key == 46;
                 if(!numero){
+                    e.consume();
+                }
+            }
+        });
+
+        /*IMGBUTTON*/
+
+        addImgButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addImgButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            public void mouseExited(MouseEvent e) {
+                addImgButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        /*PRODUCTDESCRIPTION*/
+        productDescription.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(productDescription.getText().length() > 150){
                     e.consume();
                 }
             }

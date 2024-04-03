@@ -24,6 +24,8 @@ public class RegistroUsuario extends JFrame{
     private JButton crearCuentaButton;
     private JTextField repetirContraseñaTF;
     private JLabel atrasButton;
+    private JLabel cifLabel;
+    private JLabel ibanLabel;
     private JFrame frame;
 
     public RegistroUsuario(){
@@ -48,6 +50,8 @@ public class RegistroUsuario extends JFrame{
                     ibanTF.setEnabled(true);
                     cifTF.setBackground(new Color(255, 255, 255));
                     ibanTF.setBackground(new Color(255, 255, 255));
+                    cifLabel.setText("CIF(*)");
+                    ibanLabel.setText("IBAN(*)");
                 } else {
                     cifTF.setEnabled(false);
                     ibanTF.setEnabled(false);
@@ -55,6 +59,8 @@ public class RegistroUsuario extends JFrame{
                     ibanTF.setText("");
                     cifTF.setBackground(new Color(150, 150, 150));
                     ibanTF.setBackground(new Color(150, 150, 150));
+                    cifLabel.setText("CIF");
+                    ibanLabel.setText("IBAN");
                 }
             }
         });
@@ -184,17 +190,13 @@ public class RegistroUsuario extends JFrame{
         }
     }
     public boolean areAllTextFieldsFilled(Container container) {
-        Component[] components = container.getComponents();
+
         Boolean verified = true;
-        for (Component component : components) {
-            if (component instanceof JTextField) {
-                JTextField textField = (JTextField) component;
-                if (textField.getText().isEmpty()) {
-                    verified = false;
-                    break;
-                }
-            }
+
+        if((nombreTF.getText().isEmpty() || passTF.getText().isEmpty() || repetirContraseñaTF.getText().isEmpty() || dniTF.getText().isEmpty() || emailTF.getText().isEmpty())){
+            return false;
         }
+
         if (verified && vendedorRB.isSelected()) {
             if (cifTF.getText().isEmpty() || ibanTF.getText().isEmpty()) {
                 return false;
