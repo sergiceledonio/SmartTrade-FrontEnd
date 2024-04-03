@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistroUsuario extends JFrame{
     private JPanel panelRegistro;
@@ -97,6 +99,21 @@ public class RegistroUsuario extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e){
                 String[] datos = createUser();
+
+                if(areAllTextFieldsFilled(panelRegistro)) {
+                    if (isValidEmail(emailTF.getText())) {
+                        int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                        if (answer == JOptionPane.YES_OPTION) {
+
+                        } else {
+                            deleteFields();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 /*CONECTAR CON ELEMENTOS DEL SERVICIO PARA CREAR UN USUARIO NUEVO*/
                 //nombreLabel.setText(String.join(" ", datos));
             }
@@ -153,6 +170,47 @@ public class RegistroUsuario extends JFrame{
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton); // Obtener el marco actual
         ventanaActual.dispose();
+    }
+
+    public boolean isValidEmail(String email){
+        Pattern pat = null;
+        Matcher match = null;
+        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_\\+]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
+        match = pat.matcher(email);
+        if(match.find()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean areAllTextFieldsFilled(Container container) {
+        Component[] components = container.getComponents();
+        Boolean verified = true;
+        for (Component component : components) {
+            if (component instanceof JTextField) {
+                JTextField textField = (JTextField) component;
+                if (textField.getText().isEmpty()) {
+                    verified = false;
+                    break;
+                }
+            }
+        }
+        if (verified && vendedorRB.isSelected()) {
+            if (cifTF.getText().isEmpty() || ibanTF.getText().isEmpty()) {
+                return false;
+            }
+        }
+        return verified;
+    }
+
+    public void deleteFields(){
+            nombreTF.setText("");
+            passTF.setText("");
+            repetirContraseñaTF.setText("");
+            dniTF.setText("");
+            emailTF.setText("");
+            cifTF.setText("");
+            ibanTF.setText("");
     }
 }
 

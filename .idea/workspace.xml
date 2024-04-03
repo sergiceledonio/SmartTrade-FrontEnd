@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="793e324b-0506-48a5-8aba-2f4613ee5db3" name="Changes" comment="cambio color background">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/addImage.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +54,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "183",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "268",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "334",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/javichr11/IdeaProjects/SmartTrade-FrontEnd/src/main/resources",
@@ -109,7 +104,8 @@
       <workItem from="1710500792788" duration="1170000" />
       <workItem from="1711102078423" duration="620000" />
       <workItem from="1711107265860" duration="82000" />
-      <workItem from="1712077632250" duration="6621000" />
+      <workItem from="1712077632250" duration="6863000" />
+      <workItem from="1712135986385" duration="4639000" />
     </task>
     <task id="LOCAL-00001" summary="Creacion Ventana de prueba">
       <option name="closed" value="true" />

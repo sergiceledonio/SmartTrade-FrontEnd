@@ -133,6 +133,7 @@ public class InicioSesion extends JFrame{
 
     }
 
+
     public void accessRegister(){
         RegistroUsuario registroUsuario = new RegistroUsuario();
         JFrame registro = new JFrame("Smart Trade");
