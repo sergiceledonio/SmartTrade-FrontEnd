@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="793e324b-0506-48a5-8aba-2f4613ee5db3" name="Changes" comment="cambio color background">
+    <list default="true" id="793e324b-0506-48a5-8aba-2f4613ee5db3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +107,8 @@
       <workItem from="1712135986385" duration="4639000" />
       <workItem from="1712140662792" duration="42000" />
       <workItem from="1712160612906" duration="3111000" />
-      <workItem from="1712164317031" duration="357000" />
+      <workItem from="1712164317031" duration="1035000" />
+      <workItem from="1712225235531" duration="628000" />
     </task>
     <task id="LOCAL-00001" summary="Creacion Ventana de prueba">
       <option name="closed" value="true" />
