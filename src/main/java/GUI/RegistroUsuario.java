@@ -7,8 +7,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.*;
 
 public class RegistroUsuario extends JFrame{
     private JPanel panelRegistro;
@@ -104,13 +109,24 @@ public class RegistroUsuario extends JFrame{
 
             @Override
             public void mouseClicked(MouseEvent e){
-                String[] datos = createUser();
-
                 if(areAllTextFieldsFilled(panelRegistro)) {
                     if (isValidEmail(emailTF.getText())) {
                         int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
                         if (answer == JOptionPane.YES_OPTION) {
+                            String name = nombreTF.getText();
+                            String password = repetirContraseñaTF.getText();
+                            String dni = dniTF.getText();
+                            String email = emailTF.getText();
 
+                            sendCustomerToBack(name, password, dni, email);
+                                if(vendedorRB.isSelected()){
+                                    String iban = ibanTF.getText();
+                                    String cif = cifTF.getText();
+
+                                    sendSellerToBack(name, password, dni, email, iban, cif);
+
+                                }
+                            accessLogIn();
                         } else {
                             deleteFields();
                         }
@@ -164,10 +180,6 @@ public class RegistroUsuario extends JFrame{
         return panelRegistro;
     }
 
-    public String[] createUser(){
-        String[] newUser = {nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(), ibanTF.getText(), cifTF.getText()};
-        return newUser;
-    }
     public void accessLogIn(){
         InicioSesion inicioSesion = new InicioSesion();
         JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -204,7 +216,6 @@ public class RegistroUsuario extends JFrame{
         }
         return verified;
     }
-
     public void deleteFields(){
             nombreTF.setText("");
             passTF.setText("");
@@ -214,6 +225,62 @@ public class RegistroUsuario extends JFrame{
             cifTF.setText("");
             ibanTF.setText("");
     }
+
+    private void sendCustomerToBack(String name, String password, String dni, String email){
+        String url = "http://localhost:8080/User/registerClient";
+        HttpClient client = HttpClient.newHttpClient();
+
+        Map<String, String> userData = new HashMap<>();
+        userData.put("nombre", name);
+        userData.put("email", email);
+        userData.put("password", password);
+        userData.put("dni", dni);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(userData.toString()))
+                .build();
+
+        try{
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int status = response.statusCode();
+
+            System.out.println("Respuesta del servidor: " + status);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif){
+        String url = "http://localhost:8080/User/registerSeller";
+        HttpClient client = HttpClient.newHttpClient();
+
+        Map<String, String> userData = new HashMap<>();
+        userData.put("nombre", name);
+        userData.put("email", email);
+        userData.put("password", password);
+        userData.put("dni", dni);
+        userData.put("iban", iban);
+        userData.put("cif", cif);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(userData.toString()))
+                .build();
+
+        try{
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int status = response.statusCode();
+
+            System.out.println("Respuesta del servidor: " + status);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
