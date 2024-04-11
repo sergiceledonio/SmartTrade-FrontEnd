@@ -264,7 +264,7 @@ public class RegistroUsuario extends JFrame{
     }
 
     private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif){
-        String url = "http://localhost:8080/SmartTrade-BackEnd/User/registerSeller";
+        String url = "http://localhost:8080/User/registerSeller";
         HttpClient client = HttpClient.newHttpClient();
 
         Map<String, String> userData = new HashMap<>();
