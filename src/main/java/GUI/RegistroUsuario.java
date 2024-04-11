@@ -233,7 +233,7 @@ public class RegistroUsuario extends JFrame{
     }
 
     private void sendCustomerToBack(String name, String password, String dni, String email){
-        String url = "http://localhost:8080/SmartTrade-BackEnd/User/registerClient";
+        String url = "http://localhost:8080/User/Client";
         HttpClient client = HttpClient.newHttpClient();
 
         Map<String, String> userData = new HashMap<>();
@@ -264,7 +264,7 @@ public class RegistroUsuario extends JFrame{
     }
 
     private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif){
-        String url = "http://localhost:8080/User/registerSeller";
+        String url = "http://localhost:8080/User/Seller";
         HttpClient client = HttpClient.newHttpClient();
 
         Map<String, String> userData = new HashMap<>();
