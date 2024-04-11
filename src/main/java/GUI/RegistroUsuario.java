@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
+import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -111,24 +113,28 @@ public class RegistroUsuario extends JFrame{
             public void mouseClicked(MouseEvent e){
                 if(areAllTextFieldsFilled(panelRegistro)) {
                     if (isValidEmail(emailTF.getText())) {
-                        int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
-                        if (answer == JOptionPane.YES_OPTION) {
-                            String name = nombreTF.getText();
-                            String password = repetirContraseñaTF.getText();
-                            String dni = dniTF.getText();
-                            String email = emailTF.getText();
+                        if(passTF.getText().equals(repetirContraseñaTF.getText())) {
+                            int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                            if (answer == JOptionPane.YES_OPTION) {
+                                String name = nombreTF.getText();
+                                String password = repetirContraseñaTF.getText();
+                                String dni = dniTF.getText();
+                                String email = emailTF.getText();
 
-                            sendCustomerToBack(name, password, dni, email);
-                                if(vendedorRB.isSelected()){
+                                sendCustomerToBack(name, password, dni, email);
+                                if (vendedorRB.isSelected()) {
                                     String iban = ibanTF.getText();
                                     String cif = cifTF.getText();
 
                                     sendSellerToBack(name, password, dni, email, iban, cif);
 
                                 }
-                            accessLogIn();
-                        } else {
-                            deleteFields();
+                                accessLogIn();
+                            } else {
+                                deleteFields();
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
@@ -227,7 +233,7 @@ public class RegistroUsuario extends JFrame{
     }
 
     private void sendCustomerToBack(String name, String password, String dni, String email){
-        String url = "http://localhost:8080/User/registerClient";
+        String url = "http://localhost:8080/SmartTrade-BackEnd/User/registerClient";
         HttpClient client = HttpClient.newHttpClient();
 
         Map<String, String> userData = new HashMap<>();
@@ -245,16 +251,20 @@ public class RegistroUsuario extends JFrame{
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            System.out.println("Response status code: " + response.statusCode());
+            System.out.println("Response body: " + response.body());
             int status = response.statusCode();
 
             System.out.println("Respuesta del servidor: " + status);
-        }catch (Exception e){
+        }catch (ConnectException e){
+            e.printStackTrace();
+        }catch  (Exception e){
             e.printStackTrace();
         }
     }
 
     private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif){
-        String url = "http://localhost:8080/User/registerSeller";
+        String url = "http://localhost:8080/SmartTrade-BackEnd/User/registerSeller";
         HttpClient client = HttpClient.newHttpClient();
 
         Map<String, String> userData = new HashMap<>();
@@ -276,7 +286,9 @@ public class RegistroUsuario extends JFrame{
             int status = response.statusCode();
 
             System.out.println("Respuesta del servidor: " + status);
-        }catch (Exception e){
+        }catch (ConnectException e){
+            e.printStackTrace();
+        }catch  (Exception e){
             e.printStackTrace();
         }
     }
