@@ -17,6 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class RegistroUsuario extends JFrame{
     private JPanel panelRegistro;
     private JLabel logo;
@@ -112,32 +115,57 @@ public class RegistroUsuario extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e){
                 if(areAllTextFieldsFilled(panelRegistro)) {
-                    if (isValidEmail(emailTF.getText())) {
-                        if(passTF.getText().equals(repetirContraseñaTF.getText())) {
-                            int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
-                            if (answer == JOptionPane.YES_OPTION) {
+                    if (passTF.getText().equals(repetirContraseñaTF.getText())) {
+                        if(isValidDni(dniTF.getText())){
+                            if(isValidEmail(emailTF.getText())) {
+
                                 String name = nombreTF.getText();
                                 String password = repetirContraseñaTF.getText();
                                 String dni = dniTF.getText();
                                 String email = emailTF.getText();
 
-                                sendCustomerToBack(name, password, dni, email);
                                 if (vendedorRB.isSelected()) {
                                     String iban = ibanTF.getText();
                                     String cif = cifTF.getText();
+                                    if(isValidIban(iban)){
+                                        if(isValidCif(cif)){
+                                            try {
+                                                int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                                                if (answer == JOptionPane.YES_OPTION) {
+                                                    accessLogIn();
+                                                    sendSellerToBack(name, password, dni, email, iban, cif);
+                                                }
+                                            } catch (Exception er) {
+                                                er.printStackTrace();
+                                            }
+                                        }else{
+                                            JOptionPane.showMessageDialog(frame, "CIF con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
 
-                                    sendSellerToBack(name, password, dni, email, iban, cif);
-
+                                        }
+                                    }else{
+                                        JOptionPane.showMessageDialog(frame, "IBAN con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }else{
+                                    int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                                    if (answer == JOptionPane.YES_OPTION) {
+                                        try {
+                                            accessLogIn();
+                                            sendCustomerToBack(name, password, dni, email);
+                                        } catch (Exception er) {
+                                            er.printStackTrace();
+                                        }
+                                    } else {
+                                        deleteFields();
+                                    }
                                 }
-                                accessLogIn();
-                            } else {
-                                deleteFields();
+                            }else{
+                                JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         }else{
-                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "Dni con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }else{
                     JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error", JOptionPane.ERROR_MESSAGE);
@@ -192,7 +220,7 @@ public class RegistroUsuario extends JFrame{
         ventanaAtras.setContentPane(inicioSesion.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
-        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton); // Obtener el marco actual
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton);
         ventanaActual.dispose();
     }
 
@@ -201,11 +229,30 @@ public class RegistroUsuario extends JFrame{
         Matcher match = null;
         pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_\\+]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
         match = pat.matcher(email);
-        if(match.find()){
-            return true;
-        }else{
-            return false;
-        }
+        return match.find();
+    }
+
+    public boolean isValidIban(String iban){
+        Pattern pat = null;
+        Matcher match = null;
+        pat = Pattern.compile("^[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}$");
+        match = pat.matcher(iban);
+        return match.find();
+    }
+    public boolean isValidCif(String cif){
+        Pattern pat = null;
+        Matcher match = null;
+        pat = Pattern.compile("^[ABCDEFGHJNPQRSUVW]{1}[0-9]{7}[0-9A-J]$");
+        match = pat.matcher(cif);
+        return match.find();
+    }
+
+    public boolean isValidDni(String dni){
+        Pattern pat = null;
+        Matcher match = null;
+        pat = Pattern.compile("^[0-9]{8}[A-Za-z]$");
+        match = pat.matcher(dni);
+        return match.find();
     }
     public boolean areAllTextFieldsFilled(Container container) {
 
@@ -232,30 +279,27 @@ public class RegistroUsuario extends JFrame{
             ibanTF.setText("");
     }
 
-    private void sendCustomerToBack(String name, String password, String dni, String email){
+    private void sendCustomerToBack(String name, String password, String dni, String email) throws JsonProcessingException {
         String url = "http://localhost:8080/User/Client";
         HttpClient client = HttpClient.newHttpClient();
-
-        Map<String, String> userData = new HashMap<>();
-        userData.put("nombre", name);
-        userData.put("email", email);
-        userData.put("password", password);
-        userData.put("dni", dni);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(userData.toString()))
-                .build();
-
         try{
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            Map<String, String> userData = new HashMap<>();
+            userData.put("nombre", name);
+            userData.put("email", email);
+            userData.put("password", password);
+            userData.put("dni", dni);
+            String jsonBody = new ObjectMapper().writeValueAsString(userData);
 
-            System.out.println("Response status code: " + response.statusCode());
-            System.out.println("Response body: " + response.body());
-            int status = response.statusCode();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
 
-            System.out.println("Respuesta del servidor: " + status);
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println("Response status code: " + response.statusCode());
         }catch (ConnectException e){
             e.printStackTrace();
         }catch  (Exception e){
@@ -263,7 +307,7 @@ public class RegistroUsuario extends JFrame{
         }
     }
 
-    private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif){
+    private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif) throws JsonProcessingException {
         String url = "http://localhost:8080/User/Seller";
         HttpClient client = HttpClient.newHttpClient();
 
@@ -274,11 +318,12 @@ public class RegistroUsuario extends JFrame{
         userData.put("dni", dni);
         userData.put("iban", iban);
         userData.put("cif", cif);
+        String jsonBody = new ObjectMapper().writeValueAsString(userData);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(userData.toString()))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
 
         try{
