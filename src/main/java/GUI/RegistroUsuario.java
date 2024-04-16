@@ -36,6 +36,7 @@ public class RegistroUsuario extends JFrame{
     private JLabel atrasButton;
     private JLabel cifLabel;
     private JLabel ibanLabel;
+    private JLabel dniLabel;
     private JFrame frame;
 
     public RegistroUsuario(){
@@ -62,6 +63,10 @@ public class RegistroUsuario extends JFrame{
                     ibanTF.setBackground(new Color(255, 255, 255));
                     cifLabel.setText("CIF(*)");
                     ibanLabel.setText("IBAN(*)");
+                    dniTF.setText("");
+                    dniLabel.setText("DNI");
+                    dniTF.setEnabled(false);
+                    dniTF.setBackground(new Color(150, 150, 150));
                 } else {
                     cifTF.setEnabled(false);
                     ibanTF.setEnabled(false);
@@ -71,6 +76,10 @@ public class RegistroUsuario extends JFrame{
                     ibanTF.setBackground(new Color(150, 150, 150));
                     cifLabel.setText("CIF");
                     ibanLabel.setText("IBAN");
+                    dniLabel.setText("DNI(*)");
+                    dniTF.setText("");
+                    dniTF.setEnabled(true);
+                    dniTF.setBackground(new Color(255, 255, 255));
                 }
             }
         });
@@ -114,59 +123,51 @@ public class RegistroUsuario extends JFrame{
 
             @Override
             public void mouseClicked(MouseEvent e){
-                if(areAllTextFieldsFilled(panelRegistro)) {
-                    if (passTF.getText().equals(repetirContraseñaTF.getText())) {
-                        if(isValidDni(dniTF.getText())){
-                            if(isValidEmail(emailTF.getText())) {
-
-                                String name = nombreTF.getText();
-                                String password = repetirContraseñaTF.getText();
-                                String dni = dniTF.getText();
-                                String email = emailTF.getText();
-
-                                if (vendedorRB.isSelected()) {
-                                    String iban = ibanTF.getText();
-                                    String cif = cifTF.getText();
-                                    if(isValidIban(iban)){
-                                        if(isValidCif(cif)){
-                                            try {
-                                                int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
-                                                if (answer == JOptionPane.YES_OPTION) {
-                                                    accessLogIn();
-                                                    sendSellerToBack(name, password, dni, email, iban, cif);
-                                                }
-                                            } catch (Exception er) {
-                                                er.printStackTrace();
-                                            }
-                                        }else{
-                                            JOptionPane.showMessageDialog(frame, "CIF con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-
+                if(areAllTextFieldsFilled(panelRegistro)){
+                    if(vendedorRB.isSelected()){
+                        if(passTF.getText().equals(repetirContraseñaTF.getText())){
+                            if(isValidEmail(emailTF.getText())){
+                                if(isValidIban(ibanTF.getText())){
+                                    if(isValidCif(cifTF.getText())){
+                                        try {
+                                            System.out.println("Crear Vendedor");
+                                            sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText());
+                                        } catch (JsonProcessingException ex) {
+                                            throw new RuntimeException(ex);
                                         }
                                     }else{
-                                        JOptionPane.showMessageDialog(frame, "IBAN con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(frame, "CIF con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
                                     }
                                 }else{
-                                    int answer = JOptionPane.showConfirmDialog(frame, "Este es tu usuario: " + emailTF.getText() + " y esta tu contraseña: " + passTF.getText() + "\n correcto?", "Confirmación", JOptionPane.YES_NO_OPTION);
-                                    if (answer == JOptionPane.YES_OPTION) {
-                                        try {
-                                            accessLogIn();
-                                            sendCustomerToBack(name, password, dni, email);
-                                        } catch (Exception er) {
-                                            er.printStackTrace();
-                                        }
-                                    } else {
-                                        deleteFields();
-                                    }
+                                    JOptionPane.showMessageDialog(frame, "IBAN con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
                             }else{
                                 JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         }else{
-                            JOptionPane.showMessageDialog(frame, "Dni con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else if(!vendedorRB.isSelected()){
+                        if(passTF.getText().equals(repetirContraseñaTF.getText())){
+                            if(isValidDni(dniTF.getText())){
+                                if(isValidEmail(emailTF.getText())){
+                                    try {
+                                        System.out.println("Crear comprador");
+                                        sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText());
+                                    } catch (JsonProcessingException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
+                                }else{
+                                    JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }else{
+                                JOptionPane.showMessageDialog(frame, "Dni con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
+
                 }else{
                     JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -257,15 +258,11 @@ public class RegistroUsuario extends JFrame{
     public boolean areAllTextFieldsFilled(Container container) {
 
         Boolean verified = true;
-
-        if((nombreTF.getText().isEmpty() || passTF.getText().isEmpty() || repetirContraseñaTF.getText().isEmpty() || dniTF.getText().isEmpty() || emailTF.getText().isEmpty())){
+        if(!(vendedorRB.isSelected()) && (nombreTF.getText().isEmpty() || passTF.getText().isEmpty() || repetirContraseñaTF.getText().isEmpty() || dniTF.getText().isEmpty() || emailTF.getText().isEmpty())){
             return false;
         }
-
-        if (verified && vendedorRB.isSelected()) {
-            if (cifTF.getText().isEmpty() || ibanTF.getText().isEmpty()) {
-                return false;
-            }
+        if((verified && vendedorRB.isSelected()) && (cifTF.getText().isEmpty() || ibanTF.getText().isEmpty())){
+            return false;
         }
         return verified;
     }
@@ -284,8 +281,8 @@ public class RegistroUsuario extends JFrame{
         HttpClient client = HttpClient.newHttpClient();
         try{
             Map<String, String> userData = new HashMap<>();
-            userData.put("nombre", name);
             userData.put("email", email);
+            userData.put("name", name);
             userData.put("password", password);
             userData.put("dni", dni);
             String jsonBody = new ObjectMapper().writeValueAsString(userData);
@@ -307,7 +304,7 @@ public class RegistroUsuario extends JFrame{
         }
     }
 
-    private void sendSellerToBack(String name, String password, String dni, String email, String iban, String cif) throws JsonProcessingException {
+    private void sendSellerToBack(String name, String password, String email, String iban, String cif) throws JsonProcessingException {
         String url = "http://localhost:8080/User/Seller";
         HttpClient client = HttpClient.newHttpClient();
 
@@ -315,7 +312,6 @@ public class RegistroUsuario extends JFrame{
         userData.put("nombre", name);
         userData.put("email", email);
         userData.put("password", password);
-        userData.put("dni", dni);
         userData.put("iban", iban);
         userData.put("cif", cif);
         String jsonBody = new ObjectMapper().writeValueAsString(userData);

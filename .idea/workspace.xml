@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a430ec02-edca-4da3-987c-c966e40d2b58" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,35 +35,38 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2elrEJ3qBuKmlmlOTp8cw2Kj6D0" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.InfoProducto.executor&quot;: &quot;Run&quot;,
-    &quot;Application.InicioSesion.executor&quot;: &quot;Run&quot;,
-    &quot;Application.RegistroUsuario.executor&quot;: &quot;Run&quot;,
-    &quot;Application.VentaProducto.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;291&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/javichr11/IdeaProjects/SmartTrade-FrontEnd/src/main/resources/img&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CatalogoProductos.executor": "Run",
+    "Application.InfoProducto.executor": "Run",
+    "Application.InicioSesion.executor": "Run",
+    "Application.RegistroUsuario.executor": "Run",
+    "Application.VentaProducto.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "291",
+    "git-widget-placeholder": "main",
+    "jdk.selected.JAVA_MODULE": "21",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/javichr11/IdeaProjects/SmartTrade-FrontEnd/src/main/resources/img",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\javichr11\IdeaProjects\SmartTrade-FrontEnd\src\main\resources\img" />
@@ -93,6 +103,10 @@
       <workItem from="1712857465196" duration="3591000" />
       <workItem from="1712862151540" duration="1133000" />
       <workItem from="1712906852482" duration="5374000" />
+      <workItem from="1712912257185" duration="60000" />
+      <workItem from="1712914950331" duration="748000" />
+      <workItem from="1713198725176" duration="124000" />
+      <workItem from="1713252983763" duration="7628000" />
     </task>
     <servers />
   </component>

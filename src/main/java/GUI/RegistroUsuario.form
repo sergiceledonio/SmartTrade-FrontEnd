@@ -96,7 +96,7 @@
                       <text value="Contraseña(*)"/>
                     </properties>
                   </component>
-                  <component id="d1fe" class="javax.swing.JLabel">
+                  <component id="d1fe" class="javax.swing.JLabel" binding="dniLabel">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>

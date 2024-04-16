@@ -1,17 +1,11 @@
 package GUI;
 
-import javafx.scene.control.ComboBox;
-
 import javax.accessibility.Accessible;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.NumberFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -25,7 +19,7 @@ public class VentaProducto extends JFrame{
     private JPanel panelProductoVenta;
     private JPanel panelTitulo;
     private JLabel busquedaButton;
-    private JTextField textField1;
+    private JTextField searchTF;
     private JButton filtroButton;
     private JPanel panelProducto;
     private JLabel perfilButton;

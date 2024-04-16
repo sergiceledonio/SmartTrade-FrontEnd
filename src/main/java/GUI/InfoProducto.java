@@ -1,7 +1,5 @@
 package GUI;
 
-import kotlin.random.Random;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -11,18 +9,23 @@ import java.awt.event.ComponentEvent;
 public class InfoProducto extends JFrame{
     private JPanel panelTitulo;
     private JPanel infoProduct;
-    private JTextField textField1;
+    private JTextField searchTF;
     private JButton filtrosButton;
     private JPanel panelInfo;
     private JTextArea productDescription;
     private JButton buyButton;
     private JTable comments;
+    private JLabel logoButton;
     private JFrame frame;
 
     public InfoProducto(){
         panelInfo.setPreferredSize(new Dimension(800,600));
 
         /*BUYBUTTON*/
+
+        /*LOGOBUTTON*/
+
+
 
         /*COMMENTS*/
 
