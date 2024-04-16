@@ -53,17 +53,17 @@ public class InicioSesion extends JFrame{
         });
 
         /*LOGINBUTTON*/
-        loginButton.setBackground(new Color(198,232,251));
+        loginButton.setBackground(new Color(153,233,255));
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                loginButton.setBackground(new Color(153,233,255));
+                loginButton.setBackground(new Color(73,231,255));
                 loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                loginButton.setBackground(new Color(198,232,251));
+                loginButton.setBackground(new Color(153,232,251));
                 loginButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 

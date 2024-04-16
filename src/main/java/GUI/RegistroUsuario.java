@@ -111,13 +111,13 @@ public class RegistroUsuario extends JFrame{
         crearCuentaButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                crearCuentaButton.setBackground(new Color(153, 233, 255));
+                crearCuentaButton.setBackground(new Color(73, 231, 255));
                 crearCuentaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                crearCuentaButton.setBackground(new Color(198, 232, 251));
+                crearCuentaButton.setBackground(new Color(153, 233, 255));
                 crearCuentaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 

@@ -30,6 +30,7 @@ public class VentaProducto extends JFrame{
     private JTextArea productDescription;
     private JButton validateProductButton;
     private JLabel añade;
+    private JLabel logoButton;
     private JFrame frame;
 
     public VentaProducto(){
@@ -58,7 +59,7 @@ public class VentaProducto extends JFrame{
             @Override
             public void mouseEntered(MouseEvent e) {
                 filtroButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                filtroButton.setBackground(new Color(72,231,255));
+                filtroButton.setBackground(new Color(73,231,255));
             }
             public void mouseExited(MouseEvent e) {
                 filtroButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -71,7 +72,7 @@ public class VentaProducto extends JFrame{
             @Override
             public void mouseEntered(MouseEvent e) {
                 validateProductButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                validateProductButton.setBackground(new Color(72,231,255));
+                validateProductButton.setBackground(new Color(73,231,255));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -204,6 +205,24 @@ public class VentaProducto extends JFrame{
                 }
             }
         });
+
+        /*LOGOBUTTON*/
+        logoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                backMenu();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
     }
 
 
@@ -259,6 +278,20 @@ public class VentaProducto extends JFrame{
             JOptionPane.showMessageDialog(frame, "Categoria seleccionada no válida", "Error",JOptionPane.ERROR_MESSAGE);
         }
     return false;
+    }
+
+    public void backMenu(){
+        CatalogoProductos ventanaCatalog = new CatalogoProductos();
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+    }
+
+    public JPanel getPanel(){
+        return this.panelProductoVenta;
     }
 
 }
