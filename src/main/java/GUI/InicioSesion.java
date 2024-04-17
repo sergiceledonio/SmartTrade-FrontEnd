@@ -16,7 +16,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class InicioSesion extends JFrame{
@@ -157,52 +159,41 @@ public class InicioSesion extends JFrame{
     private void sendHTTPRequest(String email, String password){
         String url = "http://localhost:8080/User/Login";
         HttpClient client = HttpClient.newHttpClient();
-        ObjectMapper objectMapper = new ObjectMapper();
 
-        try{
+        try {
+            Map<String, String> userData = new HashMap<>();
+            userData.put("email", email);
+            userData.put("password", password);
 
-            ObjectNode requestBody = objectMapper.createObjectNode();
-            requestBody.put("email", email);
-            requestBody.put("password", password);
-
-            String requestBodyString = objectMapper.writeValueAsString(requestBody);
-
+            String jsonBody = new ObjectMapper().writeValueAsString(userData);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBodyString))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .thenAccept(this::checkUser)
-                    .join();
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            if(statusCode == 200){
+                System.out.println("Client created: " + statusCode);
 
-        }catch (JsonProcessingException e){
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+
+                String email_rec = jsonResponse.get("email").asText();
+                String name_rec = jsonResponse.get("name").asText();
+                boolean isSeller_rec = jsonResponse.get("isSeller").asBoolean();
+
+                goToCatalog(name_rec, password, email_rec,"", isSeller_rec);
+            }else{
+                System.out.println("Problem with client: "  + statusCode);
+            }
+        }catch(IOException | InterruptedException e){
+            System.out.println("Error al enviar la petición: " + e.getMessage());
             e.printStackTrace();
         }
     }
-    private void checkUser(String response) {
-        if (response != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                Object[] userData = objectMapper.readValue(response, Object[].class);
-
-                String email = (String) userData[0];
-                String password = (String) userData[1];
-                String name = (String) userData[2];
-                String dni = (String) userData[3];
-                Boolean isSeller = (Boolean) userData[4];
-
-                goToCatalog(email, password, name, dni, isSeller);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No se recibió respuesta del servidor", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
 
     public void goToCatalog(String nombre, String password, String email,String dni, Boolean isSeller){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(nombre, password, email, isSeller);

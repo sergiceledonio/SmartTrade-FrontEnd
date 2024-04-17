@@ -130,8 +130,8 @@ public class RegistroUsuario extends JFrame{
                                 if(isValidIban(ibanTF.getText())){
                                     if(isValidCif(cifTF.getText())){
                                         try {
-                                            System.out.println("Crear Vendedor");
                                             sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText());
+                                            accessLogIn();
                                         } catch (JsonProcessingException ex) {
                                             throw new RuntimeException(ex);
                                         }
@@ -152,8 +152,8 @@ public class RegistroUsuario extends JFrame{
                             if(isValidDni(dniTF.getText())){
                                 if(isValidEmail(emailTF.getText())){
                                     try {
-                                        System.out.println("Crear comprador");
                                         sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText());
+                                        accessLogIn();
                                     } catch (JsonProcessingException ex) {
                                         throw new RuntimeException(ex);
                                     }
@@ -171,8 +171,6 @@ public class RegistroUsuario extends JFrame{
                 }else{
                     JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                /*CONECTAR CON ELEMENTOS DEL SERVICIO PARA CREAR UN USUARIO NUEVO*/
-                //nombreLabel.setText(String.join(" ", datos));
             }
         });
 
@@ -221,7 +219,7 @@ public class RegistroUsuario extends JFrame{
         ventanaAtras.setContentPane(inicioSesion.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
-        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(atrasButton);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
 
@@ -279,27 +277,30 @@ public class RegistroUsuario extends JFrame{
     private void sendCustomerToBack(String name, String password, String dni, String email) throws JsonProcessingException {
         String url = "http://localhost:8080/User/Client";
         HttpClient client = HttpClient.newHttpClient();
-        try{
+
+        try {
             Map<String, String> userData = new HashMap<>();
+            userData.put("nombre", name);
             userData.put("email", email);
-            userData.put("name", name);
             userData.put("password", password);
             userData.put("dni", dni);
-            String jsonBody = new ObjectMapper().writeValueAsString(userData);
 
+            String jsonBody = new ObjectMapper().writeValueAsString(userData);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                System.out.println("Response status code: " + response.statusCode());
-        }catch (ConnectException e){
-            e.printStackTrace();
-        }catch  (Exception e){
+            int statusCode = response.statusCode();
+            if(statusCode == 200){
+                System.out.println("Client created: " + statusCode);
+            }else{
+                System.out.println("Problem with client: "  + statusCode);
+            }
+        }catch(IOException | InterruptedException e){
+            System.out.println("Error al enviar la petición: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -308,32 +309,34 @@ public class RegistroUsuario extends JFrame{
         String url = "http://localhost:8080/User/Seller";
         HttpClient client = HttpClient.newHttpClient();
 
-        Map<String, String> userData = new HashMap<>();
-        userData.put("nombre", name);
-        userData.put("email", email);
-        userData.put("password", password);
-        userData.put("iban", iban);
-        userData.put("cif", cif);
-        String jsonBody = new ObjectMapper().writeValueAsString(userData);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                .build();
-
         try{
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            int status = response.statusCode();
+            Map<String, String> userData = new HashMap<>();
+            userData.put("nombre", name);
+            userData.put("email", email);
+            userData.put("password", password);
+            userData.put("iban", iban);
+            userData.put("cif", cif);
 
-            System.out.println("Respuesta del servidor: " + status);
-        }catch (ConnectException e){
-            e.printStackTrace();
-        }catch  (Exception e){
+            String jsonBody = new ObjectMapper().writeValueAsString(userData);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+
+            if(statusCode == 200){
+                System.out.println("Seller created: " + statusCode);
+            }else{
+                System.out.println("Problem with seller: "  + statusCode);
+            }
+        }catch(IOException | InterruptedException e){
+            System.out.println("Error al enviar la petición: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
 }
 
 

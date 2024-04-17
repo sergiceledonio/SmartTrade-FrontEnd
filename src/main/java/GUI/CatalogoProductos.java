@@ -12,11 +12,12 @@ public class CatalogoProductos {
     private JPanel panelInfo;
     private JPanel panelListado;
     private JLabel logoButton;
-    private JButton filtrosButton;
-    private JLabel perfilLabel;
+    private JButton filtroButton;
+    private JLabel perfilButton;
     private JTextField searchTF;
     private JTable tableCatalog;
     private JButton ventaProducto;
+    private JLabel lupaButton;
     private Boolean isSeller;
     private String name;
     private String password;
@@ -28,6 +29,8 @@ public class CatalogoProductos {
         this.name = nombre;
         this.password = password;
         this.email = email;
+
+        ventaProducto.setVisible(isSeller);
 
         /*TABLECATALOG*/
 
@@ -70,6 +73,41 @@ public class CatalogoProductos {
         });
 
 
+        /*LUPABUTTON*/
+        lupaButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lupaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            public void mouseExited(MouseEvent e) {
+                lupaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        /*PERFILBUTTON*/
+        perfilButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                perfilButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            public void mouseExited(MouseEvent e) {
+                perfilButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        /*FILTROSBUTTON*/
+        filtroButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                filtroButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                filtroButton.setBackground(new Color(73,231,255));
+            }
+            public void mouseExited(MouseEvent e) {
+                filtroButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                filtroButton.setBackground(new Color(153,233,255));
+            }
+        });
+
         /*LOGOBUTTON*/
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -111,12 +149,8 @@ public class CatalogoProductos {
     }
 
     public static void main(String[] args) {
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos("", "","",true);
-        JFrame frame = new JFrame("Smart Trade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(ventanaCatalogo.panelCatalogo);
-        frame.pack();
-        frame.setVisible(true);
+        CatalogoProductos catalogoProductos = new CatalogoProductos("Nombre", "Contraseña", "email@example.com", true);
+        catalogoProductos.setMain();
     }
 
     /*METODOS PARA ACCEDER A VARIABLES*/
@@ -133,6 +167,15 @@ public class CatalogoProductos {
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
+    }
+
+    public void setMain(){
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(name, password,email,isSeller);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCatalogo.panelCatalogo);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public void sellProduct(){
@@ -155,6 +198,18 @@ public class CatalogoProductos {
         ventanaActual.dispose();
     }
 
+    public String getName(){
+        return name;
+    }
+    public String getPassword(){
+        return password;
+    }
+    public String getEmail(){
+        return email;
+    }
+    public Boolean getIsSeller(){
+        return  isSeller;
+    }
 }
 
 
