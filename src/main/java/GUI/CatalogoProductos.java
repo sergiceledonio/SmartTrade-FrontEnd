@@ -17,9 +17,17 @@ public class CatalogoProductos {
     private JTextField searchTF;
     private JTable tableCatalog;
     private JButton ventaProducto;
+    private Boolean isSeller;
+    private String name;
+    private String password;
+    private String email;
 
-    public CatalogoProductos(){
+    public CatalogoProductos(String nombre, String password, String email, Boolean isSeller){
         panelCatalogo.setPreferredSize(new Dimension(800, 600));
+        this.isSeller = isSeller;
+        this.name = nombre;
+        this.password = password;
+        this.email = email;
 
         /*TABLECATALOG*/
 
@@ -103,7 +111,7 @@ public class CatalogoProductos {
     }
 
     public static void main(String[] args) {
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos();
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos("", "","",true);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCatalogo.panelCatalogo);
@@ -118,7 +126,7 @@ public class CatalogoProductos {
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos();
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -128,7 +136,7 @@ public class CatalogoProductos {
     }
 
     public void sellProduct(){
-        VentaProducto ventanaVenta = new VentaProducto();
+        VentaProducto ventanaVenta = new VentaProducto(name, email, password, isSeller);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();

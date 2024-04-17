@@ -27,6 +27,10 @@ public class InfoProducto extends JFrame{
     private JLabel categoryProduct;
     private JLabel priceProduct;
     private JFrame frame;
+    private String name;
+    private String email;
+    private String password;
+    private Boolean isSeller;
 
     public InfoProducto(String name, int price, String category, String description, Color color){
         panelInfo.setPreferredSize(new Dimension(800,600));
@@ -168,7 +172,7 @@ public class InfoProducto extends JFrame{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos();
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

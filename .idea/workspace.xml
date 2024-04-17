@@ -6,15 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a430ec02-edca-4da3-987c-c966e40d2b58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +102,9 @@
       <workItem from="1712914950331" duration="748000" />
       <workItem from="1713198725176" duration="124000" />
       <workItem from="1713252983763" duration="9682000" />
-      <workItem from="1713279185604" duration="5623000" />
+      <workItem from="1713279185604" duration="6340000" />
+      <workItem from="1713335116682" duration="13000" />
+      <workItem from="1713335908145" duration="9963000" />
     </task>
     <servers />
   </component>
