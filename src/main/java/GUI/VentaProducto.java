@@ -36,12 +36,18 @@ public class VentaProducto extends JFrame{
     private String email;
     private String password;
     private Boolean isSeller;
+    private String iban;
+    private String cif;
+    private String dni;
 
-    public VentaProducto(String name, String email, String password, Boolean isSeller){
+    public VentaProducto(String name, String email, String password, Boolean isSeller,String dni, String iban, String cif){
         this.name = name;
         this.email = email;
         this.password = password;
         this.isSeller = isSeller;
+        this.iban = iban;
+        this.cif = cif;
+        this.dni = dni;
 
         /*PANELPRODUCTOVENTA*/
 
@@ -234,7 +240,7 @@ public class VentaProducto extends JFrame{
 
 
     public static void main(String[] args) {
-        VentaProducto ventanaVenta = new VentaProducto("","","",true );
+        VentaProducto ventanaVenta = new VentaProducto("","","",true, "", "", "" );
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaVenta.panelProductoVenta);
@@ -288,7 +294,7 @@ public class VentaProducto extends JFrame{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

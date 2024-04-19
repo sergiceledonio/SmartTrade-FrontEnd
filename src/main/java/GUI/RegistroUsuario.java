@@ -280,7 +280,7 @@ public class RegistroUsuario extends JFrame{
 
         try {
             Map<String, String> userData = new HashMap<>();
-            userData.put("nombre", name);
+            userData.put("name", name);
             userData.put("email", email);
             userData.put("password", password);
             userData.put("dni", dni);
@@ -311,7 +311,7 @@ public class RegistroUsuario extends JFrame{
 
         try{
             Map<String, String> userData = new HashMap<>();
-            userData.put("nombre", name);
+            userData.put("name", name);
             userData.put("email", email);
             userData.put("password", password);
             userData.put("iban", iban);

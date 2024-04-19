@@ -31,16 +31,24 @@ public class InfoProducto extends JFrame{
     private String email;
     private String password;
     private Boolean isSeller;
+    private String iban;
+    private String cif;
+    private String dni;
 
-    public InfoProducto(String name, int price, String category, String description, Color color){
+    public InfoProducto(String nombre, String password, String email,String dni,String iban,String cif, int price,String name,  String category, String description, Boolean isSeller){
         panelInfo.setPreferredSize(new Dimension(800,600));
         /*SETTING VARIABLES TO WHAT WAS CLICKED*/
-
+        this.isSeller = isSeller;
+        this.name = nombre;
+        this.password = password;
+        this.email = email;
+        this.dni = dni;
+        this.iban = iban;
+        this.cif = cif;
         nameProduct.setText(name);
         priceProduct.setText("El precio es: " + price + "€");
         categoryProduct.setText("Categoria: " + category);
         productDescription.setText(description);
-        productDescription.setForeground(color);
 
         /*BUYBUTTON*/
 
@@ -157,7 +165,7 @@ public class InfoProducto extends JFrame{
         });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto("Producto", 33, "Juguetes", "Este es el inicio del proyecto", new Color(1,1,1));
+        InfoProducto ventanaInfo = new InfoProducto("", "", "", "", "", "", 11, "", "", "",true);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -172,7 +180,7 @@ public class InfoProducto extends JFrame{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

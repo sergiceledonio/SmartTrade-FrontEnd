@@ -1,10 +1,18 @@
 package GUI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
 
 public class CatalogoProductos {
@@ -22,20 +30,26 @@ public class CatalogoProductos {
     private String name;
     private String password;
     private String email;
+    private String iban;
+    private String cif;
+    private String dni;
 
-    public CatalogoProductos(String nombre, String password, String email, Boolean isSeller){
+    public CatalogoProductos(String nombre, String password, String email, Boolean isSeller,String dni,String iban,String cif){
         panelCatalogo.setPreferredSize(new Dimension(800, 600));
         this.isSeller = isSeller;
         this.name = nombre;
         this.password = password;
         this.email = email;
+        this.dni = dni;
+        this.iban = iban;
+        this.cif = cif;
 
         ventaProducto.setVisible(isSeller);
 
         /*TABLECATALOG*/
 
         DefaultTableModel model = new DefaultTableModel();
-        String[] columnas = {"Este", "Es", "El", "Catalogo"};
+        String[] columnas = {"", "", "", ""};
         for(int i = 0; i < columnas.length; i++){
             model.addColumn(columnas[i]);
         }
@@ -44,7 +58,6 @@ public class CatalogoProductos {
 
         for(int i = 0; i < productComments.length; i++) {
             model.addRow(productComments[i]);
-            System.out.println(Arrays.toString(productComments[i]));
         }
         tableCatalog.setEnabled(true);
         tableCatalog.setRowHeight(63);
@@ -65,8 +78,7 @@ public class CatalogoProductos {
                         int price = nombreCelda.charAt(1);
                         String category = "Juego";
                         String descripcion = "Esta es la descripción para el elemento selecionado";
-                        Color color = Color.black;
-                        infoProduct(nombreCelda, price, category, descripcion, color);
+                        infoProduct(nombreCelda, price, category, descripcion);
                     }
                 }
             }
@@ -149,7 +161,7 @@ public class CatalogoProductos {
     }
 
     public static void main(String[] args) {
-        CatalogoProductos catalogoProductos = new CatalogoProductos("Nombre", "Contraseña", "email@example.com", true);
+        CatalogoProductos catalogoProductos = new CatalogoProductos("Nombre", "Contraseña", "email@example.com", true, "", "", "");
         catalogoProductos.setMain();
     }
 
@@ -160,7 +172,14 @@ public class CatalogoProductos {
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller);
+        System.out.println("name: " + name);
+        System.out.println("pass: " + password);
+        System.out.println("email: " + email);
+        System.out.println("seller?: " + isSeller);
+        System.out.println("dni: " + dni);
+        System.out.println("iban: " + iban);
+        System.out.println("cif: " + cif);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -170,7 +189,7 @@ public class CatalogoProductos {
     }
 
     public void setMain(){
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos(name, password,email,isSeller);
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(name, password,email,isSeller, dni, iban, cif);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCatalogo.panelCatalogo);
@@ -179,7 +198,7 @@ public class CatalogoProductos {
     }
 
     public void sellProduct(){
-        VentaProducto ventanaVenta = new VentaProducto(name, email, password, isSeller);
+        VentaProducto ventanaVenta = new VentaProducto(name, email, password, isSeller, dni, iban, cif);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();
@@ -188,8 +207,8 @@ public class CatalogoProductos {
         ventanaActual.dispose();
     }
 
-    public void infoProduct(String name, int price, String category, String description, Color color){
-        InfoProducto ventanaInfo = new InfoProducto(name, price, category, description, color);
+    public void infoProduct(String nombreCelda,int price,String category,String descripcion){
+        InfoProducto ventanaInfo = new InfoProducto(name, password,email,dni,iban,cif, price, nombreCelda, category, descripcion, isSeller);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -198,17 +217,38 @@ public class CatalogoProductos {
         ventanaActual.dispose();
     }
 
-    public String getName(){
-        return name;
+    public Object[] getProd() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/Product/Products"))
+                .GET()
+                .build();
+        Object[] res = null;
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                res = parseResponse(response.body());
+            } else {
+                System.out.println("Error: Código de estado " + response.statusCode());
+            }
+        } catch (Exception e) {
+            System.err.println("Error al hacer la solicitud: " + e.getMessage());
+        }
+        return res;
     }
-    public String getPassword(){
-        return password;
-    }
-    public String getEmail(){
-        return email;
-    }
-    public Boolean getIsSeller(){
-        return  isSeller;
+
+    private Object[] parseResponse(String response){
+        Object[] products = null;
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+             products = objectMapper.readValue(response, Object[].class);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return products;
     }
 }
 

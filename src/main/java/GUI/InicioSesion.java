@@ -41,6 +41,9 @@ public class InicioSesion extends JFrame{
     private String password;
     private String email;
     private Boolean isSeller;
+    private String iban;
+    private String cif;
+    private String dni;
 
     public InicioSesion(){
 
@@ -184,8 +187,11 @@ public class InicioSesion extends JFrame{
                 String email_rec = jsonResponse.get("email").asText();
                 String name_rec = jsonResponse.get("name").asText();
                 boolean isSeller_rec = jsonResponse.get("isSeller").asBoolean();
+                String dni_rec = jsonResponse.get("dni").asText();
+                String iban_rec = jsonResponse.get("iban").asText();
+                String cif_rec = jsonResponse.get("dni").asText();
 
-                goToCatalog(name_rec, password, email_rec,"", isSeller_rec);
+                goToCatalog(name_rec, password, email_rec,dni_rec, isSeller_rec, iban_rec, cif_rec);
             }else{
                 System.out.println("Problem with client: "  + statusCode);
             }
@@ -195,8 +201,8 @@ public class InicioSesion extends JFrame{
         }
     }
 
-    public void goToCatalog(String nombre, String password, String email,String dni, Boolean isSeller){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(nombre, password, email, isSeller);
+    public void goToCatalog(String nombre, String password, String email, String dni, Boolean isSeller, String iban, String cif){
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(nombre, password, email, isSeller,dni, iban, cif);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
