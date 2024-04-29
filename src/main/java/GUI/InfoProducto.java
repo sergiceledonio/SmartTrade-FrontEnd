@@ -1,5 +1,6 @@
 package GUI;
 
+import Observer.ObserverUserData;
 import com.sun.webkit.perf.PerfLogger;
 import javafx.css.CssParser;
 
@@ -11,7 +12,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class InfoProducto extends JFrame{
+public class InfoProducto extends JFrame implements ObserverUserData {
     private JPanel panelTitulo;
     private JPanel infoProduct;
     private JTextField searchTF;
@@ -26,20 +27,28 @@ public class InfoProducto extends JFrame{
     private JLabel nameProduct;
     private JLabel categoryProduct;
     private JLabel priceProduct;
+    private JLabel carritoCompraButton;
     private JFrame frame;
     private String name;
     private String email;
     private String password;
-    private Boolean isSeller;
     private String iban;
     private String cif;
     private String dni;
-
-    public InfoProducto(String nombre, String password, String email,String dni,String iban,String cif, int price,String name,  String category, String description, Boolean isSeller){
+    private String city;
+    private String street;
+    private String door;
+    private String flat;
+    private String num;
+    private String type;
+    private String price;
+    private String description;
+    private String category;
+    private InicioSesion iniciosesion;
+    public InfoProducto(String[] userData){
         panelInfo.setPreferredSize(new Dimension(800,600));
         /*SETTING VARIABLES TO WHAT WAS CLICKED*/
-        this.isSeller = isSeller;
-        this.name = nombre;
+        this.name = name;
         this.password = password;
         this.email = email;
         this.dni = dni;
@@ -165,7 +174,7 @@ public class InfoProducto extends JFrame{
         });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto("", "", "", "", "", "", 11, "", "", "",true);
+        InfoProducto ventanaInfo = new InfoProducto(new String[]{});
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -180,7 +189,7 @@ public class InfoProducto extends JFrame{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -189,4 +198,37 @@ public class InfoProducto extends JFrame{
         ventanaActual.dispose();
     }
 
+    @Override
+    public void addObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void removeObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void notifyObservers(String[] data) {
+
+    }
+
+    @Override
+    public void update(String[] data) {
+        name = data[0];
+        email = data[1];
+        password = data[2];
+        type = data[3];
+        iban = data[4];
+        cif = data[5];
+        dni = data[6];
+        city = data[7];
+        street = data[8];
+        door = data[9];
+        flat = data[10];
+        num = data[11];
+    }
+    public String[] getUserData(){
+        return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
+    }
 }

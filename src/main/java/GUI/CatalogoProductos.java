@@ -1,10 +1,12 @@
 package GUI;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 import java.util.List;
 import java.awt.event.MouseAdapter;
@@ -14,8 +16,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
+import Observer.ObserverUserData;
 
-public class CatalogoProductos {
+public class CatalogoProductos implements ObserverUserData {
     private JPanel panelCatalogo;
     private JPanel panelInfo;
     private JPanel panelListado;
@@ -26,25 +29,38 @@ public class CatalogoProductos {
     private JTable tableCatalog;
     private JButton ventaProducto;
     private JLabel lupaButton;
-    private Boolean isSeller;
-    private String name;
-    private String password;
-    private String email;
-    private String iban;
-    private String cif;
-    private String dni;
+    private JLabel carritoCompraButton;
+    private static String name;
+    private static String password;
+    private static String email;
+    private static String iban;
+    private static String cif;
+    private static String dni;
+    private static String city;
+    private static String street;
+    private static String door;
+    private static String flat;
+    private static String num;
+    private static String type;
+    private static String price;
+    private static String description;
+    private static String nameProd;
+    private static String category;
 
-    public CatalogoProductos(String nombre, String password, String email, Boolean isSeller,String dni,String iban,String cif){
+    private InicioSesion iniciosesion;
+
+    public CatalogoProductos(String[] userData){
+
+        iniciosesion = new InicioSesion();
+        iniciosesion.addObserver(this);
         panelCatalogo.setPreferredSize(new Dimension(800, 600));
-        this.isSeller = isSeller;
-        this.name = nombre;
-        this.password = password;
-        this.email = email;
-        this.dni = dni;
-        this.iban = iban;
-        this.cif = cif;
 
-        ventaProducto.setVisible(isSeller);
+
+        if(dni != null){
+            ventaProducto.setVisible(false);
+        }else{
+            ventaProducto.setVisible(true);
+        }
 
         /*TABLECATALOG*/
 
@@ -53,12 +69,10 @@ public class CatalogoProductos {
         for(int i = 0; i < columnas.length; i++){
             model.addColumn(columnas[i]);
         }
-        String[][] productComments = {{"Pelota", "Libro", "Gafas", "Nachos"}, {"Falda", "Movil", "Zapatos", "Cuerda"}}; //Acceder a la BD y recoger los elementos guardados
+        Object[] productComments = getProducts(); //Acceder a la BD y recoger los elementos guardados
 
 
-        for(int i = 0; i < productComments.length; i++) {
-            model.addRow(productComments[i]);
-        }
+
         tableCatalog.setEnabled(true);
         tableCatalog.setRowHeight(63);
         tableCatalog.setMaximumSize(new Dimension(200, 120));
@@ -158,10 +172,31 @@ public class CatalogoProductos {
             }
         });
 
+        carritoCompraButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                CarritoCompra ventanaCarrito = new CarritoCompra();
+                JFrame frame = new JFrame("Smart Trade");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setContentPane(ventanaCarrito.getPanel());
+                frame.pack();
+                frame.setVisible(true);
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
     }
 
     public static void main(String[] args) {
-        CatalogoProductos catalogoProductos = new CatalogoProductos("Nombre", "Contraseña", "email@example.com", true, "", "", "");
+        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{});
         catalogoProductos.setMain();
     }
 
@@ -172,14 +207,7 @@ public class CatalogoProductos {
     }
 
     public void backMenu(){
-        System.out.println("name: " + name);
-        System.out.println("pass: " + password);
-        System.out.println("email: " + email);
-        System.out.println("seller?: " + isSeller);
-        System.out.println("dni: " + dni);
-        System.out.println("iban: " + iban);
-        System.out.println("cif: " + cif);
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -189,7 +217,7 @@ public class CatalogoProductos {
     }
 
     public void setMain(){
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos(name, password,email,isSeller, dni, iban, cif);
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData());
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCatalogo.panelCatalogo);
@@ -198,7 +226,7 @@ public class CatalogoProductos {
     }
 
     public void sellProduct(){
-        VentaProducto ventanaVenta = new VentaProducto(name, email, password, isSeller, dni, iban, cif);
+        VentaProducto ventanaVenta = new VentaProducto(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();
@@ -208,7 +236,7 @@ public class CatalogoProductos {
     }
 
     public void infoProduct(String nombreCelda,int price,String category,String descripcion){
-        InfoProducto ventanaInfo = new InfoProducto(name, password,email,dni,iban,cif, price, nombreCelda, category, descripcion, isSeller);
+        InfoProducto ventanaInfo = new InfoProducto(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -217,24 +245,30 @@ public class CatalogoProductos {
         ventanaActual.dispose();
     }
 
-    public Object[] getProd() {
+    public Object[] getProducts() {
         HttpClient httpClient = HttpClient.newHttpClient();
-
+        ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/Product/Products"))
+                .uri(URI.create("http://localhost:8080/product/products"))
                 .GET()
                 .build();
         Object[] res = null;
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        try{
 
-            if (response.statusCode() == 200) {
-                res = parseResponse(response.body());
-            } else {
-                System.out.println("Error: Código de estado " + response.statusCode());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            if(response.statusCode() == 200){
+                System.out.println("Productos recogidos");
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                res = objectMapper.convertValue(jsonResponse, Object[].class);
+                for(int i = 0; i < res.length; i++){
+                    System.out.println(res[i]);
+                }
+            }else{
+                System.out.println("Objetos no recogidos");
             }
-        } catch (Exception e) {
-            System.err.println("Error al hacer la solicitud: " + e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
         }
         return res;
     }
@@ -249,6 +283,41 @@ public class CatalogoProductos {
             e.printStackTrace();
         }
         return products;
+    }
+
+    @Override
+    public void addObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void removeObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void notifyObservers(String[] data) {
+
+    }
+
+    @Override
+    public void update(String[] data) {
+        name = data[0];
+        email = data[1];
+        password = data[2];
+        type = data[3];
+        iban = data[4];
+        cif = data[5];
+        dni = data[6];
+        city = data[7];
+        street = data[8];
+        door = data[9];
+        flat = data[10];
+        num = data[11];
+    }
+
+    public static String[] getUserData(){
+            return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
     }
 }
 

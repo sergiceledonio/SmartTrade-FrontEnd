@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.CropImageFilter;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -16,11 +14,12 @@ import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.*;
+import Observer.ObserverRegister;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class RegistroUsuario extends JFrame{
+public class RegistroUsuario extends JFrame implements ObserverRegister {
     private JPanel panelRegistro;
     private JLabel logo;
     private JTextField nombreTF;
@@ -37,9 +36,20 @@ public class RegistroUsuario extends JFrame{
     private JLabel cifLabel;
     private JLabel ibanLabel;
     private JLabel dniLabel;
+    private JButton registerAddress;
     private JFrame frame;
+    private DireccionEnvioRegister direccionEnvioRegister;
+    private String[] direccion;
+    private String city;
+    private String street;
+    private String num;
+    private String door;
+    private String flat;
 
     public RegistroUsuario(){
+
+        direccionEnvioRegister = new DireccionEnvioRegister();
+        direccionEnvioRegister.addObserver(this);
 
         /*NOMBRETF*/
 
@@ -130,7 +140,7 @@ public class RegistroUsuario extends JFrame{
                                 if(isValidIban(ibanTF.getText())){
                                     if(isValidCif(cifTF.getText())){
                                         try {
-                                            sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText());
+                                            sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText(),city, street, num, flat, door);
                                             accessLogIn();
                                         } catch (JsonProcessingException ex) {
                                             throw new RuntimeException(ex);
@@ -152,7 +162,7 @@ public class RegistroUsuario extends JFrame{
                             if(isValidDni(dniTF.getText())){
                                 if(isValidEmail(emailTF.getText())){
                                     try {
-                                        sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText());
+                                        sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(),city, street, num, flat, door);
                                         accessLogIn();
                                     } catch (JsonProcessingException ex) {
                                         throw new RuntimeException(ex);
@@ -192,9 +202,33 @@ public class RegistroUsuario extends JFrame{
             }
         });
 
+        /*REGISTERADDRESS*/
+
+        registerAddress.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                direccionEnvioRegister.pack();
+                direccionEnvioRegister.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                registerAddress.setBackground(new Color(73, 231, 255));
+                registerAddress.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                registerAddress.setBackground(new Color(153, 233, 255));
+                registerAddress.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
 
         panelRegistro.setFocusable(true);
         panelRegistro.requestFocusInWindow();
+        registerAddress.addMouseListener(new MouseAdapter() {
+        });
     }
 
 
@@ -214,6 +248,7 @@ public class RegistroUsuario extends JFrame{
     }
 
     public void accessLogIn(){
+        imprimirDireccion();
         InicioSesion inicioSesion = new InicioSesion();
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(inicioSesion.getPanel());
@@ -274,8 +309,8 @@ public class RegistroUsuario extends JFrame{
             ibanTF.setText("");
     }
 
-    private void sendCustomerToBack(String name, String password, String dni, String email) throws JsonProcessingException {
-        String url = "http://localhost:8080/User/Client";
+    private void sendCustomerToBack(String name, String password, String dni, String email, String city, String street, String num, String flat, String door) throws JsonProcessingException {
+        String url = "http://localhost:8080/user/newclient";
         HttpClient client = HttpClient.newHttpClient();
 
         try {
@@ -284,6 +319,11 @@ public class RegistroUsuario extends JFrame{
             userData.put("email", email);
             userData.put("password", password);
             userData.put("dni", dni);
+            userData.put("city", city);
+            userData.put("street", street);
+            userData.put("num", num);
+            userData.put("flat", flat);
+            userData.put("door", door);
 
             String jsonBody = new ObjectMapper().writeValueAsString(userData);
             HttpRequest request = HttpRequest.newBuilder()
@@ -305,8 +345,8 @@ public class RegistroUsuario extends JFrame{
         }
     }
 
-    private void sendSellerToBack(String name, String password, String email, String iban, String cif) throws JsonProcessingException {
-        String url = "http://localhost:8080/User/Seller";
+    private void sendSellerToBack(String name, String password, String email, String iban, String cif, String city, String street, String num, String flat, String door) throws JsonProcessingException {
+        String url = "http://localhost:8080/user/newseller";
         HttpClient client = HttpClient.newHttpClient();
 
         try{
@@ -316,6 +356,11 @@ public class RegistroUsuario extends JFrame{
             userData.put("password", password);
             userData.put("iban", iban);
             userData.put("cif", cif);
+            userData.put("city", city);
+            userData.put("street", street);
+            userData.put("num", num);
+            userData.put("floor", flat);
+            userData.put("door", door);
 
             String jsonBody = new ObjectMapper().writeValueAsString(userData);
             HttpRequest request = HttpRequest.newBuilder()
@@ -337,6 +382,43 @@ public class RegistroUsuario extends JFrame{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void addObserver(ObserverRegister observer) {
+
+    }
+
+    @Override
+    public void removeObserver(ObserverRegister observer) {
+
+    }
+
+    @Override
+    public void notifyObservers(String[] data) {
+
+    }
+    @Override
+    public void update(String[] data) {
+        direccion = data;
+        num = direccion[0];
+        street = direccion[1];
+        city = direccion[2];
+        flat = direccion[3];
+        door = direccion[4];
+    }
+    private void imprimirDireccion() {
+        if (direccion != null) {
+            System.out.println("Dirección guardada:");
+            System.out.println("Número: " + direccion[0]);
+            System.out.println("Calle: " + direccion[1]);
+            System.out.println("Ciudad: " + direccion[2]);
+            System.out.println("Planta: " + direccion[3]);
+            System.out.println("Puerta: " + direccion[4]);
+        } else {
+            System.out.println("No se ha guardado ninguna dirección.");
+        }
+    }
+
 }
 
 

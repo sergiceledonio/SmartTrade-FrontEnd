@@ -1,5 +1,7 @@
 package GUI;
 
+import Observer.ObserverUserData;
+
 import javax.accessibility.Accessible;
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +16,7 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.awt.event.KeyEvent;
 
-public class VentaProducto extends JFrame{
+public class VentaProducto extends JFrame implements ObserverUserData {
 
     private JPanel panelProductoVenta;
     private JPanel panelTitulo;
@@ -31,23 +33,26 @@ public class VentaProducto extends JFrame{
     private JButton validateProductButton;
     private JLabel añade;
     private JLabel logoButton;
+    private JPanel carritoCompraButton;
     private JFrame frame;
     private String name;
     private String email;
     private String password;
-    private Boolean isSeller;
     private String iban;
     private String cif;
     private String dni;
+    private String city;
+    private String street;
+    private String door;
+    private String flat;
+    private String num;
+    private String type;
+    private InicioSesion iniciosesion;
 
-    public VentaProducto(String name, String email, String password, Boolean isSeller,String dni, String iban, String cif){
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.isSeller = isSeller;
-        this.iban = iban;
-        this.cif = cif;
-        this.dni = dni;
+    public VentaProducto(String[] userData){
+
+        iniciosesion = new InicioSesion();
+        iniciosesion.addObserver(this);
 
         /*PANELPRODUCTOVENTA*/
 
@@ -240,12 +245,46 @@ public class VentaProducto extends JFrame{
 
 
     public static void main(String[] args) {
-        VentaProducto ventanaVenta = new VentaProducto("","","",true, "", "", "" );
+        VentaProducto ventanaVenta = new VentaProducto(new String[]{});
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaVenta.panelProductoVenta);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    @Override
+    public void addObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void removeObserver(ObserverUserData observer) {
+
+    }
+
+    @Override
+    public void notifyObservers(String[] data) {
+
+    }
+
+    @Override
+    public void update(String[] data) {
+        name = data[0];
+        email = data[1];
+        password = data[2];
+        type = data[3];
+        iban = data[4];
+        cif = data[5];
+        dni = data[6];
+        city = data[7];
+        street = data[8];
+        door = data[9];
+        flat = data[10];
+        num = data[11];
+    }
+    public String[] getUserData(){
+        return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
     }
 
 
@@ -294,7 +333,7 @@ public class VentaProducto extends JFrame{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(name, password, email, isSeller, dni, iban, cif);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
