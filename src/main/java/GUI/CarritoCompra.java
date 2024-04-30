@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import Observer.ObserverUserData;
+
+import static GUI.CatalogoProductos.getUserData;
+
 public class CarritoCompra extends JFrame implements ObserverUserData{
     private JPanel panelCarrito;
     private JPanel panelInfo;
@@ -69,122 +72,47 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
             }
         });
 
-        panelCarrito = new JPanel();
-        panelCarrito.setLayout(new BorderLayout());
-
-        String[] productos = {"",""};//PRODUCTOS DEL CARRITO
-        String[] columnNames = {"Producto", "Cantidad", "Precio"};
-        DefaultTableModel modelo = new DefaultTableModel(columnNames,0);
-        listaCarritoProductos.setModel(modelo);
-        panelCarrito.add(new JScrollPane(listaCarritoProductos));
-
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(CarritoCompra::new);
+        CarritoCompra ventanaCarrito = new CarritoCompra();
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCarrito.getPanel());
+        frame.pack();
+        frame.setVisible(true);
     }
 
     /*ACCESO A LAS VARIABLES LOCALES*/
 
 
     public void crearTabla(){
-        frame = new JFrame("Table Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 300);
-
-        String[] columnNames = {"PRODUCTO", "CANTIDAD", "PRECIO"};
-        Object[][] data = {{"Product 1", 0, 10.0}, {"Product 2", 0, 20.0}};
-
-        model = new DefaultTableModel(data, columnNames);
-        table = new JTable(model);
-
-        // Custom renderer for the 'CANTIDAD' column
-        table.getColumnModel().getColumn(1).setCellRenderer(new QuantityRenderer());
-        // Custom editor for the 'CANTIDAD' column
-        table.getColumnModel().getColumn(1).setCellEditor(new QuantityEditor(new JTextField()));
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        frame.add(scrollPane, BorderLayout.CENTER);
-
-        frame.setVisible(true);
-    }
-
-    private class QuantityRenderer extends JPanel implements TableCellRenderer {
-        private JButton plusButton;
-        private JButton minusButton;
-        private JLabel quantityLabel;
-
-        public QuantityRenderer() {
-            setLayout(new GridLayout(1, 3));
-            plusButton = new JButton("+");
-            minusButton = new JButton("-");
-            quantityLabel = new JLabel("0");
-
-            add(minusButton);
-            add(quantityLabel);
-            add(plusButton);
+        String[] productos = {"Balon","pelota","casa", };//PRODUCTOS DEL CARRITO
+        String[] columnNames = {"Producto", "Cantidad", "Precio"};
+        DefaultTableModel modelo = new DefaultTableModel();
+        for(int i = 0; i < columnNames.length; i++){
+            modelo.addColumn(columnNames[i]);
         }
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            int quantity = (int) value;
-            quantityLabel.setText(String.valueOf(quantity));
-            return this;
+        int filaActual = 0;
+        for (String nombreProducto : productos) {
+            if (modelo.getColumnCount() == 0) {
+                modelo.addRow(new Object[]{nombreProducto});
+                filaActual++;
+            } else {
+                modelo.setValueAt(nombreProducto, filaActual - 1, modelo.getColumnCount() - 1);
+            }
+            if (modelo.getColumnCount() == 3) {
+                filaActual++;
+            }
         }
     }
-
-    private class QuantityEditor extends DefaultCellEditor {
-        private JButton plusButton;
-        private JButton minusButton;
-        private JLabel quantityLabel;
-        private JPanel panel;
-
-        public QuantityEditor(JTextField textField) {
-            super(textField);
-            plusButton = new JButton("+");
-            minusButton = new JButton("-");
-            quantityLabel = new JLabel("0");
-
-            panel = new JPanel();
-            panel.setLayout(new GridLayout(1, 3));
-            panel.add(minusButton);
-            panel.add(quantityLabel);
-            panel.add(plusButton);
-
-            // Add action listeners for the buttons
-            plusButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int row = table.getSelectedRow();
-                    int quantity = (int) model.getValueAt(row, 1);
-                    model.setValueAt(quantity + 1, row, 1);
-                }
-            });
-
-            minusButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int row = table.getSelectedRow();
-                    int quantity = (int) model.getValueAt(row, 1);
-                    if (quantity > 0) {
-                        model.setValueAt(quantity - 1, row, 1);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            int quantity = (int) value;
-        }
-    }
-
     public JPanel getPanel(){
         return panelCarrito;
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(CatalogoProductos.getUserData());
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -224,9 +152,4 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         flat = data[10];
         num = data[11];
     }
-
-    public String[] getInfoProducts(){
-        return new String[]{};
-    }
-
 }

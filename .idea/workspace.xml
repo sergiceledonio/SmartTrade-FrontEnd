@@ -5,26 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a430ec02-edca-4da3-987c-c966e40d2b58" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/DireccionEnvioRegister.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/DireccionEnvioRegister.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Observer/ObserverRegister.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Observer/ObserverUserData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/carritoCompra.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/ojoAbierto (1).png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/img/ojoCerrado (1).png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +122,7 @@
       <workItem from="1714112937234" duration="16518000" />
       <workItem from="1714133275861" duration="862000" />
       <workItem from="1714140955887" duration="1472000" />
-      <workItem from="1714387749340" duration="4436000" />
+      <workItem from="1714387749340" duration="5663000" />
     </task>
     <servers />
   </component>
