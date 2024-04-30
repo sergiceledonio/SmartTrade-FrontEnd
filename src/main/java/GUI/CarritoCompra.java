@@ -45,7 +45,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
 
-
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -85,28 +84,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
     /*ACCESO A LAS VARIABLES LOCALES*/
 
-
-    public void crearTabla(){
-        String[] productos = {"Balon","pelota","casa", };//PRODUCTOS DEL CARRITO
-        String[] columnNames = {"Producto", "Cantidad", "Precio"};
-        DefaultTableModel modelo = new DefaultTableModel();
-        for(int i = 0; i < columnNames.length; i++){
-            modelo.addColumn(columnNames[i]);
-        }
-
-        int filaActual = 0;
-        for (String nombreProducto : productos) {
-            if (modelo.getColumnCount() == 0) {
-                modelo.addRow(new Object[]{nombreProducto});
-                filaActual++;
-            } else {
-                modelo.setValueAt(nombreProducto, filaActual - 1, modelo.getColumnCount() - 1);
-            }
-            if (modelo.getColumnCount() == 3) {
-                filaActual++;
-            }
-        }
-    }
     public JPanel getPanel(){
         return panelCarrito;
     }

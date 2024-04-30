@@ -28,6 +28,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private JLabel categoryProduct;
     private JLabel priceProduct;
     private JLabel carritoCompraButton;
+    private JLabel favButton;
     private JFrame frame;
     private String name;
     private String email;

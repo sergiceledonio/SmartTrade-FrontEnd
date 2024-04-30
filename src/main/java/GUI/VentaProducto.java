@@ -1,6 +1,8 @@
 package GUI;
 
 import Observer.ObserverUserData;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.accessibility.Accessible;
 import javax.swing.*;
@@ -15,6 +17,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class VentaProducto extends JFrame implements ObserverUserData {
 
@@ -47,6 +54,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private String flat;
     private String num;
     private String type;
+    private String[] attributes;
     private InicioSesion iniciosesion;
 
     public VentaProducto(String[] userData){
@@ -99,9 +107,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             }
             @Override
             public void mouseClicked(MouseEvent e){
-                String selection = getComboBox().getSelectedItem().toString();
                 if(acceptProduct()){
-                    JOptionPane.showMessageDialog(frame, "Producto válido, añadido al servicio", "Validación",JOptionPane.INFORMATION_MESSAGE);
+                    tryValidation();
                 }
             }
         });
@@ -176,7 +183,6 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         ((AbstractDocument) productPriceTF.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                // Verificar si la cadena que se está insertando es válida
                 if (isValidInsertion(fb.getDocument(), offset, string)) {
                     super.insertString(fb, offset, string, attr);
                 }
@@ -184,7 +190,6 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                // Verificar si el texto que se está reemplazando es válido
                 if (isValidInsertion(fb.getDocument(), offset, text)) {
                     super.replace(fb, offset, length, text, attrs);
                 }
@@ -311,7 +316,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             return text.matches("^\\d+(\\.\\d{0,2})?$");
     }
     public boolean isValidName(String name){
-        return name.matches("[a-zA-Z]+");
+        return name.matches("^[a-zA-Z0-9\\s]+$");
     }
 
     public boolean acceptProduct(){
@@ -319,6 +324,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         if(!validationComboBox(categorySelector.getSelectedItem().toString())){
             if(isValidName(productNameTF.getText())){
                 if(isValidPrice(productPriceTF.getText())){
+                    attributes = getData(productNameTF.getText(),productPriceTF.getText(), productDescription.getText(), categorySelector.getSelectedItem().toString());
                     return true;
                 }else{
                     JOptionPane.showMessageDialog(frame, "Precio con formato incorrecto", "Error",JOptionPane.ERROR_MESSAGE);
@@ -344,6 +350,46 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
     public JPanel getPanel(){
         return this.panelProductoVenta;
+    }
+
+    private void tryValidation(){
+
+        String url = "http://localhost:8080/product/newproducts";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode jsonBody = objectMapper.createObjectNode();
+
+        jsonBody.put("type", attributes[3]);
+        jsonBody.put("name", attributes[0]);
+        jsonBody.put("price", attributes[1]);
+        jsonBody.put("description", attributes[2]);
+        jsonBody.put("pending", true);
+        jsonBody.put("validation", false);
+
+        String jsonString = jsonBody.toString();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonString))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Response code: " + response.statusCode());
+            System.out.println("Response body: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error al enviar la solicitud POST: " + e.getMessage());
+        }
+
+
+    }
+    private String[] getData(String nameProd, String price, String description, String category){
+        String[] res = {nameProd, price, description, category};
+        return res;
     }
 
 }
