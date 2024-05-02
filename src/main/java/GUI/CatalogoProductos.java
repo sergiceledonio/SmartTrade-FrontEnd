@@ -249,7 +249,7 @@ public class CatalogoProductos implements ObserverUserData {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/product/products"))
+                .uri(URI.create("http://localhost:8080/product/validated"))
                 .GET()
                 .build();
         Object[] res = null;
