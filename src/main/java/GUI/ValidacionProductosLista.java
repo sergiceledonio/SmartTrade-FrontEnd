@@ -1,19 +1,20 @@
 package GUI;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +23,13 @@ public class ValidacionProductosLista extends JFrame{
     private JLabel logoButton;
     private JPanel panelListaValidos;
     private JPanel panelValidacion;
-    private JList validatingList;
     private JLabel backLogin;
+    private JLabel productNameLabel;
+    private JButton verInformaciónButton;
+    private JPanel panelProducto;
+    private String desc;
+    private String price;
+    private String type;
     private List<Map<String, Object>> productList;
 
     public ValidacionProductosLista(){
@@ -31,6 +37,7 @@ public class ValidacionProductosLista extends JFrame{
         panelTitulo.setPreferredSize(new Dimension(800, 200));
         panelListaValidos.setPreferredSize(new Dimension(800, 400));
         getPetitions();
+        getInfoProduct();
         backLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -46,6 +53,23 @@ public class ValidacionProductosLista extends JFrame{
                 backLogin.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+        verInformaciónButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goValidate();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                verInformaciónButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                verInformaciónButton.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                verInformaciónButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                verInformaciónButton.setBackground(new Color(153, 233, 255));
+            }
+        });
     }
 
 
@@ -58,9 +82,20 @@ public class ValidacionProductosLista extends JFrame{
         frame.setVisible(true);
     }
 
+    public void goValidate(){
+        ProductoPendiente ventanaPendiente = new ProductoPendiente(productNameLabel.getText(), desc, price, type);
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(ventanaPendiente.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+
+    }
+
 
     /*ACCESO A LOS ATRIBUTOS*/
-    private JPanel getPanel(){
+    public JPanel getPanel(){
         return panelValidacion;
     }
     private void backLogin(){
@@ -116,6 +151,39 @@ public class ValidacionProductosLista extends JFrame{
             }
         } else {
             System.out.println("La lista de productos está vacía.");
+        }
+    }
+
+    private void getInfoProduct(){
+
+        String name = productNameLabel.getText();
+
+        String baseUrl = "http://localhost:8080/product/getbyname/" + name;
+        try {
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(baseUrl))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Código de respuesta: " + response.statusCode());
+            System.out.println("Respuesta del servidor: " + response.body());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(response.body());
+
+            price = jsonNode.get("price").asText();
+            type = jsonNode.get("type").asText();
+            desc = jsonNode.get("description").asText();
+
+
+        } catch (Exception e) {
+            System.out.println("Error al enviar la solicitud GET: " + e.getMessage());
         }
     }
 }

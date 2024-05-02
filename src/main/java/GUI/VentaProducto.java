@@ -109,12 +109,13 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             public void mouseClicked(MouseEvent e){
                 if(acceptProduct()){
                     tryValidation();
+                    backMenu();
                 }
             }
         });
 
         /*CATEGORYSELECTOR*/
-        String[] categories = {"--Selecione categoria--", "Comida", "Ropa", "Juguete", "Informática"};
+        String[] categories = {"--Selecione categoria--", "Comida", "Ropa", "Juguete", "Informática", "Turismo", "Cosméticos", "Libros"};
         for(String opcion : categories){
             categorySelector.addItem(opcion);
         }
