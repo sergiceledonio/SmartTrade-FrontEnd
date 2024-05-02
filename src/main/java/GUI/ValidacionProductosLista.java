@@ -15,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,17 +28,28 @@ public class ValidacionProductosLista extends JFrame{
     private JLabel productNameLabel;
     private JButton verInformaciónButton;
     private JPanel panelProducto;
+    private String name;
     private String desc;
     private String price;
     private String type;
     private List<Map<String, Object>> productList;
+    private JFrame frame;
+    private JScrollPane scrollPane;
 
     public ValidacionProductosLista(){
+        panelValidacion = new JPanel();
+        panelValidacion.setLayout(new BoxLayout(panelValidacion, BoxLayout.Y_AXIS)); // Layout vertical
+        panelTitulo = new JPanel();
+        panelListaValidos = new JPanel();
         panelValidacion.setPreferredSize(new Dimension(800,600));
         panelTitulo.setPreferredSize(new Dimension(800, 200));
         panelListaValidos.setPreferredSize(new Dimension(800, 400));
-        getPetitions();
-        getInfoProduct();
+        productList = getPetitions();
+        scrollPane = createScrollPane(createProductoPanels(productList));
+        panelValidacion.add(panelTitulo);
+        panelValidacion.add(scrollPane);
+
+
         backLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -55,10 +67,6 @@ public class ValidacionProductosLista extends JFrame{
         });
         verInformaciónButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                goValidate();
-            }
-            @Override
             public void mouseEntered(MouseEvent e) {
                 verInformaciónButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 verInformaciónButton.setBackground(new Color(73, 231, 255));
@@ -70,7 +78,9 @@ public class ValidacionProductosLista extends JFrame{
                 verInformaciónButton.setBackground(new Color(153, 233, 255));
             }
         });
+
     }
+
 
 
     public static void main(String[] args) {
@@ -83,18 +93,78 @@ public class ValidacionProductosLista extends JFrame{
     }
 
     public void goValidate(){
-        ProductoPendiente ventanaPendiente = new ProductoPendiente(productNameLabel.getText(), desc, price, type);
+        ProductoPendiente ventanaPendiente = new ProductoPendiente(name, desc, price, type);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaPendiente.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
-
     }
 
 
     /*ACCESO A LOS ATRIBUTOS*/
+
+    private List<JPanel> createProductoPanels(List<Map<String, Object>> productList) {
+        List<JPanel> productoPanels = new ArrayList<>();
+
+        for (Map<String, Object> product : productList) {
+            JPanel productoPanel = createProductoPanel(product);
+            productoPanels.add(productoPanel);
+        }
+
+        return productoPanels;
+    }
+    private JPanel createProductoPanel(Map<String, Object> product) {
+        JPanel productoPanel = new JPanel();
+        productoPanel.setPreferredSize(new Dimension(700, 100));
+        productoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String productName = (String) product.get("name");
+        JLabel productNameLabel = new JLabel(productName);
+        JButton button = new JButton("Ver Producto");
+
+        button.setBackground(verInformaciónButton.getBackground());
+        button.setForeground(verInformaciónButton.getForeground());
+
+        productoPanel.add(productNameLabel);
+        productoPanel.add(button);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println(productNameLabel.getText());
+                getInfoProduct(productNameLabel.getText());
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                button.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                button.setBackground(new Color(153, 233, 255));
+            }
+        });
+
+        return productoPanel;
+    }
+    private JScrollPane createScrollPane(List<JPanel> productoPanels) {
+        JPanel panelContenedor = new JPanel();
+        panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
+
+        for (JPanel productoPanel : productoPanels) {
+            panelContenedor.add(productoPanel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panelContenedor);
+        scrollPane.setPreferredSize(new Dimension(750, 400));
+
+        return scrollPane;
+    }
+
+
     public JPanel getPanel(){
         return panelValidacion;
     }
@@ -109,9 +179,10 @@ public class ValidacionProductosLista extends JFrame{
     }
 
 
-    private void getPetitions(){
+    private List<Map<String, Object>> getPetitions(){
         String url = "http://localhost:8080/product/pending";
         HttpClient client = HttpClient.newHttpClient();
+        List<Map<String, Object>> productsList = null;
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -126,12 +197,11 @@ public class ValidacionProductosLista extends JFrame{
                 System.out.println("GET request successful: " + statusCode);
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                List<Map<String, Object>> productList = objectMapper.readValue(responseBody,
+                productsList = objectMapper.readValue(responseBody,
                         objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
 
-                // Hacer algo con la lista obtenida
                 System.out.println("Productos pendientes:");
-                for (Map<String, Object> product : productList) {
+                for (Map<String, Object> product : productsList) {
                     System.out.println(product);
                 }
             } else {
@@ -141,22 +211,10 @@ public class ValidacionProductosLista extends JFrame{
             System.out.println("Error al enviar la petición: " + e.getMessage());
             e.printStackTrace();
         }
+        return productsList;
     }
 
-    private void printProductList() {
-        if (productList != null) {
-            System.out.println("Productos pendientes:");
-            for (Map<String, Object> product : productList) {
-                System.out.println(product);
-            }
-        } else {
-            System.out.println("La lista de productos está vacía.");
-        }
-    }
-
-    private void getInfoProduct(){
-
-        String name = productNameLabel.getText();
+    private void getInfoProduct(String name){
 
         String baseUrl = "http://localhost:8080/product/getbyname/" + name;
         try {
@@ -177,13 +235,14 @@ public class ValidacionProductosLista extends JFrame{
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(response.body());
 
+            name = jsonNode.get("name").asText();
             price = jsonNode.get("price").asText();
             type = jsonNode.get("type").asText();
             desc = jsonNode.get("description").asText();
 
-
         } catch (Exception e) {
             System.out.println("Error al enviar la solicitud GET: " + e.getMessage());
         }
+        goValidate();
     }
 }

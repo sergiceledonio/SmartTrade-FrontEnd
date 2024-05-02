@@ -33,10 +33,13 @@ public class ProductoPendiente {
         this.prodDescription = description;
         this.prodPrice = price;
         this.prodType = type;
+        productName = new JLabel();
+        //validarPanel = new JPanel();
 
         productName.setText(prodName);
         productDescription.setText(prodDescription);
-        productDescription.setEnabled(false);
+        productDescription.setForeground(new Color(0, 0,0));
+        productDescription.setEditable(false);
 
         backValidating.addMouseListener(new MouseAdapter() {
             @Override
@@ -56,8 +59,6 @@ public class ProductoPendiente {
         validateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-
                 // addProduct(prodName, prodDescription, prodPrice, prodType);
             }
             @Override
@@ -72,10 +73,28 @@ public class ProductoPendiente {
                 validateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
         });
+        cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //cancel product
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cancelButton.setBackground(new Color(73, 231, 255));
+                cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cancelButton.setBackground(new Color(153, 233, 255));
+                cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        });
     }
 
     public static void main(String[] args) {
-        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("", "", "", "");
+        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "");
+        System.out.println(ventanaInfoValidate.getProdName());
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfoValidate.getPanel());
@@ -83,6 +102,9 @@ public class ProductoPendiente {
         frame.setVisible(true);
     }
 
+    public String getProdName(){
+        return prodName;
+    }
     public JPanel getPanel(){
         return validarPanel;
     }

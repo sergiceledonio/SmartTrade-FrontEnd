@@ -95,7 +95,7 @@
                 <properties>
                   <background color="-4737097"/>
                   <font name="JetBrains Mono" size="15" style="0"/>
-                  <foreground color="-16777216"/>
+                  <foreground color="-1"/>
                 </properties>
               </component>
             </children>
