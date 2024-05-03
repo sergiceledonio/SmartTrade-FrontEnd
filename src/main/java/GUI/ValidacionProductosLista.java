@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -215,9 +216,10 @@ public class ValidacionProductosLista extends JFrame{
     }
 
     private void getInfoProduct(String name){
-        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
+        String encodedName = encodeName(name);
 
         String baseUrl = "http://localhost:8080/product/getbyname/" + encodedName;
+        System.out.println(baseUrl);
         try {
 
             HttpClient client = HttpClient.newHttpClient();
@@ -245,5 +247,14 @@ public class ValidacionProductosLista extends JFrame{
             System.out.println("Error al enviar la solicitud GET: " + e.getMessage());
         }
         goValidate(nameProduct, price, type, desc);
+    }
+
+    public static String encodeName(String name) {
+        try {
+            return URLEncoder.encode(name, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
