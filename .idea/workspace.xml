@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a430ec02-edca-4da3-987c-c966e40d2b58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" afterDir="false" />
     </list>
@@ -132,7 +134,10 @@
       <workItem from="1714387749340" duration="11786000" />
       <workItem from="1714629887326" duration="8014000" />
       <workItem from="1714640173421" duration="170000" />
-      <workItem from="1714657464228" duration="6742000" />
+      <workItem from="1714657464228" duration="6799000" />
+      <workItem from="1714666432601" duration="1062000" />
+      <workItem from="1714714660936" duration="4463000" />
+      <workItem from="1714719880737" duration="899000" />
     </task>
     <servers />
   </component>

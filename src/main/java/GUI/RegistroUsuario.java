@@ -162,8 +162,13 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
                             if(isValidDni(dniTF.getText())){
                                 if(isValidEmail(emailTF.getText())){
                                     try {
-                                        sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(),city, street, num, flat, door);
-                                        accessLogIn();
+                                        if(isAdmin(passTF.getText(),emailTF.getText())){
+                                            sendAdminToBack(nombreTF.getText(), passTF.getText(),emailTF.getText());
+                                            accessLogIn();
+                                        }else{
+                                            sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(),city, street, num, flat, door);
+                                            accessLogIn();
+                                        }
                                     } catch (JsonProcessingException ex) {
                                         throw new RuntimeException(ex);
                                     }
@@ -308,6 +313,12 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
             cifTF.setText("");
             ibanTF.setText("");
     }
+    private boolean isAdmin(String contra, String gmail){
+        if(contra.equals("admin@admin.com") && gmail.equals("12345678")){
+            return true;
+        }
+        return false;
+    }
 
     private void sendCustomerToBack(String name, String password, String dni, String email, String city, String street, String num, String flat, String door) throws JsonProcessingException {
         String url = "http://localhost:8080/user/newclient";
@@ -361,6 +372,37 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
             userData.put("num", num);
             userData.put("floor", flat);
             userData.put("door", door);
+
+            String jsonBody = new ObjectMapper().writeValueAsString(userData);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+
+            if(statusCode == 200){
+                System.out.println("Seller created: " + statusCode);
+            }else{
+                System.out.println("Problem with seller: "  + statusCode);
+            }
+        }catch(IOException | InterruptedException e){
+            System.out.println("Error al enviar la petición: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAdminToBack(String name, String password, String email){
+        String url = "http://localhost:8080/user/newadmin";
+        HttpClient client = HttpClient.newHttpClient();
+
+        try{
+            Map<String, String> userData = new HashMap<>();
+            userData.put("name", name);
+            userData.put("email", email);
+            userData.put("password", password);
 
             String jsonBody = new ObjectMapper().writeValueAsString(userData);
             HttpRequest request = HttpRequest.newBuilder()

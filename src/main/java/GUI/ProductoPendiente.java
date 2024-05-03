@@ -23,6 +23,7 @@ public class ProductoPendiente {
     private JTextArea productDescription;
     private JButton validateButton;
     private JButton cancelButton;
+    private JPanel panelInfo;
     private String prodName;
     private String prodDescription;
     private String prodType;
@@ -33,8 +34,8 @@ public class ProductoPendiente {
         this.prodDescription = description;
         this.prodPrice = price;
         this.prodType = type;
-        productName = new JLabel();
-        //validarPanel = new JPanel();
+        validarPanel.setPreferredSize(new Dimension(800,600));
+        productDescription.setPreferredSize(new Dimension(500, 200));
 
         productName.setText(prodName);
         productDescription.setText(prodDescription);
@@ -60,6 +61,7 @@ public class ProductoPendiente {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // addProduct(prodName, prodDescription, prodPrice, prodType);
+                backMenuValidation();
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -77,6 +79,7 @@ public class ProductoPendiente {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //cancel product
+                backMenuValidation();
             }
             @Override
             public void mouseEntered(MouseEvent e) {

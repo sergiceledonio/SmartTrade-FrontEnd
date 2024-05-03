@@ -206,36 +206,48 @@ public class InicioSesion extends JFrame implements ObserverUserData {
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                try{
+                    email = jsonResponse.get("email").asText();
+                    name = jsonResponse.get("name").asText();
+                    password = jsonResponse.get("password").asText();
+                    type = jsonResponse.get("type").asInt();
+                    dni = "";
+                    iban = "";
+                    cif = "";
+                    switch(type){
 
-                email = jsonResponse.get("email").asText();
-                name = jsonResponse.get("name").asText();
-                password = jsonResponse.get("password").asText();
-                type = jsonResponse.get("type").asInt();
-                city = jsonResponse.get("city").asText();
-                street = jsonResponse.get("street").asText();
-                door = jsonResponse.get("door").asText();
-                flat = jsonResponse.get("flat").asText();
-                num = jsonResponse.get("num").asText();
-                dni = "";
-                iban = "";
-                cif = "";
-                switch(type){
+                        case 1:
+                            System.out.println("Cliente");
+                            dni = jsonResponse.get("dni").asText();
+                            city = jsonResponse.get("city").asText();
+                            street = jsonResponse.get("street").asText();
+                            door = jsonResponse.get("door").asText();
+                            flat = jsonResponse.get("flat").asText();
+                            num = jsonResponse.get("num").asText();
+                            goToCatalog(getUserData());
+                            break;
 
-                    case 1:
-                        dni = jsonResponse.get("dni").asText();;
-                    break;
+                        case 2:
+                            System.out.println("Vendedor");
+                            iban = jsonResponse.get("iban").asText();
+                            cif = jsonResponse.get("dni").asText();
+                            city = jsonResponse.get("city").asText();
+                            street = jsonResponse.get("street").asText();
+                            door = jsonResponse.get("door").asText();
+                            flat = jsonResponse.get("flat").asText();
+                            num = jsonResponse.get("num").asText();
+                            goToCatalog(getUserData());
+                            break;
 
-                    case 2:
-                        iban = jsonResponse.get("iban").asText();
-                        cif = jsonResponse.get("dni").asText();
-                    break;
-
-                    case 3:
-                        //Admin
-                    break;
+                        case 3:
+                            System.out.println("Admin");
+                            goToAdmin();
+                            break;
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
 
-                goToCatalog(getUserData());
             }else{
                 System.out.println("Problem with client: "  + statusCode);
             }
@@ -249,6 +261,16 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         CatalogoProductos ventanaCatalog = new CatalogoProductos(userData);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+    }
+
+    public void goToAdmin(){
+        ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(ventanaValidacion.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
