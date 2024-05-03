@@ -30,6 +30,8 @@ public class CatalogoProductos implements ObserverUserData {
     private JButton ventaProducto;
     private JLabel lupaButton;
     private JLabel carritoCompraButton;
+    private JPanel panelScrollPane;
+    private JScrollPane scrollPane;
     private static String name;
     private static String password;
     private static String email;

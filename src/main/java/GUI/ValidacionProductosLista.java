@@ -35,21 +35,26 @@ public class ValidacionProductosLista extends JFrame{
     private List<Map<String, Object>> productList;
     private JFrame frame;
     private JScrollPane scrollPane;
+    private JPanel panelContenedor;
 
     public ValidacionProductosLista(){
         panelValidacion = new JPanel();
         panelTitle = new JPanel();
+        panelContenedor = new JPanel();
         panelListaValidos = new JPanel();
+        panelProducto = new JPanel();
+
         panelValidacion.setPreferredSize(new Dimension(800,700));
         panelTitle.setPreferredSize(new Dimension(800, 200));
         panelListaValidos.setPreferredSize(new Dimension(800, 400));
+
         productList = getPetitions();
         scrollPane = createScrollPane(createProductoPanels(productList));
-        panelValidacion.add(panelTitle);
-        panelListaValidos.add(scrollPane);
-        panelValidacion.add(panelListaValidos);
-        panelTitle.setVisible(true);
 
+        panelValidacion.add(panelTitle);
+        panelContenedor.add(scrollPane);
+        panelListaValidos.add(panelContenedor);
+        panelValidacion.add(panelListaValidos);
 
         backLogin.addMouseListener(new MouseAdapter() {
             @Override

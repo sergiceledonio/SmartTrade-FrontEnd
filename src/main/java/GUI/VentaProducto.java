@@ -40,7 +40,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private JButton validateProductButton;
     private JLabel añade;
     private JLabel logoButton;
-    private JPanel carritoCompraButton;
+    private JPanel panel;
+    private JLabel carritoCompraButton;
     private JFrame frame;
     private String name;
     private String email;
@@ -245,6 +246,28 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             @Override
             public void mouseExited(MouseEvent e) {
                 logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        carritoCompraButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                CarritoCompra ventanaCarrito = new CarritoCompra();
+                JFrame frame = new JFrame("Smart Trade");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setContentPane(ventanaCarrito.getPanel());
+                frame.pack();
+                frame.setVisible(true);
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
     }
