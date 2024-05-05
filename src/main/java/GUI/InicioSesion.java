@@ -230,7 +230,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                         case 2:
                             System.out.println("Vendedor");
                             iban = jsonResponse.get("iban").asText();
-                            cif = jsonResponse.get("dni").asText();
+                            cif = jsonResponse.get("cif").asText();
                             city = jsonResponse.get("city").asText();
                             street = jsonResponse.get("street").asText();
                             door = jsonResponse.get("door").asText();
