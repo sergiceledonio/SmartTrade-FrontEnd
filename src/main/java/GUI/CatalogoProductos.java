@@ -1,24 +1,19 @@
 package GUI;
 
+import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.SQLSyntaxErrorException;
-import java.util.*;
-import java.util.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Arrays;
-import Observer.ObserverUserData;
 
-public class CatalogoProductos implements ObserverUserData {
+public class CatalogoProductos extends JFrame implements ObserverUserData {
     private JPanel panelCatalogo;
     private JPanel panelInfo;
     private JPanel panelListado;
@@ -26,12 +21,9 @@ public class CatalogoProductos implements ObserverUserData {
     private JButton filtroButton;
     private JLabel perfilButton;
     private JTextField searchTF;
-    private JTable tableCatalog;
     private JButton ventaProducto;
     private JLabel lupaButton;
     private JLabel carritoCompraButton;
-    private JPanel panelScrollPane;
-    private JScrollPane scrollPane;
     private static String name;
     private static String password;
     private static String email;
@@ -47,169 +39,75 @@ public class CatalogoProductos implements ObserverUserData {
     private static String price;
     private static String description;
     private static String nameProd;
-    private static String category;
+    private JPanel panelProductos;
+    private final InicioSesion iniciosesion;
+    private int tipo;
+    private String[] userData;
 
-    private InicioSesion iniciosesion;
-
-    public CatalogoProductos(String[] userData){
-
+    public CatalogoProductos(String[] userData, int tipo) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
-        panelCatalogo.setPreferredSize(new Dimension(800, 600));
 
+        System.out.println("********************************************************************");
+        System.out.println("Catalogo de productos");
+        System.out.println("El tipo de usuario es: ");
+        System.out.println(tipo);
 
-        if(dni != null){
+        if(tipo == 1){
             ventaProducto.setVisible(false);
+            System.out.println("NO Visible");
+        }else if(tipo == 2){
+            ventaProducto.setVisible(true);
+            System.out.println("Visible");
         }else{
             ventaProducto.setVisible(true);
+            System.out.println("El tipo no concuerda");
         }
 
-        /*TABLECATALOG*/
 
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columnas = {"", "", "", ""};
-        for(int i = 0; i < columnas.length; i++){
-            model.addColumn(columnas[i]);
-        }
-        Object[] productComments = getProducts(); //Acceder a la BD y recoger los elementos guardados
+        inicializarComponentes();
+        organizarInterfaz();
+        getProducts();
 
-
-
-        tableCatalog.setEnabled(true);
-        tableCatalog.setRowHeight(63);
-        tableCatalog.setMaximumSize(new Dimension(200, 120));
-        tableCatalog.setPreferredScrollableViewportSize(new Dimension(200, 120));
-        tableCatalog.setModel(model);
-
-        tableCatalog.setDefaultEditor(Object.class, null);
-        tableCatalog.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int row = tableCatalog.rowAtPoint(e.getPoint());
-                int col = tableCatalog.columnAtPoint(e.getPoint());
-                if (row >= 0 && col >= 0) {
-                    Object cellValue = tableCatalog.getValueAt(row, col);
-                    if (cellValue != null) {
-                        String nombreCelda = cellValue.toString();
-                        int price = nombreCelda.charAt(1);
-                        String category = "Juego";
-                        String descripcion = "Esta es la descripción para el elemento selecionado";
-                        infoProduct(nombreCelda, price, category, descripcion);
-                    }
-                }
-            }
-        });
-
-
-        /*LUPABUTTON*/
-        lupaButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                lupaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-            public void mouseExited(MouseEvent e) {
-                lupaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-
-        /*PERFILBUTTON*/
-        perfilButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                perfilButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-            public void mouseExited(MouseEvent e) {
-                perfilButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-
-        /*FILTROSBUTTON*/
-        filtroButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                filtroButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                filtroButton.setBackground(new Color(73,231,255));
-            }
-            public void mouseExited(MouseEvent e) {
-                filtroButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                filtroButton.setBackground(new Color(153,233,255));
-            }
-        });
-
-        /*LOGOBUTTON*/
-        logoButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                backMenu();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-
-        /*VENTAPRODUCTO*/
         ventaProducto.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 sellProduct();
             }
-
             @Override
             public void mouseEntered(MouseEvent e) {
                 ventaProducto.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                ventaProducto.setBackground(new Color(73,233,255));
+                ventaProducto.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 ventaProducto.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                ventaProducto.setBackground(new Color(153,233,255));
-            }
-        });
-
-        carritoCompraButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                CarritoCompra ventanaCarrito = new CarritoCompra();
-                JFrame frame = new JFrame("Smart Trade");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(ventanaCarrito.getPanel());
-                frame.pack();
-                frame.setVisible(true);
-
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                carritoCompraButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                carritoCompraButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                ventaProducto.setBackground(new Color(153, 233, 255));
             }
         });
     }
 
     public static void main(String[] args) {
-        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{});
+        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{}, 0);
         catalogoProductos.setMain();
     }
 
-    /*METODOS PARA ACCEDER A VARIABLES*/
+    public void setMain() {
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData(), tipo);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCatalogo.panelCatalogo);
+        frame.pack();
+        frame.setVisible(true);
+    }
 
-    public JPanel getPanel(){
+    public JPanel getPanel() {
         return this.panelCatalogo;
     }
 
-    public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
+    public void backMenu() {
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -218,16 +116,7 @@ public class CatalogoProductos implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void setMain(){
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData());
-        JFrame frame = new JFrame("Smart Trade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(ventanaCatalogo.panelCatalogo);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public void sellProduct(){
+    public void sellProduct() {
         VentaProducto ventanaVenta = new VentaProducto(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
@@ -237,7 +126,7 @@ public class CatalogoProductos implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void infoProduct(String nombreCelda,int price,String category,String descripcion){
+    public void infoProduct(String nombreCelda, int price, String category, String descripcion) {
         InfoProducto ventanaInfo = new InfoProducto(getUserData());
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
@@ -247,59 +136,64 @@ public class CatalogoProductos implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public Object[] getProducts() {
+    private void getProducts() {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/product/validated"))
                 .GET()
                 .build();
-        Object[] res = null;
-        try{
-
+        try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
-            if(response.statusCode() == 200){
-                System.out.println("Productos recogidos");
+            if (response.statusCode() == 200) {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
-                res = objectMapper.convertValue(jsonResponse, Object[].class);
-                for(int i = 0; i < res.length; i++){
-                    System.out.println(res[i]);
+                if (jsonResponse.isArray()) {
+                    for (JsonNode productNode : jsonResponse) {
+                        String nombre = productNode.get("name").asText();
+                        String precio = productNode.get("price").asText();
+                        String descripcion = productNode.get("description").asText();
+
+                        System.out.println("Producto: " + nombre + " Precio: " + precio + " Descripción: " + descripcion);
+
+                        agregarProducto(nombre, precio, descripcion);
+                    }
                 }
-            }else{
-                System.out.println("Objetos no recogidos");
+            } else {
+                System.out.println("Error: " + response.statusCode());
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return res;
     }
 
-    private Object[] parseResponse(String response){
-        Object[] products = null;
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-             products = objectMapper.readValue(response, Object[].class);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return products;
+    private void agregarProducto(String nombre, String precio, String descripcion) {
+        JPanel panelProducto = new JPanel(new BorderLayout());
+        panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JLabel labelNombre = new JLabel(nombre);
+        JLabel labelPrecio = new JLabel(precio);
+        JLabel labelDescripcion = new JLabel("<html>" + descripcion + "</html>");
+        labelNombre.setPreferredSize(new Dimension(200, 30));
+        labelPrecio.setPreferredSize(new Dimension(200, 30));
+        labelDescripcion.setPreferredSize(new Dimension(200, 30));
+        panelProducto.add(labelNombre, BorderLayout.NORTH);
+        panelProducto.add(labelPrecio, BorderLayout.CENTER);
+        panelProducto.add(labelDescripcion, BorderLayout.SOUTH);
+        panelProductos.add(panelProducto);
+        panelProductos.revalidate();
+        panelProductos.repaint();
     }
 
     @Override
     public void addObserver(ObserverUserData observer) {
-
     }
 
     @Override
     public void removeObserver(ObserverUserData observer) {
-
     }
 
     @Override
     public void notifyObservers(String[] data) {
-
     }
 
     @Override
@@ -318,9 +212,72 @@ public class CatalogoProductos implements ObserverUserData {
         num = data[11];
     }
 
-    public static String[] getUserData(){
-            return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
+    public static String[] getUserData() {
+        return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
+    }
+
+    private void inicializarComponentes() {
+        panelCatalogo = new JPanel();
+        panelInfo = new JPanel();
+        panelListado = new JPanel();
+        panelProductos = new JPanel();
+        panelProductos.setLayout(new GridLayout(0, 3, 10, 10));
+        ventaProducto = new JButton("Vender Producto");
+        ventaProducto.setBackground(new Color(153, 233, 255));
+        ventaProducto.setPreferredSize(new Dimension(150, 30));
+        JPanel panelVenta = new JPanel();
+        panelVenta.setLayout(new FlowLayout(FlowLayout.CENTER));
+    }
+
+    private void organizarInterfaz() {
+
+        searchTF.setPreferredSize(new Dimension(120,20));
+
+        panelCatalogo.setLayout(new BorderLayout());
+
+        panelInfo.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 0.1;
+        panelInfo.add(logoButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.9;
+        panelInfo.add(searchTF, gbc);
+
+        gbc.gridx = 2;
+        gbc.weightx = 0.1;
+        panelInfo.add(lupaButton, gbc);
+
+        gbc.gridx = 3;
+        gbc.weightx = 0.1;
+        panelInfo.add(filtroButton, gbc);
+
+        gbc.gridx = 4;
+        gbc.weightx = 0.1;
+        panelInfo.add(carritoCompraButton, gbc);
+
+        gbc.gridx = 5;
+        gbc.weightx = 0.1;
+        panelInfo.add(perfilButton, gbc);
+
+        panelInfo.setPreferredSize(new Dimension(800, 120));
+        panelInfo.setBackground(new Color(183, 183, 183));
+
+        panelListado.setLayout(new BorderLayout());
+        panelListado.setBackground(new Color(198, 232, 251));
+        panelListado.setPreferredSize(new Dimension(800, 480));
+
+        panelProductos.setLayout(new GridLayout(0, 3, 10, 10));
+        panelProductos.setBackground(new Color(198, 232, 251));
+        panelListado.add(panelProductos, BorderLayout.CENTER);
+
+        panelCatalogo.add(panelInfo, BorderLayout.NORTH);
+        panelCatalogo.add(panelListado, BorderLayout.CENTER);
+        panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
     }
 }
-
-

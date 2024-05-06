@@ -8,10 +8,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductoPendiente {
     private JPanel panelTitulo;
@@ -45,6 +49,7 @@ public class ProductoPendiente {
         backValidating.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                validateProduct("false");
                 backMenuValidation();
             }
             @Override
@@ -60,7 +65,7 @@ public class ProductoPendiente {
         validateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // addProduct(prodName, prodDescription, prodPrice, prodType);
+                validateProduct("true");
                 backMenuValidation();
             }
             @Override
@@ -113,21 +118,48 @@ public class ProductoPendiente {
     }
 
     private void backMenuValidation(){
-        ValidacionProductosLista ventanaLista = new ValidacionProductosLista();
-        JFrame ventanaAtras = new JFrame("Smart Trade");
-        ventanaAtras.setContentPane(ventanaLista.getPanel());
-        ventanaAtras.pack();
-        ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        SwingUtilities.invokeLater(() -> {
+            ValidacionProductosLista nuevaVentanaValidacion = new ValidacionProductosLista();
+            nuevaVentanaValidacion.setTitle("Smart Trade");
+            nuevaVentanaValidacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            nuevaVentanaValidacion.setSize(800, 600);
+            nuevaVentanaValidacion.setLocationRelativeTo(null);
+            nuevaVentanaValidacion.setVisible(true);
+        });
         ventanaActual.dispose();
     }
 
+    private void validateProduct(String valid){
 
-    private void deleteOldProduct(String name){
 
-        //Eliminar producto si no es validado
+        String url = "http://localhost:8080/product/validate";
+        HttpClient client = HttpClient.newHttpClient();
 
+        try{
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("name", prodName);
+            productData.put("valid", valid);
+
+            String jsonBody = new ObjectMapper().writeValueAsString(productData);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            if (statusCode == 200){
+                System.out.println(responseBody);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
 
    /* private void addProduct(String name, String desc, String price, String type){
 
@@ -166,6 +198,5 @@ public class ProductoPendiente {
         }
 
     }*/
-
 }
 

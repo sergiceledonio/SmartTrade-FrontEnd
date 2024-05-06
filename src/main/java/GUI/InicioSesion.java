@@ -42,12 +42,13 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     private String iban;
     private String cif;
     private String dni;
-    private int type;
+    private String type;
     private String city;
     private String street;
     private String door;
     private String num;
     private String flat;
+    private int tipo;
     private List<ObserverUserData> observadores = new ArrayList<>();
     public InicioSesion(){
 
@@ -210,40 +211,79 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                     email = jsonResponse.get("email").asText();
                     name = jsonResponse.get("name").asText();
                     password = jsonResponse.get("password").asText();
-                    type = jsonResponse.get("type").asInt();
+                    type = jsonResponse.get("type").asText();
                     dni = "";
                     iban = "";
                     cif = "";
-                    switch(type){
+                    city = "";
+                    street = "";
+                    door = "";
+                    flat = "";
+                    num = "";
 
-                        case 1:
-                            System.out.println("Cliente");
-                            dni = jsonResponse.get("dni").asText();
-                            city = jsonResponse.get("city").asText();
-                            street = jsonResponse.get("street").asText();
-                            door = jsonResponse.get("door").asText();
-                            flat = jsonResponse.get("flat").asText();
-                            num = jsonResponse.get("num").asText();
-                            goToCatalog(getUserData());
-                            break;
+                    System.out.println("Type= " + type);
 
-                        case 2:
-                            System.out.println("Vendedor");
-                            iban = jsonResponse.get("iban").asText();
-                            cif = jsonResponse.get("dni").asText();
-                            city = jsonResponse.get("city").asText();
-                            street = jsonResponse.get("street").asText();
-                            door = jsonResponse.get("door").asText();
-                            flat = jsonResponse.get("flat").asText();
-                            num = jsonResponse.get("num").asText();
-                            goToCatalog(getUserData());
-                            break;
+                    JsonNode cityNode = jsonResponse.get("city");
+                    if(cityNode != null){
+                        switch(Integer.parseInt(type)){
 
-                        case 3:
-                            System.out.println("Admin");
-                            goToAdmin();
-                            break;
+                            case 1:
+                                System.out.println("Cliente");
+                                dni = jsonResponse.get("dni").asText();
+                                city = jsonResponse.get("city").asText();
+                                street = jsonResponse.get("street").asText();
+                                door = jsonResponse.get("door").asText();
+                                flat = jsonResponse.get("flat").asText();
+                                num = jsonResponse.get("num").asText();
+                                tipo = 1;
+                                goToCatalog(getUserData(), tipo);
+                                break;
+
+                            case 2:
+                                System.out.println("Vendedor");
+                                iban = jsonResponse.get("iban").asText();
+                                cif = jsonResponse.get("cif").asText();
+                                city = jsonResponse.get("city").asText();
+                                street = jsonResponse.get("street").asText();
+                                door = jsonResponse.get("door").asText();
+                                flat = jsonResponse.get("flat").asText();
+                                num = jsonResponse.get("num").asText();
+                                tipo = 2;
+                                goToCatalog(getUserData(), tipo);
+                                break;
+
+                            case 3:
+                                System.out.println("Admin");
+                                goToAdmin();
+                                break;
+                        }
+                    }else{
+                        switch(Integer.parseInt(type)){
+
+                            case 1:
+                                System.out.println("Cliente");
+                                dni = jsonResponse.get("dni").asText();
+                                tipo = 1;
+                                goToCatalog(getUserData(), tipo);
+                                break;
+
+                            case 2:
+                                System.out.println("Vendedor");
+                                iban = jsonResponse.get("iban").asText();
+                                cif = jsonResponse.get("cif").asText();
+                                tipo = 2;
+                                goToCatalog(getUserData(), tipo);
+                                break;
+
+                            case 3:
+                                System.out.println("Admin");
+                                goToAdmin();
+                                break;
+                        }
                     }
+
+
+
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -257,8 +297,8 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         }
     }
 
-    public void goToCatalog(String[] userData){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData);
+    public void goToCatalog(String[] userData, int tipo){
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -268,12 +308,15 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     }
 
     public void goToAdmin(){
-        ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
-        JFrame ventanaAtras = new JFrame("Smart Trade");
-        ventanaAtras.setContentPane(ventanaValidacion.getPanel());
-        ventanaAtras.pack();
-        ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        SwingUtilities.invokeLater(() -> {
+            ValidacionProductosLista nuevaVentanaValidacion = new ValidacionProductosLista();
+            nuevaVentanaValidacion.setTitle("Smart Trade");
+            nuevaVentanaValidacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            nuevaVentanaValidacion.setSize(800, 600);
+            nuevaVentanaValidacion.setLocationRelativeTo(null);
+            nuevaVentanaValidacion.setVisible(true);
+        });
         ventanaActual.dispose();
     }
 
@@ -282,7 +325,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         res[0] = name;
         res[1] = email;
         res[2] = password;
-        res[3] = String.valueOf(type);
+        res[3] = type;
         res[4] = city;
         res[5] = street;
         res[6] = door;
@@ -317,7 +360,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         name = res[0];
         email = res[1];
         password = res[2];
-        type = Integer.parseInt(res[3]);
+        type = res[3];
         city = res[4];
         street = res[5];
         door = res[6];

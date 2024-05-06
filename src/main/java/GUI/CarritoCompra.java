@@ -38,6 +38,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private static String category;
     private InicioSesion iniciosesion;
     private JFrame frame;
+    private int tipo;
 
 
     public CarritoCompra() {
@@ -89,7 +90,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

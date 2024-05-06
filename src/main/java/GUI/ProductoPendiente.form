@@ -129,7 +129,7 @@
             <properties>
               <background color="-6690305"/>
               <foreground color="-16777216"/>
-              <text value="Cancelar"/>
+              <text value="No validar"/>
             </properties>
           </component>
         </children>

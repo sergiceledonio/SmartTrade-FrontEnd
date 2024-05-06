@@ -20,7 +20,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private JPanel panelInfo;
     private JTextArea productDescription;
     private JButton buyButton;
-    private JTable comments;
     private JLabel logoButton;
     private JLabel searchButton;
     private JLabel perfilButton;
@@ -42,6 +41,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private String flat;
     private String num;
     private String type;
+    private int tipo;
     private String price;
     private String description;
     private String category;
@@ -78,27 +78,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             @Override
             public void mouseExited(MouseEvent e) {
                 logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-
-        /*COMMENTS*/
-
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Comentarios");
-        String[] productComments = {"Muy bueno", "Me encanta", "Me encanta", "Me encantan los nachos", "Me encanta el guacamole", "Me encantan las salchichas", "Me gusta el baloncesto", "Me encanta nerea"}; //Metodo que acceda a la BD y recoja comentarios
-        for(int i = 0; i < 4; i++) {
-            model.addRow(new Object[]{productComments[i]});
-            System.out.println();
-        }
-        comments.setEnabled(false);
-        comments.setRowHeight(63);
-        comments.setMaximumSize(new Dimension(200, 120));
-        comments.setPreferredScrollableViewportSize(new Dimension(200, 120));
-        comments.setModel(model);
-        comments.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                System.out.println("La altura es: " + comments.getHeight());
             }
         });
 
@@ -190,7 +169,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

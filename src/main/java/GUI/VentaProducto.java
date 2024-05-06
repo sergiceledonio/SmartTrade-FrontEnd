@@ -57,6 +57,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private String type;
     private String[] attributes;
     private InicioSesion iniciosesion;
+    private int tipo;
 
     public VentaProducto(String[] userData){
 
@@ -363,7 +364,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData());
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -383,10 +384,10 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode jsonBody = objectMapper.createObjectNode();
 
-        jsonBody.put("type", attributes[3]);
         jsonBody.put("name", attributes[0]);
         jsonBody.put("price", attributes[1]);
-        jsonBody.put("description", attributes[2]);
+        jsonBody.put("type", attributes[2]);
+        jsonBody.put("description", attributes[3]);
         jsonBody.put("pending", true);
         jsonBody.put("validation", false);
 

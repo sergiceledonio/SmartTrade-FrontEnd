@@ -42,7 +42,6 @@ public class ValidacionProductosLista extends JFrame{
         panelTitle = new JPanel();
         panelContenedor = new JPanel();
         panelListaValidos = new JPanel();
-        panelProducto = new JPanel();
 
         panelValidacion.setPreferredSize(new Dimension(800,700));
         panelTitle.setPreferredSize(new Dimension(800, 200));
@@ -54,7 +53,7 @@ public class ValidacionProductosLista extends JFrame{
         panelValidacion.add(panelTitle);
         panelContenedor.add(scrollPane);
         panelListaValidos.add(panelContenedor);
-        panelValidacion.add(panelListaValidos);
+        setContentPane(panelListaValidos);
 
         backLogin.addMouseListener(new MouseAdapter() {
             @Override
@@ -90,24 +89,37 @@ public class ValidacionProductosLista extends JFrame{
 
 
     public static void main(String[] args) {
-        ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
-        JFrame frame = new JFrame("Smart Trade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(ventanaValidacion.getPanel());
-        frame.pack();
-        frame.setVisible(true);
+        invoke();
     }
 
-    public void goValidate(String nombre, String precio, String categoria, String descripcion){
-        ProductoPendiente ventanaPendiente = new ProductoPendiente(nombre, descripcion, precio, categoria);
-        JFrame ventanaAtras = new JFrame("Smart Trade");
-        ventanaAtras.setContentPane(ventanaPendiente.getPanel());
-        ventanaAtras.pack();
-        ventanaAtras.setVisible(true);
-        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
-        ventanaActual.dispose();
+    public void goValidate(String nombre, String precio, String categoria, String descripcion) {
+        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, descripcion, precio, categoria);
+        JFrame registro = new JFrame("Smart Trade");
+        registro.setContentPane(ventanaValidar.getPanel());
+        registro.pack();
+        registro.setVisible(true);
+        this.dispose();
     }
 
+    public static void invoke(){
+        SwingUtilities.invokeLater(() -> {
+            ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
+            ventanaValidacion.setTitle("Smart Trade");
+            ventanaValidacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            ventanaValidacion.setSize(800, 600);
+            ventanaValidacion.setLocationRelativeTo(null);
+            ventanaValidacion.setVisible(true);
+        });
+    }
+
+    private void disposeCurrentFrame() {
+        SwingUtilities.invokeLater(() -> {
+            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(panelValidacion);
+            if (currentFrame != null) {
+                currentFrame.dispose();
+            }
+        });
+    }
 
     /*ACCESO A LOS ATRIBUTOS*/
 
