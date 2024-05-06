@@ -48,26 +48,24 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
+        this.tipo = tipo;
+
         System.out.println("********************************************************************");
         System.out.println("Catalogo de productos");
         System.out.println("El tipo de usuario es: ");
         System.out.println(tipo);
 
         if(tipo == 1){
-            ventaProducto.setVisible(false);
             System.out.println("NO Visible");
         }else if(tipo == 2){
-            ventaProducto.setVisible(true);
             System.out.println("Visible");
-        }else{
-            ventaProducto.setVisible(true);
-            System.out.println("El tipo no concuerda");
         }
 
-
         inicializarComponentes();
-        organizarInterfaz();
+        organizarInterfaz(tipo);
         getProducts();
+
+
 
         ventaProducto.addMouseListener(new MouseAdapter() {
             @Override
@@ -84,6 +82,83 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
             public void mouseExited(MouseEvent e) {
                 ventaProducto.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 ventaProducto.setBackground(new Color(153, 233, 255));
+            }
+        });
+        logoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                backMenu(tipo);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        lupaButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lupaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lupaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        filtroButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                filtroButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                filtroButton.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                filtroButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                filtroButton.setBackground(new Color(153, 233, 255));
+            }
+        });
+        carritoCompraButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //ir al carrito
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                carritoCompraButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        perfilButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //ir al perfil
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                perfilButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                perfilButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
     }
@@ -106,8 +181,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         return this.panelCatalogo;
     }
 
-    public void backMenu() {
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
+    public void backMenu(int param) {
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -117,7 +192,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void sellProduct() {
-        VentaProducto ventanaVenta = new VentaProducto(getUserData());
+        VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();
@@ -171,8 +246,11 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         JPanel panelProducto = new JPanel(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel labelNombre = new JLabel(nombre);
-        JLabel labelPrecio = new JLabel(precio);
+        JLabel labelPrecio = new JLabel(precio + "€");
         JLabel labelDescripcion = new JLabel("<html>" + descripcion + "</html>");
+        labelNombre.setHorizontalAlignment(JLabel.CENTER);
+        labelDescripcion.setHorizontalAlignment(JLabel.CENTER);
+        labelPrecio.setHorizontalAlignment(JLabel.CENTER);
         labelNombre.setPreferredSize(new Dimension(200, 30));
         labelPrecio.setPreferredSize(new Dimension(200, 30));
         labelDescripcion.setPreferredSize(new Dimension(200, 30));
@@ -229,7 +307,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         panelVenta.setLayout(new FlowLayout(FlowLayout.CENTER));
     }
 
-    private void organizarInterfaz() {
+    private void organizarInterfaz(int param) {
 
         searchTF.setPreferredSize(new Dimension(120,20));
 
@@ -278,6 +356,16 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
 
         panelCatalogo.add(panelInfo, BorderLayout.NORTH);
         panelCatalogo.add(panelListado, BorderLayout.CENTER);
-        panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
+
+        //System.out.println("El tipo es: " + param);
+        if(param == 2){
+            panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
+            //System.out.println("Se crea el boton");
+        }else if(param == 1){
+            //System.out.println("No se crea el boton");
+        }else {
+            //System.out.println("Raro");
+        }
+
     }
 }

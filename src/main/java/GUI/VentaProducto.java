@@ -59,7 +59,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private InicioSesion iniciosesion;
     private int tipo;
 
-    public VentaProducto(String[] userData){
+    public VentaProducto(String[] userData, int tipo){
+        this.tipo = tipo;
 
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
@@ -111,7 +112,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             public void mouseClicked(MouseEvent e){
                 if(acceptProduct()){
                     tryValidation();
-                    backMenu();
+                    System.out.println(tipo);
+                    backMenu(tipo);
                 }
             }
         });
@@ -236,7 +238,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                backMenu();
+                backMenu(tipo);
             }
 
             @Override
@@ -275,7 +277,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
 
     public static void main(String[] args) {
-        VentaProducto ventanaVenta = new VentaProducto(new String[]{});
+        VentaProducto ventanaVenta = new VentaProducto(new String[]{}, 0);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaVenta.panelProductoVenta);
@@ -363,8 +365,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     return false;
     }
 
-    public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
+    public void backMenu(int param){
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
