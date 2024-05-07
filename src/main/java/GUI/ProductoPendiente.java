@@ -33,7 +33,7 @@ public class ProductoPendiente {
     private String prodType;
     private String prodPrice;
 
-    public ProductoPendiente(String name, String description, String price, String type){
+    public ProductoPendiente(String name, String price, String type, String description){
         this.prodName = name;
         this.prodDescription = description;
         this.prodPrice = price;

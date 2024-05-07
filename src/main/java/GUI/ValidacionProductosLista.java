@@ -93,7 +93,7 @@ public class ValidacionProductosLista extends JFrame{
     }
 
     public void goValidate(String nombre, String precio, String categoria, String descripcion) {
-        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, descripcion, precio, categoria);
+        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion);
         JFrame registro = new JFrame("Smart Trade");
         registro.setContentPane(ventanaValidar.getPanel());
         registro.pack();
