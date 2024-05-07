@@ -93,6 +93,8 @@ public class ValidacionProductosLista extends JFrame{
     }
 
     public void goValidate(String nombre, String precio, String categoria, String descripcion) {
+        System.out.println(nombre + " " + precio + " " + categoria + " " + descripcion);
+
         ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion);
         JFrame registro = new JFrame("Smart Trade");
         registro.setContentPane(ventanaValidar.getPanel());
@@ -103,6 +105,7 @@ public class ValidacionProductosLista extends JFrame{
 
     public static void invoke(){
         SwingUtilities.invokeLater(() -> {
+            System.out.println("**************************************");
             ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
             ventanaValidacion.setTitle("Smart Trade");
             ventanaValidacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

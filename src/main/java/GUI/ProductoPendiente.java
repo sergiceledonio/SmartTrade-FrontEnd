@@ -49,7 +49,6 @@ public class ProductoPendiente {
         backValidating.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                validateProduct("false");
                 backMenuValidation();
             }
             @Override
@@ -65,7 +64,7 @@ public class ProductoPendiente {
         validateButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                validateProduct("true");
+                validateProduct(true);
                 backMenuValidation();
             }
             @Override
@@ -83,7 +82,7 @@ public class ProductoPendiente {
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //cancel product
+                validateProduct(false);
                 backMenuValidation();
             }
             @Override
@@ -102,7 +101,6 @@ public class ProductoPendiente {
 
     public static void main(String[] args) {
         ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "");
-        System.out.println(ventanaInfoValidate.getProdName());
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfoValidate.getPanel());
@@ -130,7 +128,7 @@ public class ProductoPendiente {
         ventanaActual.dispose();
     }
 
-    private void validateProduct(String valid){
+    private void validateProduct(Boolean valid){
 
 
         String url = "http://localhost:8080/product/validate";
@@ -151,8 +149,11 @@ public class ProductoPendiente {
 
             int statusCode = response.statusCode();
             String responseBody = response.body();
+            System.out.println(statusCode);
             if (statusCode == 200){
-                System.out.println(responseBody);
+                System.out.println("Aquí está llegando?? " + responseBody);
+            }else{
+                System.out.println("Estamos jodidos");
             }
 
         }catch(Exception e){
@@ -160,43 +161,5 @@ public class ProductoPendiente {
         }
     }
 
-
-   /* private void addProduct(String name, String desc, String price, String type){
-
-        //Validar producto
-
-
-        String url = "http://localhost:8080/product/newproducts";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode jsonBody = objectMapper.createObjectNode();
-
-        jsonBody.put("type", type);
-        jsonBody.put("name", name);
-        jsonBody.put("price", price);
-        jsonBody.put("description", desc);
-        jsonBody.put("pending", false);
-        jsonBody.put("validation", true);
-
-        String jsonString = jsonBody.toString();
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonString))
-                .build();
-
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            System.out.println("Response code: " + response.statusCode());
-            System.out.println("Response body: " + response.body());
-        } catch (IOException | InterruptedException e) {
-            System.out.println("Error al enviar la solicitud POST: " + e.getMessage());
-        }
-
-    }*/
 }
 

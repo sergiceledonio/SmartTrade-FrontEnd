@@ -1,5 +1,9 @@
 package GUI;
 
+import Estado.Closed;
+import Estado.StatePattern;
+import Estado.Closed;
+import Estado.Open;
 import Observer.ObserverRegister;
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,6 +54,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     private String flat;
     private int tipo;
     private List<ObserverUserData> observadores = new ArrayList<>();
+    private StatePattern currentState;
     public InicioSesion(){
 
         /*USERTF*/
@@ -101,8 +106,18 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         });
 
         /*VISIBILITYBUTTON*/
+        currentState = new Closed();
 
-        visibilityButton.addMouseListener(new MouseAdapter(){
+        visibilityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                currentState.changeIcon(visibilityButton);
+                currentState.handleVisibilityButton(passTF);
+                changeState();
+            }
+        });
+        visibilityButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 visibilityButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -110,22 +125,6 @@ public class InicioSesion extends JFrame implements ObserverUserData {
             @Override
             public void mouseExited(MouseEvent e) {
                 visibilityButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-        ImageIcon abierto = new ImageIcon("src/main/resources/img/ojoAbierto (1).png");
-        ImageIcon cerrado = new ImageIcon("src/main/resources/img/ojoCerrado (1).png");
-        visibilityButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(visiblePass){
-                    passTF.setEchoChar((char) 0);
-                    visiblePass = false;
-                    visibilityButton.setIcon(abierto);
-                }else{
-                    passTF.setEchoChar('*');
-                    visiblePass = true;
-                    visibilityButton.setIcon(cerrado);
-                }
             }
         });
 
@@ -369,5 +368,13 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         dni = res[9];
         iban = res[10];
         cif = res[11];
+    }
+
+    private void changeState() {
+        if (currentState instanceof Open) {
+            currentState = new Closed();
+        } else {
+            currentState = new Open();
+        }
     }
 }

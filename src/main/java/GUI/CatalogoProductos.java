@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
@@ -35,10 +38,11 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     private static String door;
     private static String flat;
     private static String num;
+    private static String prodType;
+    private static double prodPrice;
+    private static String prodDescription;
+    private static String prodName;
     private static String type;
-    private static String price;
-    private static String description;
-    private static String nameProd;
     private JPanel panelProductos;
     private final InicioSesion iniciosesion;
     private int tipo;
@@ -54,12 +58,6 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Catalogo de productos");
         System.out.println("El tipo de usuario es: ");
         System.out.println(tipo);
-
-        if(tipo == 1){
-            System.out.println("NO Visible");
-        }else if(tipo == 2){
-            System.out.println("Visible");
-        }
 
         inicializarComponentes();
         organizarInterfaz(tipo);
@@ -201,8 +199,15 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void infoProduct(String nombreCelda, int price, String category, String descripcion) {
-        InfoProducto ventanaInfo = new InfoProducto(getUserData());
+    public void infoProduct(String nombre, Double price, String descripcion,  String category) {
+
+        System.out.println("*************************************");
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Precio: " + price);
+        System.out.println("Categoria: " + category);
+        System.out.println("Descripción: " + descripcion);
+
+        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -225,13 +230,14 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 if (jsonResponse.isArray()) {
                     for (JsonNode productNode : jsonResponse) {
-                        String nombre = productNode.get("name").asText();
-                        String precio = productNode.get("price").asText();
-                        String descripcion = productNode.get("description").asText();
+                        prodName = productNode.get("name").asText();
+                        prodPrice = productNode.get("price").asDouble();
+                        prodDescription = productNode.get("description").asText();
+                        prodType = productNode.get("type").asText();
 
-                        System.out.println("Producto: " + nombre + " Precio: " + precio + " Descripción: " + descripcion);
+                        System.out.println("Producto: " + prodName + " Precio: " + prodPrice + " Descripción: " + prodDescription + " Tipo: " + prodType);
 
-                        agregarProducto(nombre, precio, descripcion);
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
                     }
                 }
             } else {
@@ -242,12 +248,30 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         }
     }
 
-    private void agregarProducto(String nombre, String precio, String descripcion) {
+    private void agregarProducto(String nombre, Double precio, String descripcion, String type) {
         JPanel panelProducto = new JPanel(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel labelNombre = new JLabel(nombre);
         JLabel labelPrecio = new JLabel(precio + "€");
         JLabel labelDescripcion = new JLabel("<html>" + descripcion + "</html>");
+        panelProducto.setMinimumSize(new Dimension(300,200));
+        panelProducto.setMaximumSize(new Dimension(300,200));
+        panelProducto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                infoProduct(nombre, precio, descripcion, type);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                panelProducto.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                panelProducto.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
         labelNombre.setHorizontalAlignment(JLabel.CENTER);
         labelDescripcion.setHorizontalAlignment(JLabel.CENTER);
         labelPrecio.setHorizontalAlignment(JLabel.CENTER);
@@ -352,19 +376,15 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
 
         panelProductos.setLayout(new GridLayout(0, 3, 10, 10));
         panelProductos.setBackground(new Color(198, 232, 251));
-        panelListado.add(panelProductos, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(panelProductos);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        panelListado.add(scrollPane, BorderLayout.CENTER);
 
         panelCatalogo.add(panelInfo, BorderLayout.NORTH);
         panelCatalogo.add(panelListado, BorderLayout.CENTER);
 
-        //System.out.println("El tipo es: " + param);
         if(param == 2){
             panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
-            //System.out.println("Se crea el boton");
-        }else if(param == 1){
-            //System.out.println("No se crea el boton");
-        }else {
-            //System.out.println("Raro");
         }
 
     }

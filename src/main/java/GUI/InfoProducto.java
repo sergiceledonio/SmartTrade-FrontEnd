@@ -27,7 +27,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private JLabel categoryProduct;
     private JLabel priceProduct;
     private JLabel carritoCompraButton;
-    private JLabel favButton;
+    private JLabel favouriteButton;
     private JFrame frame;
     private String name;
     private String email;
@@ -46,19 +46,14 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private String description;
     private String category;
     private InicioSesion iniciosesion;
-    public InfoProducto(String[] userData){
+    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription){
         panelInfo.setPreferredSize(new Dimension(800,600));
         /*SETTING VARIABLES TO WHAT WAS CLICKED*/
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.dni = dni;
-        this.iban = iban;
-        this.cif = cif;
-        nameProduct.setText(name);
-        priceProduct.setText("El precio es: " + price + "€");
-        categoryProduct.setText("Categoria: " + category);
-        productDescription.setText(description);
+
+        nameProduct.setText(prodName);
+        priceProduct.setText("El precio es de: " + prodPrice + "€");
+        categoryProduct.setText("Categoria: " + prodType);
+        productDescription.setText(prodDescription);
 
         /*BUYBUTTON*/
 
@@ -152,9 +147,24 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                 buyButton.setBackground(new Color(153,233,255));
             }
         });
+        favouriteButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                favouriteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                favouriteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto(new String[]{});
+        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","");
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -210,5 +220,13 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     }
     public String[] getUserData(){
         return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
+    }
+
+    public boolean isFav(Boolean fav){
+        if(fav){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

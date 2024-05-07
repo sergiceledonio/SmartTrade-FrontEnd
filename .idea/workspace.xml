@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9647fbb4-4146-4203-9197-2d36c3d72cd7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Estado/Closed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Estado/Open.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Estado/StatePattern.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/img/favLleno.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/img/favVacio.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" afterDir="false" />
     </list>
@@ -36,21 +45,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CatalogoProductos.executor": "Run",
-    "Application.InicioSesion.executor": "Run",
-    "Application.VentaProducto.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CatalogoProductos.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InfoProducto.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InicioSesion.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProductoPendiente.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ValidacionProductosLista.executor&quot;: &quot;Run&quot;,
+    &quot;Application.VentaProducto.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\javichr11\IdeaProjects\SmartTrade-FrontEnd\src\main\java" />
@@ -60,6 +72,13 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\javichr11\IdeaProjects\SmartTrade-FrontEnd\src\main\resources\img" />
     </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -117,7 +136,9 @@
       <workItem from="1714727117303" duration="11570000" />
       <workItem from="1714812732813" duration="7043000" />
       <workItem from="1714976382924" duration="8537000" />
-      <workItem from="1715067203320" duration="1563000" />
+      <workItem from="1715067203320" duration="4988000" />
+      <workItem from="1715089437456" duration="4035000" />
+      <workItem from="1715097334749" duration="4229000" />
     </task>
     <servers />
   </component>
