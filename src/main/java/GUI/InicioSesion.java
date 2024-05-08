@@ -297,7 +297,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     }
 
     public void goToCatalog(String[] userData, int tipo){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

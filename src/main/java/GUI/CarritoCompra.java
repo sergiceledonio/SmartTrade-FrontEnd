@@ -37,13 +37,15 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private static String category;
     private InicioSesion iniciosesion;
     private int tipo;
+    private int id;
 
 
-    public CarritoCompra(int t) {
+    public CarritoCompra(int t, int id) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
+        this.id = id;
 
         inicializarComponentes();
 
@@ -77,7 +79,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public static void main(String[] args) {
-        CarritoCompra carritoCompra = new CarritoCompra(0);
+        CarritoCompra carritoCompra = new CarritoCompra(0, 0);
         carritoCompra.setMain();
     }
 
@@ -88,7 +90,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     private void setMain(){
-        CarritoCompra ventanaCarrito = new CarritoCompra(tipo);
+        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCarrito.getPanel());
@@ -97,7 +99,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
