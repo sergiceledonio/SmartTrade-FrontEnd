@@ -19,7 +19,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JLabel perfilButton;
     private JLabel lupaButton;
     private JPanel panelCompras;
-    private JTable listaCarritoProductos;
     private static String name;
     private static String password;
     private static String email;
@@ -37,14 +36,17 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private static String nameProd;
     private static String category;
     private InicioSesion iniciosesion;
-    private JFrame frame;
     private int tipo;
 
 
-    public CarritoCompra() {
+    public CarritoCompra(int t) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
+        this.tipo = t;
+
+        inicializarComponentes();
+
 
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -75,18 +77,23 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public static void main(String[] args) {
-        CarritoCompra ventanaCarrito = new CarritoCompra();
-        JFrame frame = new JFrame("Smart Trade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(ventanaCarrito.getPanel());
-        frame.pack();
-        frame.setVisible(true);
+        CarritoCompra carritoCompra = new CarritoCompra(0);
+        carritoCompra.setMain();
     }
 
     /*ACCESO A LAS VARIABLES LOCALES*/
 
     public JPanel getPanel(){
         return panelCarrito;
+    }
+
+    private void setMain(){
+        CarritoCompra ventanaCarrito = new CarritoCompra(tipo);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCarrito.getPanel());
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public void backMenu(){
@@ -98,7 +105,17 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
+    private void inicializarComponentes(){
+        panelCarrito.setLayout(new BorderLayout());
 
+        panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panelCompras);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        panelCarrito.add(scrollPane, BorderLayout.CENTER);
+
+
+    }
 
     @Override
     public void addObserver(ObserverUserData observer) {

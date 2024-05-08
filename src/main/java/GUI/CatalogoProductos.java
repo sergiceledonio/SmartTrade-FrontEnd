@@ -132,7 +132,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         carritoCompraButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //ir al carrito
+                goCarrito(tipo);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -177,6 +177,18 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
 
     public JPanel getPanel() {
         return this.panelCatalogo;
+    }
+
+    public void goCarrito(int t){
+        CarritoCompra ventanaCarrito = new CarritoCompra(t);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCarrito.getPanel());
+        frame.pack();
+        frame.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+
     }
 
     public void backMenu(int param) {

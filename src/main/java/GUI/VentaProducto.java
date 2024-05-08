@@ -255,7 +255,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         carritoCompraButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                CarritoCompra ventanaCarrito = new CarritoCompra();
+                CarritoCompra ventanaCarrito = new CarritoCompra(tipo);
                 JFrame frame = new JFrame("Smart Trade");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setContentPane(ventanaCarrito.getPanel());
