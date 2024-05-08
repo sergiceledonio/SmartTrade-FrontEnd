@@ -33,7 +33,7 @@ public class ProductoPendiente {
     private String prodType;
     private String prodPrice;
 
-    public ProductoPendiente(String name, String price, String type, String description){
+    public ProductoPendiente(String name, String price, String description, String type){
         this.prodName = name;
         this.prodDescription = description;
         this.prodPrice = price;
@@ -108,9 +108,6 @@ public class ProductoPendiente {
         frame.setVisible(true);
     }
 
-    public String getProdName(){
-        return prodName;
-    }
     public JPanel getPanel(){
         return validarPanel;
     }
@@ -148,13 +145,7 @@ public class ProductoPendiente {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = response.statusCode();
-            String responseBody = response.body();
             System.out.println(statusCode);
-            if (statusCode == 200){
-                System.out.println("Aquí está llegando?? " + responseBody);
-            }else{
-                System.out.println("Estamos jodidos");
-            }
 
         }catch(Exception e){
             e.printStackTrace();

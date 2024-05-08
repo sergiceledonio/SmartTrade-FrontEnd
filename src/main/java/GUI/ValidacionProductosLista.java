@@ -38,14 +38,7 @@ public class ValidacionProductosLista extends JFrame{
     private JPanel panelContenedor;
 
     public ValidacionProductosLista(){
-        panelValidacion = new JPanel();
-        panelTitle = new JPanel();
-        panelContenedor = new JPanel();
-        panelListaValidos = new JPanel();
-
-        panelValidacion.setPreferredSize(new Dimension(800,700));
-        panelTitle.setPreferredSize(new Dimension(800, 200));
-        panelListaValidos.setPreferredSize(new Dimension(800, 400));
+        iniciarComponentes();
 
         productList = getPetitions();
         scrollPane = createScrollPane(createProductoPanels(productList));
@@ -92,6 +85,17 @@ public class ValidacionProductosLista extends JFrame{
         invoke();
     }
 
+    private void iniciarComponentes(){
+        panelValidacion = new JPanel();
+        panelTitle = new JPanel();
+        panelContenedor = new JPanel();
+        panelListaValidos = new JPanel();
+
+        panelValidacion.setPreferredSize(new Dimension(800,700));
+        panelTitle.setPreferredSize(new Dimension(800, 200));
+        panelListaValidos.setPreferredSize(new Dimension(800, 400));
+    }
+
     public void goValidate(String nombre, String precio, String categoria, String descripcion) {
         System.out.println(nombre + " " + precio + " " + categoria + " " + descripcion);
 
@@ -112,15 +116,6 @@ public class ValidacionProductosLista extends JFrame{
             ventanaValidacion.setSize(800, 600);
             ventanaValidacion.setLocationRelativeTo(null);
             ventanaValidacion.setVisible(true);
-        });
-    }
-
-    private void disposeCurrentFrame() {
-        SwingUtilities.invokeLater(() -> {
-            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(panelValidacion);
-            if (currentFrame != null) {
-                currentFrame.dispose();
-            }
         });
     }
 
@@ -204,23 +199,19 @@ public class ValidacionProductosLista extends JFrame{
         String url = "http://localhost:8080/product/pending";
         HttpClient client = HttpClient.newHttpClient();
         List<Map<String, Object>> productsList = null;
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             int statusCode = response.statusCode();
             String responseBody = response.body();
             if (statusCode == 200) {
                 System.out.println("GET request successful: " + statusCode);
-
                 ObjectMapper objectMapper = new ObjectMapper();
                 productsList = objectMapper.readValue(responseBody,
                         objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
-
                 System.out.println("Productos pendientes:");
                 for (Map<String, Object> product : productsList) {
                     System.out.println(product);
