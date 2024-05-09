@@ -32,12 +32,14 @@ public class ProductoPendiente {
     private String prodDescription;
     private String prodType;
     private String prodPrice;
+    private int prodId;
 
-    public ProductoPendiente(String name, String price, String description, String type){
+    public ProductoPendiente(String name, String price, String description, String type, int id){
         this.prodName = name;
         this.prodDescription = description;
         this.prodPrice = price;
         this.prodType = type;
+        this.prodId = id;
         validarPanel.setPreferredSize(new Dimension(800,600));
         productDescription.setPreferredSize(new Dimension(500, 200));
 
@@ -100,7 +102,7 @@ public class ProductoPendiente {
     }
 
     public static void main(String[] args) {
-        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "");
+        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "", 0);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfoValidate.getPanel());
@@ -127,16 +129,16 @@ public class ProductoPendiente {
 
     private void validateProduct(Boolean valid){
 
-
         String url = "http://localhost:8080/product/validate";
         HttpClient client = HttpClient.newHttpClient();
 
         try{
-            Map<String, Object> productData = new HashMap<>();
-            productData.put("name", prodName);
+            ObjectNode productData = new ObjectMapper().createObjectNode();
+            productData.put("id", prodId);
             productData.put("valid", valid);
 
-            String jsonBody = new ObjectMapper().writeValueAsString(productData);
+            String jsonBody = productData.toString();
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
@@ -145,7 +147,7 @@ public class ProductoPendiente {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = response.statusCode();
-            System.out.println(statusCode);
+            System.out.println("El código es: " + statusCode);
 
         }catch(Exception e){
             e.printStackTrace();
