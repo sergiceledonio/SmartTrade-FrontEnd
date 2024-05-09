@@ -58,10 +58,11 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private String[] attributes;
     private InicioSesion iniciosesion;
     private int tipo;
+    private int id;
 
-    public VentaProducto(String[] userData, int tipo){
+    public VentaProducto(String[] userData, int tipo, int id){
         this.tipo = tipo;
-
+        this.id = id;
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
@@ -255,7 +256,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         carritoCompraButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                CarritoCompra ventanaCarrito = new CarritoCompra();
+                CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id);
                 JFrame frame = new JFrame("Smart Trade");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setContentPane(ventanaCarrito.getPanel());
@@ -277,7 +278,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
 
     public static void main(String[] args) {
-        VentaProducto ventanaVenta = new VentaProducto(new String[]{}, 0);
+        VentaProducto ventanaVenta = new VentaProducto(new String[]{}, 0, 0);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaVenta.panelProductoVenta);
@@ -366,7 +367,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(int param){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

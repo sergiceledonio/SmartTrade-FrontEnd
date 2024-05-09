@@ -53,6 +53,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     private String num;
     private String flat;
     private int tipo;
+    private int id;
     private List<ObserverUserData> observadores = new ArrayList<>();
     private StatePattern currentState;
     public InicioSesion(){
@@ -207,10 +208,12 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 try{
+
                     email = jsonResponse.get("email").asText();
                     name = jsonResponse.get("name").asText();
                     password = jsonResponse.get("password").asText();
                     type = jsonResponse.get("type").asText();
+                    id = jsonResponse.get("id").asInt();
                     dni = "";
                     iban = "";
                     cif = "";
@@ -221,6 +224,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                     num = "";
 
                     System.out.println("Type= " + type);
+                    System.out.println("ID= " + id);
 
                     JsonNode cityNode = jsonResponse.get("city");
                     if(cityNode != null){
@@ -280,13 +284,9 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                                 break;
                         }
                     }
-
-
-
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-
             }else{
                 System.out.println("Problem with client: "  + statusCode);
             }
@@ -297,7 +297,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     }
 
     public void goToCatalog(String[] userData, int tipo){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -320,7 +320,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     }
 
     public String[] getUserData(){
-        String[] res = new String[12];
+        String[] res = new String[13];
         res[0] = name;
         res[1] = email;
         res[2] = password;
@@ -333,6 +333,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         res[9] = dni;
         res[10] = iban;
         res[11] = cif;
+        res[12] =String.valueOf(id);
         return res;
     }
 
@@ -368,6 +369,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         dni = res[9];
         iban = res[10];
         cif = res[11];
+        id = Integer.parseInt(res[12]);
     }
 
     private void changeState() {

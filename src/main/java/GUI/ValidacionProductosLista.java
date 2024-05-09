@@ -32,28 +32,35 @@ public class ValidacionProductosLista extends JFrame{
     private String desc;
     private String price;
     private String type;
+    private int id;
     private List<Map<String, Object>> productList;
     private JFrame frame;
     private JScrollPane scrollPane;
     private JPanel panelContenedor;
 
     public ValidacionProductosLista(){
-        panelValidacion = new JPanel();
-        panelTitle = new JPanel();
-        panelContenedor = new JPanel();
-        panelListaValidos = new JPanel();
-
-        panelValidacion.setPreferredSize(new Dimension(800,700));
-        panelTitle.setPreferredSize(new Dimension(800, 200));
-        panelListaValidos.setPreferredSize(new Dimension(800, 400));
+        iniciarComponentes();
 
         productList = getPetitions();
         scrollPane = createScrollPane(createProductoPanels(productList));
 
-        panelValidacion.add(panelTitle);
+        panelValidacion.setLayout(new BorderLayout());
+
+        panelTitle.setLayout(new BorderLayout());
+        panelTitle.add(backLogin, BorderLayout.WEST);
+        panelTitle.add(logoButton, BorderLayout.EAST);
+        panelTitle.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        panelListaValidos.setBackground(new Color(198, 232, 255));
+        panelTitle.setBackground(new Color(183, 183, 183));
+
         panelContenedor.add(scrollPane);
         panelListaValidos.add(panelContenedor);
-        setContentPane(panelListaValidos);
+
+        panelValidacion.add(panelTitle, BorderLayout.NORTH);
+        panelValidacion.add(panelListaValidos, BorderLayout.CENTER);
+
+        setContentPane(panelValidacion);
 
         backLogin.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,6 +75,21 @@ public class ValidacionProductosLista extends JFrame{
             @Override
             public void mouseExited(MouseEvent e) {
                 backLogin.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        logoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
         verInformaciónButton.addMouseListener(new MouseAdapter() {
@@ -92,10 +114,21 @@ public class ValidacionProductosLista extends JFrame{
         invoke();
     }
 
-    public void goValidate(String nombre, String precio, String categoria, String descripcion) {
+    private void iniciarComponentes(){
+        panelValidacion = new JPanel();
+        panelTitle = new JPanel();
+        panelContenedor = new JPanel();
+        panelListaValidos = new JPanel();
+
+        panelValidacion.setPreferredSize(new Dimension(800,700));
+        panelTitle.setPreferredSize(new Dimension(800, 150));
+        panelListaValidos.setPreferredSize(new Dimension(800, 400));
+    }
+
+    public void goValidate(String nombre, String precio, String categoria, String descripcion, int identificador) {
         System.out.println(nombre + " " + precio + " " + categoria + " " + descripcion);
 
-        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion);
+        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion, identificador);
         JFrame registro = new JFrame("Smart Trade");
         registro.setContentPane(ventanaValidar.getPanel());
         registro.pack();
@@ -105,22 +138,13 @@ public class ValidacionProductosLista extends JFrame{
 
     public static void invoke(){
         SwingUtilities.invokeLater(() -> {
-            System.out.println("**************************************");
+            System.out.println("");
             ValidacionProductosLista ventanaValidacion = new ValidacionProductosLista();
             ventanaValidacion.setTitle("Smart Trade");
             ventanaValidacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             ventanaValidacion.setSize(800, 600);
             ventanaValidacion.setLocationRelativeTo(null);
             ventanaValidacion.setVisible(true);
-        });
-    }
-
-    private void disposeCurrentFrame() {
-        SwingUtilities.invokeLater(() -> {
-            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(panelValidacion);
-            if (currentFrame != null) {
-                currentFrame.dispose();
-            }
         });
     }
 
@@ -140,6 +164,7 @@ public class ValidacionProductosLista extends JFrame{
         JPanel productoPanel = new JPanel();
         productoPanel.setPreferredSize(new Dimension(700, 100));
         productoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        productoPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         String productName = (String) product.get("name");
         JLabel productNameLabel = new JLabel(productName);
@@ -204,23 +229,19 @@ public class ValidacionProductosLista extends JFrame{
         String url = "http://localhost:8080/product/pending";
         HttpClient client = HttpClient.newHttpClient();
         List<Map<String, Object>> productsList = null;
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
             int statusCode = response.statusCode();
             String responseBody = response.body();
             if (statusCode == 200) {
                 System.out.println("GET request successful: " + statusCode);
-
                 ObjectMapper objectMapper = new ObjectMapper();
                 productsList = objectMapper.readValue(responseBody,
                         objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
-
                 System.out.println("Productos pendientes:");
                 for (Map<String, Object> product : productsList) {
                     System.out.println(product);
@@ -262,17 +283,24 @@ public class ValidacionProductosLista extends JFrame{
             price = jsonNode.get("price").asText();
             type = jsonNode.get("type").asText();
             desc = jsonNode.get("description").asText();
+            id = jsonNode.get("id").asInt();
 
         } catch (Exception e) {
             System.out.println("Error al enviar la solicitud GET: " + e.getMessage());
         }
-        goValidate(nameProduct, price, type, desc);
+
+        System.out.println("*********************************************************");
+        System.out.println("El id del producto es: " + id);
+
+
+        goValidate(nameProduct, price, type, desc, id);
     }
 
     public static String encodeName(String name) {
         try {
-            return URLEncoder.encode(name, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+            String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
+            return encodedName.replace("+", "%20");
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

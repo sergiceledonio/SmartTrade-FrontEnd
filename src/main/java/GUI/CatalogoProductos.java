@@ -49,12 +49,14 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     private int tipo;
     private String[] userData;
     private List searchHistory = new List();
+    private int id;
 
-    public CatalogoProductos(String[] userData, int tipo) {
+    public CatalogoProductos(String[] userData, int tipo, int id) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
         this.tipo = tipo;
+        this.id = id;
 
         System.out.println("********************************************************************");
         System.out.println("Catalogo de productos");
@@ -513,7 +515,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         carritoCompraButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //ir al carrito
+                goCarrito(tipo, id);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -543,12 +545,12 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public static void main(String[] args) {
-        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{}, 0);
+        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{}, 0, 0);
         catalogoProductos.setMain();
     }
 
     public void setMain() {
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData(), tipo);
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData(), tipo, id);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCatalogo.panelCatalogo);
@@ -560,8 +562,19 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         return this.panelCatalogo;
     }
 
+    public void goCarrito(int t, int i){
+        CarritoCompra ventanaCarrito = new CarritoCompra(t, i);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCarrito.getPanel());
+        frame.pack();
+        frame.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+    }
+
     public void backMenu(int param) {
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -571,7 +584,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void sellProduct() {
-        VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo);
+        VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();
@@ -588,7 +601,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Categoria: " + category);
         System.out.println("Descripción: " + descripcion);
 
-        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion);
+        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -615,9 +628,6 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
                         prodType = productNode.get("type").asText();
-
-                        System.out.println("Producto: " + prodName + " Precio: " + prodPrice + " Descripción: " + prodDescription + " Tipo: " + prodType);
-
                         agregarProducto(prodName, prodPrice, prodDescription, prodType);
                     }
                 }

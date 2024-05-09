@@ -6,8 +6,16 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import Observer.ObserverUserData;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import static GUI.CatalogoProductos.getUserData;
 
@@ -19,7 +27,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JLabel perfilButton;
     private JLabel lupaButton;
     private JPanel panelCompras;
-    private JTable listaCarritoProductos;
     private static String name;
     private static String password;
     private static String email;
@@ -37,14 +44,20 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private static String nameProd;
     private static String category;
     private InicioSesion iniciosesion;
-    private JFrame frame;
     private int tipo;
+    private int id;
 
 
-    public CarritoCompra() {
+    public CarritoCompra(int t, int id) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
+        this.tipo = t;
+        this.id = id;
+
+        getCarritoProducts(id);
+        inicializarComponentes();
+
 
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -75,12 +88,8 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public static void main(String[] args) {
-        CarritoCompra ventanaCarrito = new CarritoCompra();
-        JFrame frame = new JFrame("Smart Trade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(ventanaCarrito.getPanel());
-        frame.pack();
-        frame.setVisible(true);
+        CarritoCompra carritoCompra = new CarritoCompra(0, 0);
+        carritoCompra.setMain();
     }
 
     /*ACCESO A LAS VARIABLES LOCALES*/
@@ -89,8 +98,44 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         return panelCarrito;
     }
 
+    private void setMain(){
+        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaCarrito.getPanel());
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void getCarritoProducts(int userId){
+        HttpClient httpClient = HttpClient.newHttpClient();
+        String url = "http://localhost:8080/cart/cartProducts?user_id=" + userId;
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            int statusCode = response.statusCode();
+            System.out.println("Código es: " + statusCode);
+            if(statusCode == 200){
+
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+
+
+                System.out.println("Ha devuelto el carrito: " + responseBody);
+            }else{
+                System.out.println("No devuelve nada");
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -98,7 +143,17 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
+    private void inicializarComponentes(){
+        panelCarrito.setLayout(new BorderLayout());
 
+        panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panelCompras);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        panelCarrito.add(scrollPane, BorderLayout.CENTER);
+
+
+    }
 
     @Override
     public void addObserver(ObserverUserData observer) {
