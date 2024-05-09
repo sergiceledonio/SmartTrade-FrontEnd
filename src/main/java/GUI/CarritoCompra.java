@@ -6,8 +6,16 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import Observer.ObserverUserData;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import static GUI.CatalogoProductos.getUserData;
 
@@ -47,6 +55,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         this.tipo = t;
         this.id = id;
 
+        getCarritoProducts(id);
         inicializarComponentes();
 
 
@@ -98,6 +107,33 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         frame.setVisible(true);
     }
 
+    public void getCarritoProducts(int userId){
+        HttpClient httpClient = HttpClient.newHttpClient();
+        String url = "http://localhost:8080/cart/cartProducts?user_id=" + userId;
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            int statusCode = response.statusCode();
+            System.out.println("Código es: " + statusCode);
+            if(statusCode == 200){
+
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+
+
+                System.out.println("Ha devuelto el carrito: " + responseBody);
+            }else{
+                System.out.println("No devuelve nada");
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public void backMenu(){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");

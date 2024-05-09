@@ -58,10 +58,11 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private int prodId;
     private int id;
     private InicioSesion iniciosesion;
-    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id){
+    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser){
         panelInfo.setPreferredSize(new Dimension(800,600));
         /*SETTING VARIABLES TO WHAT WAS CLICKED*/
         this.id = id;
+        this.tipo = tipoUser;
 
 
         nameProduct.setText(prodName);
@@ -76,7 +77,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                backMenu();
+                backMenu(id);
             }
 
             @Override
@@ -149,7 +150,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             public void mouseClicked(MouseEvent e) {
                 prodId = getProductId(prodName);
                 addToCart(id, prodId, 1);
-                backMenu();
+                backMenu(tipo);
             }
 
             @Override
@@ -180,7 +181,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1);
+        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1, 1);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -214,7 +215,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
             if(response.statusCode() == 200){
                 System.out.println("SE HA AÑADIDO AL CARRITO");
-                System.out.println(response.body());
+                System.out.println("BODY: " + response.body().toString());
             }else{
                 System.out.println("ERROR EN LA PETICIÓN");
             }
@@ -224,7 +225,8 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
     }
 
-    public void backMenu(){
+    public void backMenu(int tipo){
+
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
@@ -287,7 +289,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                 JsonNode jsonNode = mapper.readTree(responseBody);
 
                 productId = jsonNode.get("id").asInt();
-                System.out.println(productId);
             } else {
                 System.out.println("Problem with client: " + statusCode);
             }
