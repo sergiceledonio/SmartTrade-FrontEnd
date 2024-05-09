@@ -5,16 +5,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CatalogoProductos extends JFrame implements ObserverUserData {
     private JPanel panelCatalogo;
@@ -47,6 +48,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     private final InicioSesion iniciosesion;
     private int tipo;
     private String[] userData;
+    private List searchHistory = new List();
 
     public CatalogoProductos(String[] userData, int tipo) {
         iniciosesion = new InicioSesion();
@@ -97,10 +99,21 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+
         lupaButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //
+                /*
+                for (int prod = 0; prod < products.length; prod++) {
+                    for (int pos = 0; pos < searchTF.getText().toLowerCase().length(); pos++) {
+                        if (searchTF.getText().toLowerCase().substring(0, pos)
+                                .equals(products.get(i).getName().substring(0, pos))) {
+                            //buscar en la bd y mostrar por pantalla los productos que cumplan la condición
+                        }
+                    }
+                }
+                searchHistory = stotableSearch(searchHistory, products, searchTF.getText());
+                */
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -112,10 +125,378 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 lupaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+
+        searchTF.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+                            /*
+                            for (int prod = 0; prod < products.length; prod++) {
+                                for (int pos = 0; pos < searchTF.getText().toLowerCase().length(); pos++) {
+                                    if (searchTF.getText().toLowerCase().substring(0, pos)
+                                            .equals(products.get(i).getName().substring(0, pos))) {
+                                        //buscar en la bd y mostrar por pantalla los productos que cumplan la condición
+                                    }
+                                }
+                            }
+                            searchHistory = stotableSearch(searchHistory, products, searchTF.getText());
+                            */
+                        }
+                    }
+                }
+        );
+
         filtroButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
+                JDialog filterPopUp = new JDialog();
+                JSeparator separator = new JSeparator();
+                JComboBox<String> shippingDurationComboBox = new JComboBox<String>();
+                String[] storableSearchButtonText = {"", "", ""};
+                final int[] numStars = {0};
+
+                JButton okButton = new JButton("Aceptar");
+                JButton storableSearchButton1 = new JButton(storableSearchButtonText[0]);
+                JButton storableSearchButton2 = new JButton(storableSearchButtonText[1]);
+                JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
+                JToggleButton ascendingToggleButton = new JToggleButton("Ascendente");
+                JToggleButton descendingToggleButton = new JToggleButton("Descendente");
+                ButtonGroup storableSearchButtonGroup = new ButtonGroup();
+                JButton starButton1 = new JButton();
+                JButton starButton2 = new JButton();
+                JButton starButton3 = new JButton();
+                JButton starButton4 = new JButton();
+                JButton starButton5 = new JButton();
+
+                JLabel priceLabel = new JLabel("Precio");
+                JLabel minPriceLabel = new JLabel("min");
+                JLabel maxPriceLabel = new JLabel("max");
+                JLabel sortByCategotyLabel = new JLabel("Ordenar por categoría");
+                JLabel valorationLabel = new JLabel("Valoración");
+                JLabel shippingDurationLabel = new JLabel("Duración del envío");
+                JLabel storableSearchLabel = new JLabel("Búsqueda Almacenable");
+                JLabel minPriceErrorLabel = new JLabel("El mínimo no es un número válido");
+                JLabel maxPriceErrorLabel = new JLabel("El máximo no es un número válido");
+                JLabel greaterOrlowerPriceErrorLabel = new JLabel("El mínimo debe ser menor que el máximo");
+
+                JTextField minPriceTextField = new JTextField();
+                JTextField maxPriceTextField = new JTextField();
+
+                ImageIcon filledStarImageIcon = new ImageIcon(System.getProperty("user.dir") +
+                        System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "main" +
+                        System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") +
+                        "img" + System.getProperty("file.separator") + "favLleno" + ".jpeg");
+                ImageIcon blankStarImageIcon = new ImageIcon(System.getProperty("user.dir") +
+                        System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "main" +
+                        System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") +
+                        "img" + System.getProperty("file.separator") + "favVacio" + ".png");
+
+                Image filledStarImage = filledStarImageIcon.getImage();
+                Image blankStarImage = blankStarImageIcon.getImage();
+                Image scaledFilledStarImage = filledStarImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                Image scaledBlankStarImage = blankStarImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                ImageIcon scaledFilledStarImageIcon = new ImageIcon(scaledFilledStarImage);
+                ImageIcon scaledBlankStarImageIcon = new ImageIcon(scaledBlankStarImage);
+
+                filterPopUp.setTitle("Filtros y Búsqueda Almacenable");
+                filterPopUp.setSize(500, 400);
+                filterPopUp.setLayout(null);
+                filterPopUp.setLocationRelativeTo(panelCatalogo);
+                filterPopUp.add(okButton);
+                filterPopUp.add(storableSearchButton1);
+                filterPopUp.add(storableSearchButton2);
+                filterPopUp.add(storableSearchButton3);
+                filterPopUp.add(separator);
+                filterPopUp.add(priceLabel);
+                filterPopUp.add(minPriceTextField);
+                filterPopUp.add(maxPriceTextField);
+                filterPopUp.add(minPriceLabel);
+                filterPopUp.add(maxPriceLabel);
+                filterPopUp.add(sortByCategotyLabel);
+                filterPopUp.add(ascendingToggleButton);
+                filterPopUp.add(descendingToggleButton);
+                filterPopUp.add(valorationLabel);
+                filterPopUp.add(starButton1);
+                filterPopUp.add(starButton2);
+                filterPopUp.add(starButton3);
+                filterPopUp.add(starButton4);
+                filterPopUp.add(starButton5);
+                filterPopUp.add(shippingDurationLabel);
+                filterPopUp.add(shippingDurationComboBox);
+                filterPopUp.add(storableSearchLabel);
+                filterPopUp.add(minPriceErrorLabel);
+                filterPopUp.add(maxPriceErrorLabel);
+                filterPopUp.add(greaterOrlowerPriceErrorLabel);
+
+                priceLabel.setBounds(115, 0, 40, 30);
+                minPriceTextField.setEditable(true);
+                maxPriceTextField.setEditable(true);
+                minPriceTextField.setBounds(90, 30, 40, 25);
+                maxPriceTextField.setBounds(140, 30, 40, 25);
+                minPriceLabel.setBounds(100, 50, 40 ,25);
+                maxPriceLabel.setBounds(150, 50, 40, 25);
+                minPriceErrorLabel.setBounds(35, 65, 250 ,25);
+                minPriceErrorLabel.setForeground(Color.RED);
+                minPriceErrorLabel.setVisible(false);
+                maxPriceErrorLabel.setBounds(35, 65, 250 ,25);
+                maxPriceErrorLabel.setForeground(Color.RED);
+                maxPriceErrorLabel.setVisible(false);
+                greaterOrlowerPriceErrorLabel.setBounds(25, 65, 250 ,25);
+                greaterOrlowerPriceErrorLabel.setForeground(Color.RED);
+                greaterOrlowerPriceErrorLabel.setVisible(false);
+
+                sortByCategotyLabel.setBounds(75, 95, 200, 30);
+                ascendingToggleButton.setBounds(10, 125, 120, 30);
+                descendingToggleButton.setBounds(135, 125, 120, 30);
+                storableSearchButtonGroup.add(ascendingToggleButton);
+                storableSearchButtonGroup.add(descendingToggleButton);
+                ascendingToggleButton.addActionListener(
+                        actionEvent -> {
+                            ascendingToggleButton.setSelected(true);
+                        }
+                );
+                descendingToggleButton.addActionListener(
+                        actionEvent -> {
+                            descendingToggleButton.setSelected(true);
+                        }
+                );
+
+                valorationLabel.setBounds(345, 0, 100, 30);
+                starButton1.setIcon(scaledBlankStarImageIcon);
+                starButton2.setIcon(scaledBlankStarImageIcon);
+                starButton3.setIcon(scaledBlankStarImageIcon);
+                starButton4.setIcon(scaledBlankStarImageIcon);
+                starButton5.setIcon(scaledBlankStarImageIcon);
+                starButton1.setBounds(300, 30, 25, 25);
+                starButton2.setBounds(330, 30, 25, 25);
+                starButton3.setBounds(360, 30, 25, 25);
+                starButton4.setBounds(390, 30, 25, 25);
+                starButton5.setBounds(420, 30, 25, 25);
+                starButton1.addActionListener(
+                        actionEvent -> {
+                            if (starButton1.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton2.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton3.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton4.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton5.getIcon().equals(scaledBlankStarImageIcon)) {
+                                starButton1.setIcon(scaledBlankStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 0;
+                            } else {
+                                starButton1.setIcon(scaledFilledStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 1;
+                            }
+                        }
+                );
+                starButton2.addActionListener(
+                        actionEvent -> {
+                            if (starButton1.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton2.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton3.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton4.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton5.getIcon().equals(scaledBlankStarImageIcon)) {
+                                starButton1.setIcon(scaledBlankStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 0;
+                            } else {
+                                starButton1.setIcon(scaledFilledStarImageIcon);
+                                starButton2.setIcon(scaledFilledStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 2;
+                            }
+                        }
+                );
+                starButton3.addActionListener(
+                        actionEvent -> {
+                            if (starButton1.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton2.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton3.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton4.getIcon().equals(scaledBlankStarImageIcon) &&
+                                    starButton5.getIcon().equals(scaledBlankStarImageIcon)) {
+                                starButton1.setIcon(scaledBlankStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 0;
+                            } else {
+                                starButton1.setIcon(scaledFilledStarImageIcon);
+                                starButton2.setIcon(scaledFilledStarImageIcon);
+                                starButton3.setIcon(scaledFilledStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 3;
+                            }
+                        }
+                );
+                starButton4.addActionListener(
+                        actionEvent -> {
+                            if (starButton1.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton2.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton3.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton4.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton5.getIcon().equals(scaledBlankStarImageIcon)) {
+                                starButton1.setIcon(scaledBlankStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 0;
+                            } else {
+                                starButton1.setIcon(scaledFilledStarImageIcon);
+                                starButton2.setIcon(scaledFilledStarImageIcon);
+                                starButton3.setIcon(scaledFilledStarImageIcon);
+                                starButton4.setIcon(scaledFilledStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 4;
+                            }
+                        }
+                );
+                starButton5.addActionListener(
+                        actionEvent -> {
+                            if (starButton1.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton2.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton3.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton4.getIcon().equals(scaledFilledStarImageIcon) &&
+                                    starButton5.getIcon().equals(scaledFilledStarImageIcon)) {
+                                starButton1.setIcon(scaledBlankStarImageIcon);
+                                starButton2.setIcon(scaledBlankStarImageIcon);
+                                starButton3.setIcon(scaledBlankStarImageIcon);
+                                starButton4.setIcon(scaledBlankStarImageIcon);
+                                starButton5.setIcon(scaledBlankStarImageIcon);
+                                numStars[0] = 0;
+                            } else {
+                                starButton1.setIcon(scaledFilledStarImageIcon);
+                                starButton2.setIcon(scaledFilledStarImageIcon);
+                                starButton3.setIcon(scaledFilledStarImageIcon);
+                                starButton4.setIcon(scaledFilledStarImageIcon);
+                                starButton5.setIcon(scaledFilledStarImageIcon);
+                                numStars[0] = 5;
+                            }
+                        }
+                );
+
+                shippingDurationLabel.setBounds(320, 95, 150, 30);
+                shippingDurationComboBox.addItem("Ninguna selección");
+                shippingDurationComboBox.addItem("1 Día");
+                shippingDurationComboBox.addItem("2 Días");
+                shippingDurationComboBox.addItem("3 Días");
+                shippingDurationComboBox.addItem("4 Días");
+                shippingDurationComboBox.setBounds(300, 125, 145, 30);
+
+                separator.setOrientation(SwingConstants.HORIZONTAL);
+                separator.setBounds(0, 175, 500, 400);
+
+                storableSearchLabel.setBounds(180, 180, 150, 30);
+                storableSearchButton1.setBounds(10, 210, 465, 30);
+                storableSearchButton2.setBounds(10, 245, 465, 30);
+                storableSearchButton3.setBounds(10, 280, 465, 30);
+                if (searchHistory.getItemCount() == 1) {
+                    storableSearchButtonText[0] = searchHistory.getItem(0).toString();
+                    storableSearchButton1.setText(storableSearchButtonText[0]);
+                }
+                if (searchHistory.getItemCount() == 2) {
+                    storableSearchButtonText[1] = searchHistory.getItem(0).toString();
+                    storableSearchButton2.setText(storableSearchButtonText[1]);
+                    storableSearchButtonText[0] = searchHistory.getItem(1).toString();
+                    storableSearchButton1.setText(storableSearchButtonText[0]);
+                }
+                if (searchHistory.getItemCount() == 3) {
+                    storableSearchButtonText[2] = searchHistory.getItem(0).toString();
+                    storableSearchButton3.setText(storableSearchButtonText[2]);
+                    storableSearchButtonText[1] = searchHistory.getItem(1).toString();
+                    storableSearchButton2.setText(storableSearchButtonText[1]);
+                    storableSearchButtonText[0] = searchHistory.getItem(2).toString();
+                    storableSearchButton1.setText(storableSearchButtonText[0]);
+                }
+                storableSearchButton1.addActionListener(
+                        actionEvent -> {
+                            //ir a la información del producto
+                            filterPopUp.dispose();
+                        }
+                );
+                storableSearchButton2.addActionListener(
+                        actionEvent -> {
+                            //ir a la información del producto
+                            filterPopUp.dispose();
+                        }
+                );
+                storableSearchButton3.addActionListener(
+                        actionEvent -> {
+                            //ir a la información del producto
+                            filterPopUp.dispose();
+                        }
+                );
+
+                okButton.setBounds(395, 325, 80, 30);
+                okButton.addActionListener(
+                    actionEvent -> {
+                        double minPrice = 0.0;
+                        double maxPrice = 0.0;
+                        greaterOrlowerPriceErrorLabel.setVisible(false);
+                        try {
+                            minPrice = Double.parseDouble(minPriceTextField.getText());
+                            minPriceErrorLabel.setVisible(false);
+                        } catch (NumberFormatException nF) {
+                            if (minPriceTextField.getText().trim().equals("")) {
+                                minPrice = 0.0;
+                            } else {
+                                if (!(minPriceErrorLabel.isVisible() || maxPriceErrorLabel.isVisible())) {
+                                    minPriceErrorLabel.setVisible(true);
+                                }
+                            }
+                        }
+                        try {
+                            maxPrice = Double.parseDouble(maxPriceTextField.getText());
+                            maxPriceErrorLabel.setVisible(false);
+                        } catch (NumberFormatException nF) {
+                            if (maxPriceTextField.getText().trim().equals("")) {
+                                minPrice = 0.0;
+                            } else {
+                                if (!(minPriceErrorLabel.isVisible() || maxPriceErrorLabel.isVisible())) {
+                                    maxPriceErrorLabel.setVisible(true);
+                                }
+                            }
+                        }
+
+                        if (minPrice > maxPrice) {
+                            greaterOrlowerPriceErrorLabel.setVisible(true);
+                        }
+
+                        if (ascendingToggleButton.isSelected()) {
+                            //sortByAscendingCategory(products);
+                        } else if (descendingToggleButton.isSelected()) {
+                            //sortByDescendingCategory(products);
+                        }
+
+                        //sortByPrice(products, minPrice, maxPrice);
+                        //sortByAssesment(products, numStars[0]);
+                        //sortByShippingDuration(products, shippingDurationComboBox.getSelectedIndex());
+
+                        if (!(minPriceErrorLabel.isVisible() || maxPriceErrorLabel.isVisible() ||
+                                greaterOrlowerPriceErrorLabel.isVisible())) {
+                            filterPopUp.dispose();
+                        }
+
+                    }
+                );
+
+                filterPopUp.setVisible(true);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
