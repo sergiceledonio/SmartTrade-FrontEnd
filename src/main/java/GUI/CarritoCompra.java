@@ -55,6 +55,8 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         this.tipo = t;
         this.id = id;
 
+        panelCompras = new JPanel();
+
         getCarritoProducts(id);
         inicializarComponentes();
 
@@ -122,17 +124,104 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
             int statusCode = response.statusCode();
             System.out.println("Código es: " + statusCode);
             if(statusCode == 200){
-
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
-
-
                 System.out.println("Ha devuelto el carrito: " + responseBody);
-            }else{
+
+                JPanel panelProductos = new JPanel();
+                panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+
+                for (JsonNode productoNode : jsonResponse) {
+
+                    String nombre = productoNode.get("name").asText();
+                    String descripcion = productoNode.get("description").asText();
+                    double precio = productoNode.get("price").asDouble();
+
+                    addProduct(nombre, descripcion, precio, 1, panelProductos);
+                }
+
+                panelCompras.removeAll();
+                panelCompras.add(panelProductos);
+                panelCompras.revalidate();
+                panelCompras.repaint();
+
+            } else {
                 System.out.println("No devuelve nada");
             }
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void addProduct(String name, String desc, double price, int amount, JPanel panel){
+        JPanel panelProducto = new JPanel();
+        panelProducto.setLayout(new BorderLayout());
+        panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelProducto.setPreferredSize(new Dimension(770, 100));
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JLabel labelNombre = new JLabel("Nombre: " + name);
+        JLabel labelDescripcion = new JLabel("Descripción: " + desc);
+        JLabel labelPrecio = new JLabel("Precio: " + price + "€");
+
+        JButton buttonMas = new JButton("+");
+        JLabel labelAmount = new JLabel(String.valueOf(amount));
+        JButton buttonMenos = new JButton("-");
+
+        buttonMenos.setBackground(new Color(153, 233, 255));
+        buttonMas.setBackground(new Color(153, 233, 255));
+
+        buttonMenos.setPreferredSize(new Dimension(45, 45));
+        buttonMas.setPreferredSize(new Dimension(45, 45));
+
+        panelProducto.add(labelNombre, BorderLayout.NORTH);
+        panelProducto.add(labelDescripcion, BorderLayout.WEST);
+        panelProducto.add(labelPrecio, BorderLayout.EAST);
+        panelProducto.add(panelBotones, BorderLayout.CENTER);
+
+
+        panelBotones.add(buttonMenos);
+        panelBotones.add(labelAmount);
+        panelBotones.add(buttonMas);
+
+        buttonMenos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonMenos.setBackground(new Color(73, 231, 255));
+                buttonMenos.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonMenos.setBackground(new Color(153, 233, 255));
+                buttonMenos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        buttonMas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonMas.setBackground(new Color(73, 231, 255));
+                buttonMas.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonMas.setBackground(new Color(153, 233, 255));
+                buttonMas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+
+        panel.add(panelProducto);
     }
     public void backMenu(){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
@@ -146,11 +235,18 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private void inicializarComponentes(){
         panelCarrito.setLayout(new BorderLayout());
 
+        panelCarrito.add(panelInfo, BorderLayout.NORTH);
+        panelInfo.setPreferredSize(new Dimension(800, 150));
+
+
+
         panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(panelCompras);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         panelCarrito.add(scrollPane, BorderLayout.CENTER);
+        panelCarrito.setBackground(new Color(198, 232, 251));
 
 
     }
@@ -184,5 +280,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         door = data[9];
         flat = data[10];
         num = data[11];
+        id = Integer.parseInt(data[12]);
     }
 }

@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9647fbb4-4146-4203-9197-2d36c3d72cd7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ProductoPendiente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +38,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.CarritoCompra.executor": "Run",
     "Application.CatalogoProductos.executor": "Run",
     "Application.InfoProducto.executor": "Run",
     "Application.InicioProyecto.executor": "Run",
@@ -151,6 +152,8 @@
       <workItem from="1715238665080" duration="1061000" />
       <workItem from="1715257530015" duration="1428000" />
       <workItem from="1715265801436" duration="6897000" />
+      <workItem from="1715272782008" duration="25000" />
+      <workItem from="1715327056008" duration="5698000" />
     </task>
     <servers />
   </component>
