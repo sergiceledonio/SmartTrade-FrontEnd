@@ -532,7 +532,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         perfilButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //ir al perfil
+                goFavs(tipo, id);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -584,7 +584,15 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
-
+    public void goFavs(int tipo, int id){
+        ListaDeseos ventanaFav = new ListaDeseos( tipo, id);
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(ventanaFav.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+    }
     public void sellProduct() {
         VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");

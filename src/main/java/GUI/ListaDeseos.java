@@ -133,7 +133,7 @@ public class ListaDeseos extends JFrame {
                     String descripcion = productoNode.get("description").asText();
                     double precio = productoNode.get("price").asDouble();
 
-                    addProduct(nombre, descripcion, precio, 1, panelProduct);
+                    addProduct(nombre, descripcion, precio, panelProduct);
                 }
 
                 panelProductos.removeAll();
@@ -149,13 +149,12 @@ public class ListaDeseos extends JFrame {
         }
     }
 
-    private void addProduct(String name, String desc, double price, int amount, JPanel panel){
+    private void addProduct(String name, String desc, double price, JPanel panel){
         JPanel panelProducto = new JPanel();
         panelProducto.setLayout(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelProducto.setPreferredSize(new Dimension(770, 100));
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JLabel labelNombre = new JLabel("Nombre: " + name);
         JLabel labelDescripcion = new JLabel("Descripción: " + desc);
@@ -165,7 +164,6 @@ public class ListaDeseos extends JFrame {
         panelProducto.add(labelNombre, BorderLayout.NORTH);
         panelProducto.add(labelDescripcion, BorderLayout.WEST);
         panelProducto.add(labelPrecio, BorderLayout.EAST);
-        panelProducto.add(panelBotones, BorderLayout.CENTER);
 
         panel.add(panelProducto);
     }
