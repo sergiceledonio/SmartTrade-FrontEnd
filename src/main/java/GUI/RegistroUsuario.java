@@ -316,7 +316,7 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
             ibanTF.setText("");
     }
     private boolean isAdmin(String contra, String gmail){
-        if(contra.equals("admin@admin.com") && gmail.equals("12345678")){
+        if(gmail.equals("admin@admin.com") && contra.equals("12345678")){
             return true;
         }
         return false;
