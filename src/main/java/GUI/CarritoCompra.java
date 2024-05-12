@@ -6,10 +6,13 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -46,6 +49,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private InicioSesion iniciosesion;
     private int tipo;
     private int id;
+    private JFrame frame;
 
 
     public CarritoCompra(int t, int id) {
@@ -187,16 +191,23 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         buttonMenos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //reducir la cantidad de objetos
+                nameProd = labelNombre.getText();
                 int cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad--;
-                if(cantidad < 0){
-                    labelAmount.setText("0");
+                if(cantidad <= 0){
+                    int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres eliminar el producto del carrito?", "Producto del carrito", JOptionPane.YES_NO_OPTION);
+
+                    if(opcion == JOptionPane.YES_OPTION){
+                        deleteProductFromCart(nameProd);
+                    }else{
+                        labelAmount.setText("1");
+                    }
                 }else{
                     labelAmount.setText(String.valueOf(cantidad));
                 }
                 double precio = price * Integer.parseInt(labelAmount.getText());
                 labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
+                changeItemAmount(labelNombre.getText(), -1);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -219,6 +230,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 labelAmount.setText(String.valueOf(cantidad));
                 double precio = price * Integer.parseInt(labelAmount.getText());
                 labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
+                changeItemAmount(labelNombre.getText(), 1);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -262,6 +274,59 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         panelCarrito.setBackground(new Color(198, 232, 251));
 
 
+    }
+
+    private void changeItemAmount(String productName, int op){
+        String url = "http://localhost:8080/cart/changeAmount/" + productName;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try{
+            Map<String, Object> data = new HashMap<>();
+            data.put("operation", op);
+
+            String jsonBody = new ObjectMapper().writeValueAsString(data);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode() == 200){
+
+            }else{
+
+            }
+        }catch(IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteProductFromCart(String productName){
+
+        String url = "http://localhost:8080/cart/eliminated/" + productName;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try{
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .DELETE()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if(statusCode == 200){
+                System.out.println("Elemento borrado del carrito correctamente");
+            }else{
+                System.out.println("Problema con la eliminación del producto, error:" + statusCode);
+            }
+
+            getCarritoProducts(id);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

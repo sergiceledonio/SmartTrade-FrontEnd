@@ -62,6 +62,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Catalogo de productos");
         System.out.println("El tipo de usuario es: ");
         System.out.println(tipo);
+        System.out.println("El id de usuario es: ");
+        System.out.println(id);
 
         inicializarComponentes();
         organizarInterfaz(tipo);
