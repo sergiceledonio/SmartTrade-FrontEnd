@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9647fbb4-4146-4203-9197-2d36c3d72cd7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,29 +38,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CarritoCompra.executor": "Run",
-    "Application.CatalogoProductos.executor": "Run",
-    "Application.InfoProducto.executor": "Run",
-    "Application.InicioProyecto.executor": "Run",
-    "Application.InicioSesion.executor": "Run",
-    "Application.ProductoPendiente.executor": "Run",
-    "Application.ValidacionProductosLista.executor": "Run",
-    "Application.VentaProducto.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "211",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/javichr11/IdeaProjects/SmartTrade-FrontEnd",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CarritoCompra.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CatalogoProductos.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InfoProducto.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InicioProyecto.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InicioSesion.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProductoPendiente.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ValidacionProductosLista.executor&quot;: &quot;Run&quot;,
+    &quot;Application.VentaProducto.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH&quot;: &quot;211&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/javichr11/IdeaProjects/SmartTrade-FrontEnd&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\javichr11\IdeaProjects\SmartTrade-FrontEnd\src\main\java" />
@@ -153,7 +155,8 @@
       <workItem from="1715257530015" duration="1428000" />
       <workItem from="1715265801436" duration="6897000" />
       <workItem from="1715272782008" duration="25000" />
-      <workItem from="1715327056008" duration="5698000" />
+      <workItem from="1715327056008" duration="5734000" />
+      <workItem from="1715506435595" duration="2311000" />
     </task>
     <servers />
   </component>

@@ -140,6 +140,7 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
                                 if(isValidIban(ibanTF.getText())){
                                     if(isValidCif(cifTF.getText())){
                                         try {
+                                            JOptionPane.showMessageDialog(frame, "El usuario de tipo vendedor ha sido registrado", "Registro completado", JOptionPane.INFORMATION_MESSAGE);
                                             sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText(),city, street, num, flat, door);
                                             accessLogIn();
                                         } catch (JsonProcessingException ex) {
@@ -166,6 +167,7 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
                                             sendAdminToBack(nombreTF.getText(), passTF.getText(),emailTF.getText());
                                             accessLogIn();
                                         }else{
+                                            JOptionPane.showMessageDialog(frame, "El usuario de tipo comprador ha sido registrado", "Registro completado", JOptionPane.INFORMATION_MESSAGE);
                                             sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(),city, street, num, flat, door);
                                             accessLogIn();
                                         }

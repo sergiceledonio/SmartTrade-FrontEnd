@@ -288,10 +288,12 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                     e.printStackTrace();
                 }
             }else{
+                JOptionPane.showMessageDialog(frame, "El correo o la contraseña son erróneos, comprueba otra vez tus datos", "Error", JOptionPane.ERROR_MESSAGE);
+                cleanFields();
                 System.out.println("Problem with client: "  + statusCode);
             }
         }catch(IOException | InterruptedException e){
-            System.out.println("Error al enviar la petición: " + e.getMessage());
+            System.out.println("No hay conexión");
             e.printStackTrace();
         }
     }
@@ -317,6 +319,11 @@ public class InicioSesion extends JFrame implements ObserverUserData {
             nuevaVentanaValidacion.setVisible(true);
         });
         ventanaActual.dispose();
+    }
+
+    public void cleanFields(){
+        userTF.setText("");
+        passTF.setText("");
     }
 
     public String[] getUserData(){

@@ -214,6 +214,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if(response.statusCode() == 200){
+                JOptionPane.showMessageDialog(frame, "El producto ha sido añadido al carrito", "Producto añadido al carrito", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("SE HA AÑADIDO AL CARRITO");
                 System.out.println("BODY: " + response.body().toString());
             }else{

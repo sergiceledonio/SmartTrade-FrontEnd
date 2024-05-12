@@ -187,7 +187,16 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         buttonMenos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                //reducir la cantidad de objetos
+                int cantidad = Integer.parseInt(labelAmount.getText());
+                cantidad--;
+                if(cantidad < 0){
+                    labelAmount.setText("0");
+                }else{
+                    labelAmount.setText(String.valueOf(cantidad));
+                }
+                double precio = price * Integer.parseInt(labelAmount.getText());
+                labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -205,7 +214,11 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         buttonMas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                int cantidad = Integer.parseInt(labelAmount.getText());
+                cantidad++;
+                labelAmount.setText(String.valueOf(cantidad));
+                double precio = price * Integer.parseInt(labelAmount.getText());
+                labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
             }
             @Override
             public void mouseEntered(MouseEvent e) {
