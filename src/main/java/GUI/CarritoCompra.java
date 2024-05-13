@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,8 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private int tipo;
     private int id;
     private JFrame frame;
+    private int cantidad;
+    private double precio;
 
 
     public CarritoCompra(int t, int id) {
@@ -138,9 +141,11 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
                     String nombre = productoNode.get("name").asText();
                     String descripcion = productoNode.get("description").asText();
-                    double precio = productoNode.get("price").asDouble();
+                    precio = productoNode.get("price").asDouble();
+                    precio = productoNode.get("price").asDouble();
+                    int amount = getAmount(nombre, id);
 
-                    addProduct(nombre, descripcion, precio, 1, panelProductos);
+                    addProduct(nombre, descripcion, precio, amount, panelProductos);
                 }
 
                 panelCompras.removeAll();
@@ -156,6 +161,44 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         }
     }
 
+    public int getAmount(String nombreProd, int idUser){
+        HttpClient httpClient = HttpClient.newHttpClient();
+        String url = "http://localhost:8080/cart/amount";
+        ObjectMapper objectMapper = new ObjectMapper();
+        cantidad = 0;
+        try {
+
+            Map<String, Object> prod = new HashMap<>();
+            prod.put("p_name", nombreProd);
+            prod.put("u_id", idUser);
+            String jsonBody = new ObjectMapper().writeValueAsString(prod);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            int statusCode = response.statusCode();
+            System.out.println("Código es: " + statusCode);
+            System.out.println("El body es: " + response.body());
+
+            if(statusCode == 200){
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                try{
+                    cantidad = Integer.parseInt(response.body());
+                    System.out.println("La cantidad es: " + cantidad);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return cantidad;
+    }
+
+
     private void addProduct(String name, String desc, double price, int amount, JPanel panel){
         JPanel panelProducto = new JPanel();
         panelProducto.setLayout(new BorderLayout());
@@ -166,7 +209,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
         JLabel labelNombre = new JLabel("Nombre: " + name);
         JLabel labelDescripcion = new JLabel("Descripción: " + desc);
-        JLabel labelPrecio = new JLabel("Precio: " + price + "€");
+        JLabel labelPrecio = new JLabel("Precio: " + price * cantidad + "€");
 
         JButton buttonMas = new JButton("+");
         JLabel labelAmount = new JLabel(String.valueOf(amount));
@@ -191,8 +234,8 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         buttonMenos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                nameProd = labelNombre.getText();
-                int cantidad = Integer.parseInt(labelAmount.getText());
+                nameProd = name;
+                cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad--;
                 if(cantidad <= 0){
                     int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres eliminar el producto del carrito?", "Producto del carrito", JOptionPane.YES_NO_OPTION);
@@ -204,10 +247,10 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                     }
                 }else{
                     labelAmount.setText(String.valueOf(cantidad));
+                    double precio = price * cantidad;
+                    labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
+                    changeItemAmount(name, -1);
                 }
-                double precio = price * Integer.parseInt(labelAmount.getText());
-                labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
-                changeItemAmount(labelNombre.getText(), -1);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -228,9 +271,9 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 int cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad++;
                 labelAmount.setText(String.valueOf(cantidad));
-                double precio = price * Integer.parseInt(labelAmount.getText());
+                double precio = price * cantidad;
                 labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
-                changeItemAmount(labelNombre.getText(), 1);
+                changeItemAmount(name, 1);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -277,12 +320,15 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     private void changeItemAmount(String productName, int op){
-        String url = "http://localhost:8080/cart/changeAmount/" + productName;
+        String url = "http://localhost:8080/cart/newAmount";
         HttpClient client = HttpClient.newHttpClient();
 
         try{
             Map<String, Object> data = new HashMap<>();
-            data.put("operation", op);
+            data.put("n", op);
+            data.put("p_name", productName);
+            data.put("u_id", id);
+
 
             String jsonBody = new ObjectMapper().writeValueAsString(data);
             HttpRequest request = HttpRequest.newBuilder()
@@ -293,7 +339,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if(response.statusCode() == 200){
-
+                System.out.println(response.body());
             }else{
 
             }
@@ -304,14 +350,21 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
     private void deleteProductFromCart(String productName){
 
-        String url = "http://localhost:8080/cart/eliminated/" + productName;
+        String url = "http://localhost:8080/cart/delete";
         HttpClient client = HttpClient.newHttpClient();
 
         try{
+            System.out.println("user id: " + id);
+            System.out.println("product name: " + productName);
+            Map<String, Object> data = new HashMap<>();
+            data.put("p_name", productName);
+            data.put("u_id", id);
+            String jsonBody = new ObjectMapper().writeValueAsString(data);
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
-                    .DELETE()
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
