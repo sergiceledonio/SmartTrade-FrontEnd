@@ -214,22 +214,48 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JButton buttonMas = new JButton("+");
         JLabel labelAmount = new JLabel(String.valueOf(amount));
         JButton buttonMenos = new JButton("-");
+        JButton buttonEliminar = new JButton("Eliminar");
 
         buttonMenos.setBackground(new Color(153, 233, 255));
         buttonMas.setBackground(new Color(153, 233, 255));
+        buttonEliminar.setBackground(new Color(153, 233, 255));
 
-        buttonMenos.setPreferredSize(new Dimension(45, 45));
-        buttonMas.setPreferredSize(new Dimension(45, 45));
+        buttonMenos.setPreferredSize(new Dimension(45, 35));
+        buttonMas.setPreferredSize(new Dimension(45, 35));
+        buttonEliminar.setPreferredSize(new Dimension(100, 35));
 
         panelProducto.add(labelNombre, BorderLayout.NORTH);
         panelProducto.add(labelDescripcion, BorderLayout.WEST);
         panelProducto.add(labelPrecio, BorderLayout.EAST);
         panelProducto.add(panelBotones, BorderLayout.CENTER);
 
-
+        panelBotones.add(buttonEliminar);
         panelBotones.add(buttonMenos);
         panelBotones.add(labelAmount);
         panelBotones.add(buttonMas);
+
+        buttonEliminar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                nameProd = name;
+
+                int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres eliminar el producto del carrito?", "Producto del carrito", JOptionPane.YES_NO_OPTION);
+                if(opcion == JOptionPane.YES_OPTION){
+                    deleteProductFromCart(nameProd);
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonEliminar.setBackground(new Color(73, 231, 255));
+                buttonEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonEliminar.setBackground(new Color(153, 233, 255));
+                buttonEliminar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
 
         buttonMenos.addMouseListener(new MouseAdapter() {
             @Override
