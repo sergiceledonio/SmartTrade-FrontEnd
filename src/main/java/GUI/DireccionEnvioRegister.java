@@ -9,8 +9,8 @@ import java.util.List;
 
 public class DireccionEnvioRegister extends JDialog  implements ObserverRegister {
     private JPanel contentPane;
-    private JButton buttonOK;
     private JButton buttonCancel;
+    private JButton buttonOK;
     private JTextField numTF;
     private JTextField streetTF;
     private JTextField cityTF;
@@ -26,33 +26,14 @@ public class DireccionEnvioRegister extends JDialog  implements ObserverRegister
     public DireccionEnvioRegister() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(buttonCancel);
         this.setTitle("Añadir dirección de envío");
         contentPane.setPreferredSize(new Dimension(400, 400));
-
-        buttonOK.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                onOK();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                buttonOK.setBackground(new Color(73, 231, 255));
-                buttonOK.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                buttonOK.setBackground(new Color(153, 233, 255));
-                buttonOK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
 
         buttonCancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                onCancel();
+                onOK();
             }
 
             @Override
@@ -65,6 +46,25 @@ public class DireccionEnvioRegister extends JDialog  implements ObserverRegister
             public void mouseExited(MouseEvent e) {
                 buttonCancel.setBackground(new Color(153, 233, 255));
                 buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        buttonOK.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                onCancel();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonOK.setBackground(new Color(73, 231, 255));
+                buttonOK.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonOK.setBackground(new Color(153, 233, 255));
+                buttonOK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 

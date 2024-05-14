@@ -216,9 +216,14 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if(response.statusCode() == 200){
-                JOptionPane.showMessageDialog(frame, "El producto ha sido añadido al carrito", "Producto añadido al carrito", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("SE HA AÑADIDO AL CARRITO");
-                System.out.println("BODY: " + response.body().toString());
+                System.out.println("La respuesta es: " + response.body());
+                if(Integer.parseInt(response.body()) == 1){
+                    System.out.println("Se añade el producto sin problemas");
+                    JOptionPane.showMessageDialog(null,"El producto se ha añadido al carrito correctamente", "Producto añadido al carrito", JOptionPane.INFORMATION_MESSAGE );
+                }else{
+                    System.out.println("El producto ya está añadido al carrito");
+                    JOptionPane.showMessageDialog(null,"El producto estaba ya añadido al carrito", "Producto ya añadido anteriormentegitgit ", JOptionPane.INFORMATION_MESSAGE );
+                }
             }else{
                 System.out.println("ERROR EN LA PETICIÓN");
             }
@@ -247,9 +252,9 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
             System.out.println("Código " + response.statusCode());
             if(response.statusCode() == 200){
-                JOptionPane.showMessageDialog(frame, "El producto ha sido añadido a la lista de favoritos", "Producto añadido a la lista de favoritos", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("SE HA AÑADIDO A LA LISTA DE FAVS");
-                System.out.println("BODY: " + response.body().toString());
+                JOptionPane.showMessageDialog(frame, "El producto ha sido añadido a la lista de favoritos", "Producto añadido a la lista de deseados", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("SE HA AÑADIDO A LA LISTA DE FAV");
+                System.out.println("BODY: " + response.body());
             }else{
                 System.out.println("ERROR EN LA PETICIÓN");
             }
