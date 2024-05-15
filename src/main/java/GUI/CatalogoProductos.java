@@ -26,6 +26,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     private JLabel perfilButton;
     private JTextField searchTF;
     private JButton ventaProducto;
+    private JButton ventasValidas;
     private JLabel lupaButton;
     private JLabel carritoCompraButton;
     private static String name;
@@ -86,6 +87,23 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
             public void mouseExited(MouseEvent e) {
                 ventaProducto.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 ventaProducto.setBackground(new Color(153, 233, 255));
+            }
+        });
+        ventasValidas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToValidated();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                ventasValidas.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                ventasValidas.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                ventasValidas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                ventasValidas.setBackground(new Color(153, 233, 255));
             }
         });
         logoButton.addMouseListener(new MouseAdapter() {
@@ -564,6 +582,17 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         return this.panelCatalogo;
     }
 
+    public void goToValidated(){
+       VendedorProductosValidos ventanaVendedor = new VendedorProductosValidos(id, tipo);
+        JFrame frame = new JFrame("Smart Trade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(ventanaVendedor.getPanel());
+        frame.pack();
+        frame.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
+    }
+
     public void goCarrito(int t, int i){
         CarritoCompra ventanaCarrito = new CarritoCompra(t, i);
         JFrame frame = new JFrame("Smart Trade");
@@ -726,8 +755,11 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         panelProductos = new JPanel();
         panelProductos.setLayout(new GridLayout(0, 3, 10, 10));
         ventaProducto = new JButton("Vender Producto");
+        ventasValidas = new JButton("Mis productos validados");
         ventaProducto.setBackground(new Color(153, 233, 255));
+        ventasValidas.setBackground(new Color(153, 233, 255));
         ventaProducto.setPreferredSize(new Dimension(150, 30));
+        ventasValidas.setPreferredSize(new Dimension(250, 30));
         JPanel panelVenta = new JPanel();
         panelVenta.setLayout(new FlowLayout(FlowLayout.CENTER));
     }
@@ -784,8 +816,15 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         panelCatalogo.add(panelInfo, BorderLayout.NORTH);
         panelCatalogo.add(panelListado, BorderLayout.CENTER);
 
-        if(param == 2){
-            panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
+        if (param == 2) {
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            bottomPanel.setBackground(new Color(198, 232, 251));
+
+            bottomPanel.add(ventaProducto);
+            bottomPanel.add(ventasValidas);
+
+            panelCatalogo.add(bottomPanel, BorderLayout.SOUTH);
         }
 
     }

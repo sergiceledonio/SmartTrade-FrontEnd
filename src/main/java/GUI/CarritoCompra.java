@@ -1,8 +1,6 @@
 package GUI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,22 +9,19 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import static GUI.CatalogoProductos.getUserData;
 
 public class CarritoCompra extends JFrame implements ObserverUserData{
     private JPanel panelCarrito;
     private JPanel panelInfo;
-    private JLabel logoButton;
+    private JLabel backButton;
     private JButton filtroButton;
     private JLabel perfilButton;
     private JLabel lupaButton;
@@ -63,12 +58,13 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         this.id = id;
 
         panelCompras = new JPanel();
+        panelCompras.setBackground(new Color(198, 232, 251));
 
         getCarritoProducts(id);
         inicializarComponentes();
 
 
-        logoButton.addMouseListener(new MouseAdapter() {
+        backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 backMenu();
@@ -76,12 +72,12 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                logoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
         perfilButton.addMouseListener(new MouseAdapter() {
@@ -164,7 +160,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     public int getAmount(String nombreProd, int idUser){
         HttpClient httpClient = HttpClient.newHttpClient();
         String url = "http://localhost:8080/cart/amount";
-        ObjectMapper objectMapper = new ObjectMapper();
         cantidad = 0;
         try {
 
@@ -178,13 +173,11 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            String responseBody = response.body();
             int statusCode = response.statusCode();
             System.out.println("Código es: " + statusCode);
             System.out.println("El body es: " + response.body());
 
             if(statusCode == 200){
-                JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 try{
                     cantidad = Integer.parseInt(response.body());
                     System.out.println("La cantidad es: " + cantidad);
