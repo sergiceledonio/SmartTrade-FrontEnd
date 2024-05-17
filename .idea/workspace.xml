@@ -8,6 +8,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,29 +26,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;bcb64&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Z3LEE/SmartTrade-FrontEnd.git&quot;,
-    &quot;accountId&quot;: &quot;d86451a4-cd6f-4bd9-864a-7178fbe191a0&quot;
-  }
-}</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" root0="SKIP_INSPECTION" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -192,7 +171,7 @@
       <workItem from="1715760056465" duration="1133000" />
       <workItem from="1715783266229" duration="5094000" />
       <workItem from="1715846341703" duration="5508000" />
-      <workItem from="1715929375251" duration="659000" />
+      <workItem from="1715929375251" duration="3261000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />

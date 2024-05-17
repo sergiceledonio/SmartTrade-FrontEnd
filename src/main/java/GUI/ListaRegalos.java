@@ -44,6 +44,7 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
+        panelListaRegalos.setBackground(new Color(198, 233, 255));
 
         panelRegalos = new JPanel();
         panelRegalos.setPreferredSize(new Dimension(800, 500));
@@ -152,36 +153,10 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         panelRegalos.setLayout(new BoxLayout(panelRegalos, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(panelRegalos);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         panelListaRegalos.add(scrollPane, BorderLayout.CENTER);
         panelListaRegalos.setBackground(new Color(198, 232, 251));
-
-        JButton newUser = new JButton("Añadir persona");
-        newUser.setBackground(new Color(153, 233, 255));
-
-        newUser.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //Añadir nueva lista de productos para un usuario
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                newUser.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                newUser.setBackground(new Color(73, 231, 255));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                newUser.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                newUser.setBackground(new Color(153, 233, 255));
-            }
-        });
-
-        panelListaRegalos.add(newUser, BorderLayout.SOUTH);
-
-
 
     }
 

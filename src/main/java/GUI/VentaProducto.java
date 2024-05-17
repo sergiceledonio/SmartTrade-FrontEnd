@@ -323,16 +323,6 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
     /*METODOS DE ACCESO A VARIABLES*/
 
-    static class DisabledFirstElementRenderer extends DefaultListCellRenderer {
-        @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel component = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (index == 0) {
-
-            }
-            return component;
-        }
-    }
     public JComboBox getComboBox(){
         return this.categorySelector;
     }
@@ -389,8 +379,8 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
         jsonBody.put("name", attributes[0]);
         jsonBody.put("price", attributes[1]);
-        jsonBody.put("type", attributes[2]);
-        jsonBody.put("description", attributes[3]);
+        jsonBody.put("description", attributes[2]);
+        jsonBody.put("type", attributes[3]);
         jsonBody.put("pending", true);
         jsonBody.put("validation", false);
         jsonBody.put("user_id", id);
