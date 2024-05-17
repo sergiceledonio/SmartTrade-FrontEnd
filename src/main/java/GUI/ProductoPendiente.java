@@ -34,7 +34,7 @@ public class ProductoPendiente {
     private String prodPrice;
     private int prodId;
 
-    public ProductoPendiente(String name, String price, String description, String type, int id){
+    public ProductoPendiente(String name, String price, String type, String description, int id){
         this.prodName = name;
         this.prodDescription = description;
         this.prodPrice = price;
