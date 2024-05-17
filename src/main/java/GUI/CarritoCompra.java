@@ -316,6 +316,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
         panel.add(panelProducto);
     }
+
     public void backMenu(){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -325,6 +326,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
+
     private void inicializarComponentes(){
         panelCarrito.setLayout(new BorderLayout());
 
