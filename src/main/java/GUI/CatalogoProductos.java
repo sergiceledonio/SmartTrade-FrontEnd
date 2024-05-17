@@ -50,6 +50,11 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     private String[] userData;
     private List searchHistory = new List();
     private int id;
+    String[] storableSearchButtonText = {"", "", ""};
+    JButton storableSearchButton1 = new JButton(storableSearchButtonText[0]);
+    JButton storableSearchButton2 = new JButton(storableSearchButtonText[1]);
+    JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
+    private JDialog filterPopUp;
 
     public CatalogoProductos(String[] userData, int tipo, int id) {
         iniciosesion = new InicioSesion();
@@ -152,18 +157,13 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         filtroButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
 
-                JDialog filterPopUp = new JDialog();
+                filterPopUp = new JDialog();
                 JSeparator separator = new JSeparator();
                 JComboBox<String> shippingDurationComboBox = new JComboBox<String>();
-                String[] storableSearchButtonText = {"", "", ""};
                 final int[] numStars = {0};
 
                 JButton okButton = new JButton("Aceptar");
-                JButton storableSearchButton1 = new JButton(storableSearchButtonText[0]);
-                JButton storableSearchButton2 = new JButton(storableSearchButtonText[1]);
-                JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
                 JToggleButton ascendingToggleButton = new JToggleButton("Ascendente");
                 JToggleButton descendingToggleButton = new JToggleButton("Descendente");
                 ButtonGroup storableSearchButtonGroup = new ButtonGroup();
@@ -249,6 +249,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 greaterOrlowerPriceErrorLabel.setBounds(25, 65, 250 ,25);
                 greaterOrlowerPriceErrorLabel.setForeground(Color.RED);
                 greaterOrlowerPriceErrorLabel.setVisible(false);
+                goBackFromFilterWithEsc(minPriceTextField);
+                goBackFromFilterWithEsc(maxPriceTextField);
 
                 sortByCategotyLabel.setBounds(75, 95, 200, 30);
                 ascendingToggleButton.setBounds(10, 125, 120, 30);
@@ -265,6 +267,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                             descendingToggleButton.setSelected(true);
                         }
                 );
+                goBackFromFilterWithEsc(ascendingToggleButton);
+                goBackFromFilterWithEsc(descendingToggleButton);
 
                 valorationLabel.setBounds(345, 0, 100, 30);
                 starButton1.setIcon(scaledBlankStarImageIcon);
@@ -392,6 +396,11 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                             }
                         }
                 );
+                goBackFromFilterWithEsc(starButton1);
+                goBackFromFilterWithEsc(starButton2);
+                goBackFromFilterWithEsc(starButton3);
+                goBackFromFilterWithEsc(starButton4);
+                goBackFromFilterWithEsc(starButton5);
 
                 shippingDurationLabel.setBounds(320, 95, 150, 30);
                 shippingDurationComboBox.addItem("Ninguna selección");
@@ -400,6 +409,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 shippingDurationComboBox.addItem("3 Días");
                 shippingDurationComboBox.addItem("4 Días");
                 shippingDurationComboBox.setBounds(300, 125, 145, 30);
+                goBackFromFilterWithEsc(shippingDurationComboBox);
 
                 separator.setOrientation(SwingConstants.HORIZONTAL);
                 separator.setBounds(0, 175, 500, 400);
@@ -408,24 +418,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 storableSearchButton1.setBounds(10, 210, 465, 30);
                 storableSearchButton2.setBounds(10, 245, 465, 30);
                 storableSearchButton3.setBounds(10, 280, 465, 30);
-                if (searchHistory.getItemCount() == 1) {
-                    storableSearchButtonText[0] = searchHistory.getItem(0).toString();
-                    storableSearchButton1.setText(storableSearchButtonText[0]);
-                }
-                if (searchHistory.getItemCount() == 2) {
-                    storableSearchButtonText[1] = searchHistory.getItem(0).toString();
-                    storableSearchButton2.setText(storableSearchButtonText[1]);
-                    storableSearchButtonText[0] = searchHistory.getItem(1).toString();
-                    storableSearchButton1.setText(storableSearchButtonText[0]);
-                }
-                if (searchHistory.getItemCount() == 3) {
-                    storableSearchButtonText[2] = searchHistory.getItem(0).toString();
-                    storableSearchButton3.setText(storableSearchButtonText[2]);
-                    storableSearchButtonText[1] = searchHistory.getItem(1).toString();
-                    storableSearchButton2.setText(storableSearchButtonText[1]);
-                    storableSearchButtonText[0] = searchHistory.getItem(2).toString();
-                    storableSearchButton1.setText(storableSearchButtonText[0]);
-                }
+                getStorableSearch();
                 storableSearchButton1.addActionListener(
                         actionEvent -> {
                             //ir a la información del producto
@@ -481,12 +474,12 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         }
 
                         if (ascendingToggleButton.isSelected()) {
-                            //sortByAscendingCategory(products);
+                            getProductsSortedByAscendingCategory();
                         } else if (descendingToggleButton.isSelected()) {
-                            //sortByDescendingCategory(products);
+                            getProductsSortedByDescendingCategory();
                         }
 
-                        //sortByPrice(products, minPrice, maxPrice);
+                        getProductsSortedByPrice();
                         //sortByAssesment(products, numStars[0]);
                         //sortByShippingDuration(products, shippingDurationComboBox.getSelectedIndex());
 
@@ -677,6 +670,136 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         panelProductos.repaint();
     }
 
+    public void getProductsSortedByPrice() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/search/price"))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            if (response.statusCode() == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                if (jsonResponse.isArray()) {
+                    for (JsonNode productNode : jsonResponse) {
+                        prodName = productNode.get("name").asText();
+                        prodPrice = productNode.get("price").asDouble();
+                        prodDescription = productNode.get("description").asText();
+                        prodType = productNode.get("type").asText();
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                    }
+                }
+            } else {
+                System.out.println("Error: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProductsSortedByAscendingCategory() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/search/ascending"))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            if (response.statusCode() == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                if (jsonResponse.isArray()) {
+                    for (JsonNode productNode : jsonResponse) {
+                        prodName = productNode.get("name").asText();
+                        prodPrice = productNode.get("price").asDouble();
+                        prodDescription = productNode.get("description").asText();
+                        prodType = productNode.get("type").asText();
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                    }
+                }
+            } else {
+                System.out.println("Error: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProductsSortedByDescendingCategory() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/search/descending"))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            if (response.statusCode() == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                if (jsonResponse.isArray()) {
+                    for (JsonNode productNode : jsonResponse) {
+                        prodName = productNode.get("name").asText();
+                        prodPrice = productNode.get("price").asDouble();
+                        prodDescription = productNode.get("description").asText();
+                        prodType = productNode.get("type").asText();
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                    }
+                }
+            } else {
+                System.out.println("Error: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getStorableSearch() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/search/storable"))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            String responseBody = response.body();
+            if (response.statusCode() == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                if (jsonResponse.isArray()) {
+                    for (JsonNode productNode : jsonResponse) {
+                        //prodName = productNode.get("name").asText();
+                        if (jsonResponse.size() == 1) {
+                            storableSearchButtonText[0] = productNode.get(0).get("name").asText();
+                            storableSearchButton1.setText(storableSearchButtonText[0]);
+                        }
+                        if (jsonResponse.size() == 2) {
+                            storableSearchButtonText[1] = productNode.get(0).get("name").asText();
+                            storableSearchButton2.setText(storableSearchButtonText[1]);
+                            storableSearchButtonText[0] = productNode.get(1).get("name").asText();
+                            storableSearchButton1.setText(storableSearchButtonText[0]);
+                        }
+                        if (jsonResponse.size() == 3) {
+                            storableSearchButtonText[2] = productNode.get(0).get("name").asText();
+                            storableSearchButton3.setText(storableSearchButtonText[2]);
+                            storableSearchButtonText[1] = productNode.get(1).get("name").asText();
+                            storableSearchButton2.setText(storableSearchButtonText[1]);
+                            storableSearchButtonText[0] = productNode.get(2).get("name").asText();
+                            storableSearchButton1.setText(storableSearchButtonText[0]);
+                        }
+                    }
+                }
+            } else {
+                System.out.println("Error: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void addObserver(ObserverUserData observer) {
     }
@@ -778,5 +901,18 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
             panelCatalogo.add(ventaProducto, BorderLayout.SOUTH);
         }
 
+    }
+
+    public void goBackFromFilterWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            filterPopUp.dispose();
+                        }
+                    }
+                }
+        );
     }
 }

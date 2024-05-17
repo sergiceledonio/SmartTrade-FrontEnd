@@ -2,10 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -52,16 +49,19 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
         direccionEnvioRegister.addObserver(this);
 
         /*NOMBRETF*/
-
+        registerWithEnter(nombreTF);
         /*PASSTF*/
-
+        registerWithEnter(passTF);
         /*EMAILTF*/
-
+        registerWithEnter(emailTF);
         /*REPETIRCONTRASEÑATF*/
-
+        registerWithEnter(repetirContraseñaTF);
         /*DNITF*/
-
+        registerWithEnter(dniTF);
         /*VENDEDORRB*/
+        registerWithEnter(vendedorRB);
+        registerWithEnter(cifTF);
+        registerWithEnter(ibanTF);
 
         vendedorRB.addActionListener(new ActionListener() {
             @Override
@@ -133,61 +133,7 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
 
             @Override
             public void mouseClicked(MouseEvent e){
-                if(areAllTextFieldsFilled(panelRegistro)){
-                    if(vendedorRB.isSelected()){
-                        if(passTF.getText().equals(repetirContraseñaTF.getText())){
-                            if(isValidEmail(emailTF.getText())){
-                                if(isValidIban(ibanTF.getText())){
-                                    if(isValidCif(cifTF.getText())){
-                                        try {
-                                            JOptionPane.showMessageDialog(frame, "El usuario de tipo vendedor ha sido registrado", "Registro completado", JOptionPane.INFORMATION_MESSAGE);
-                                            sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(), ibanTF.getText(),cifTF.getText(),city, street, num, flat, door);
-                                            accessLogIn();
-                                        } catch (JsonProcessingException ex) {
-                                            throw new RuntimeException(ex);
-                                        }
-                                    }else{
-                                        JOptionPane.showMessageDialog(frame, "CIF con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                                    }
-                                }else{
-                                    JOptionPane.showMessageDialog(frame, "IBAN con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                            }else{
-                                JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }else{
-                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }else if(!vendedorRB.isSelected()){
-                        if(passTF.getText().equals(repetirContraseñaTF.getText())){
-                            if(isValidDni(dniTF.getText())){
-                                if(isValidEmail(emailTF.getText())){
-                                    try {
-                                        if(isAdmin(passTF.getText(),emailTF.getText())){
-                                            sendAdminToBack(nombreTF.getText(), passTF.getText(),emailTF.getText());
-                                            accessLogIn();
-                                        }else{
-                                            JOptionPane.showMessageDialog(frame, "El usuario de tipo comprador ha sido registrado", "Registro completado", JOptionPane.INFORMATION_MESSAGE);
-                                            sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(), emailTF.getText(),city, street, num, flat, door);
-                                            accessLogIn();
-                                        }
-                                    } catch (JsonProcessingException ex) {
-                                        throw new RuntimeException(ex);
-                                    }
-                                }else{
-                                    JOptionPane.showMessageDialog(frame, "Email con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                            }else{
-                                JOptionPane.showMessageDialog(frame, "Dni con formato incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }else{
-                            JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-
-                }else{
-                    JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                register();
             }
         });
 
@@ -316,7 +262,7 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
             ibanTF.setText("");
     }
     private boolean isAdmin(String contra, String gmail){
-        if(contra.equals("admin@admin.com") && gmail.equals("12345678")){
+        if(gmail.equals("admin@admin.com") && contra.equals("12345678")){
             return true;
         }
         return false;
@@ -463,6 +409,89 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
         }
     }
 
+    public void registerWithEnter(JComponent component) {
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                            register();
+                        }
+                    }
+                }
+        );
+    }
+
+    public void register() {
+        if(areAllTextFieldsFilled(panelRegistro)){
+            if(vendedorRB.isSelected()){
+                if(passTF.getText().equals(repetirContraseñaTF.getText())){
+                    if(isValidEmail(emailTF.getText())){
+                        if(isValidIban(ibanTF.getText())){
+                            if(isValidCif(cifTF.getText())){
+                                try {
+                                    JOptionPane.showMessageDialog(frame,
+                                            "El usuario de tipo vendedor ha sido registrado",
+                                            "Registro completado", JOptionPane.INFORMATION_MESSAGE);
+                                    sendSellerToBack(nombreTF.getText(), passTF.getText(), emailTF.getText(),
+                                            ibanTF.getText(),cifTF.getText(),city, street, num, flat, door);
+                                    accessLogIn();
+                                } catch (JsonProcessingException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }else{
+                                JOptionPane.showMessageDialog(frame, "CIF con formato incorrecto",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(frame, "IBAN con formato incorrecto",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(frame, "Email con formato incorrecto",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }else if(!vendedorRB.isSelected()){
+                if(passTF.getText().equals(repetirContraseñaTF.getText())){
+                    if(isValidDni(dniTF.getText())){
+                        if(isValidEmail(emailTF.getText())){
+                            try {
+                                if(isAdmin(passTF.getText(),emailTF.getText())){
+                                    sendAdminToBack(nombreTF.getText(), passTF.getText(),emailTF.getText());
+                                    accessLogIn();
+                                }else{
+                                    JOptionPane.showMessageDialog(frame,
+                                            "El usuario de tipo comprador ha sido registrado",
+                                            "Registro completado", JOptionPane.INFORMATION_MESSAGE);
+                                    sendCustomerToBack(nombreTF.getText(), passTF.getText(), dniTF.getText(),
+                                            emailTF.getText(),city, street, num, flat, door);
+                                    accessLogIn();
+                                }
+                            } catch (JsonProcessingException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(frame, "Email con formato incorrecto",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(frame, "Dni con formato incorrecto",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(frame, "Contraseñas no coinciden", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(frame, "Debes rellenar todos los apartados", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
 
 

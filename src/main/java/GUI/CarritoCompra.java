@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
@@ -60,6 +62,9 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         getCarritoProducts(id);
         inicializarComponentes();
 
+        panelCarrito.setFocusable(true);
+        panelCarrito.requestFocusInWindow();
+        goBackWithEsc(panelCarrito);
 
         logoButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -210,6 +215,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 buttonMenos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+        goBackWithEsc(buttonMas);
 
         buttonMas.addMouseListener(new MouseAdapter() {
             @Override
@@ -232,7 +238,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 buttonMas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-
+        goBackWithEsc(buttonMenos);
 
         panel.add(panelProducto);
     }
@@ -294,5 +300,18 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         flat = data[10];
         num = data[11];
         id = Integer.parseInt(data[12]);
+    }
+
+    public void goBackWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            backMenu();
+                        }
+                    }
+                }
+        );
     }
 }
