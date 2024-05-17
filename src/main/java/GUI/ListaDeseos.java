@@ -166,7 +166,9 @@ public class ListaDeseos extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton buttonMenos = new JButton("Eliminar");
-        JButton buyButton = new JButton();
+        JButton buyButton = new JButton("Añadir al carrito");
+        buyButton.setBackground(new Color(153, 233, 255));
+        buyButton.setPreferredSize(new Dimension(185, 45));
         buttonMenos.setBackground(new Color(153, 233, 255));
         buttonMenos.setPreferredSize(new Dimension(105, 45));
 
@@ -180,7 +182,7 @@ public class ListaDeseos extends JFrame {
         panelProduco.add(labelPrecio, BorderLayout.EAST);
         panelProduco.add(panelBotones, BorderLayout.CENTER);
 
-
+        panelBotones.add(buyButton);
         panelBotones.add(buttonMenos);
 
         buttonMenos.addMouseListener(new MouseAdapter() {
