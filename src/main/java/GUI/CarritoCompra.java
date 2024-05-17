@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -63,6 +65,9 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         getCarritoProducts(id);
         inicializarComponentes();
 
+        panelCarrito.setFocusable(true);
+        panelCarrito.requestFocusInWindow();
+        goBackWithEsc(panelCarrito);
 
         backButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -283,6 +288,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 buttonMenos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
+        goBackWithEsc(buttonMas);
 
         buttonMas.addMouseListener(new MouseAdapter() {
             @Override
@@ -306,10 +312,11 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 buttonMas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-
+        goBackWithEsc(buttonMenos);
 
         panel.add(panelProducto);
     }
+
     public void backMenu(){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -319,6 +326,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
+
     private void inicializarComponentes(){
         panelCarrito.setLayout(new BorderLayout());
 
@@ -431,5 +439,18 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         flat = data[10];
         num = data[11];
         id = Integer.parseInt(data[12]);
+    }
+
+    public void goBackWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            backMenu();
+                        }
+                    }
+                }
+        );
     }
 }

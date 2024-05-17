@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -56,7 +57,12 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private int id;
     private InicioSesion iniciosesion;
     public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser){
+        panelInfo.setFocusable(true);
+        panelInfo.requestFocusInWindow();
         panelInfo.setPreferredSize(new Dimension(800,600));
+        goBackWithEsc(panelInfo);
+        goBackWithEsc(searchTF);
+
         /*SETTING VARIABLES TO WHAT WAS CLICKED*/
         this.id = id;
         this.tipo = tipoUser;
@@ -131,7 +137,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         perfilButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //
+                super.mouseClicked(e);
             }
 
             @Override
@@ -188,6 +194,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         frame.setContentPane(ventanaInfo.panelInfo);
         frame.pack();
         frame.setVisible(true);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
     }
 
     /*METODOS PARA ACCEDER A VARIABLES*/
@@ -377,6 +384,19 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
         return productId;
 
+    }
+
+    public void goBackWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            backMenu(tipo);
+                        }
+                    }
+                }
+        );
     }
 
 }

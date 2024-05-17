@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
@@ -54,6 +56,9 @@ public class ListaDeseos extends JFrame {
         this.id = id;
 
         panelListDeseos = new JPanel();
+        panelDeseos.setFocusable(true);
+        panelDeseos.requestFocusInWindow();
+        goBackWithEsc(panelDeseos);
 
         getDeseosProducts(id);
         inicializarComponentes();
@@ -178,7 +183,6 @@ public class ListaDeseos extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                     int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres eliminar el producto del carrito?", "Producto del carrito", JOptionPane.YES_NO_OPTION);
-
                     if(opcion == JOptionPane.YES_OPTION){
                         deleteProductFromWish(name);
                     }
@@ -256,8 +260,18 @@ public class ListaDeseos extends JFrame {
 
         panelDeseos.add(scrollPane, BorderLayout.CENTER);
         panelDeseos.setBackground(new Color(198, 232, 251));
-
-
     }
 
+    public void goBackWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            backMenu();
+                        }
+                    }
+                }
+        );
+    }
 }

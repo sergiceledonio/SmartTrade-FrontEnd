@@ -56,6 +56,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     private int id;
     private List<ObserverUserData> observadores = new ArrayList<>();
     private StatePattern currentState;
+
     public InicioSesion(){
 
         /*USERTF*/
@@ -69,6 +70,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                 }
             }
         });
+        logInWithEnter(userTF);
 
         /*PASSTF*/
         passTF.setText("Contraseña");
@@ -84,6 +86,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                 }
             }
         });
+        logInWithEnter(passTF);
 
         /*LOGINBUTTON*/
         loginButton.setBackground(new Color(153,233,255));
@@ -385,5 +388,17 @@ public class InicioSesion extends JFrame implements ObserverUserData {
         } else {
             currentState = new Open();
         }
+    }
+
+    public void logInWithEnter(JComponent component) {
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                            trylogIn();                    }
+                    }
+                }
+        );
     }
 }
