@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9647fbb4-4146-4203-9197-2d36c3d72cd7" name="Changes" comment="changes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,9 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2elrEJ3qBuKmlmlOTp8cw2Kj6D0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -167,7 +162,8 @@
       <workItem from="1715679323084" duration="2631000" />
       <workItem from="1715760056465" duration="1133000" />
       <workItem from="1715783266229" duration="5094000" />
-      <workItem from="1715846341703" duration="5263000" />
+      <workItem from="1715846341703" duration="5508000" />
+      <workItem from="1715929375251" duration="659000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
