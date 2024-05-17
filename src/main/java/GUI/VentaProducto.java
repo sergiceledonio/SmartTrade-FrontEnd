@@ -393,6 +393,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         jsonBody.put("description", attributes[3]);
         jsonBody.put("pending", true);
         jsonBody.put("validation", false);
+        jsonBody.put("user_id", id);
 
         String jsonString = jsonBody.toString();
 

@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import static GUI.CatalogoProductos.getUserData;
 
@@ -22,7 +24,7 @@ public class ListaDeseos extends JFrame {
     private JButton filtroButton;
     private JLabel perfilButton;
     private JLabel lupaButton;
-    private JPanel panelProductos;
+    private JPanel panelListDeseos;
     private static String name;
     private static String password;
     private static String email;
@@ -51,7 +53,7 @@ public class ListaDeseos extends JFrame {
         this.tipo = t;
         this.id = id;
 
-        panelDeseos = new JPanel();
+        panelListDeseos = new JPanel();
 
         getDeseosProducts(id);
         inicializarComponentes();
@@ -128,18 +130,17 @@ public class ListaDeseos extends JFrame {
                 panelProduct.setLayout(new BoxLayout(panelProduct, BoxLayout.Y_AXIS));
 
                 for (JsonNode productoNode : jsonResponse) {
-
                     String nombre = productoNode.get("name").asText();
                     String descripcion = productoNode.get("description").asText();
                     double precio = productoNode.get("price").asDouble();
 
-                    addProduct(nombre, descripcion, precio, 1, panelProduct);
+                    addProduct(nombre, descripcion, precio, panelProduct);
                 }
 
-                panelProductos.removeAll();
-                panelProductos.add(panelProduct);
-                panelProductos.revalidate();
-                panelProductos.repaint();
+                panelListDeseos.removeAll();
+                panelListDeseos.add(panelProduct);
+                panelListDeseos.revalidate();
+                panelListDeseos.repaint();
 
             } else {
                 System.out.println("No devuelve nada");
@@ -149,27 +150,87 @@ public class ListaDeseos extends JFrame {
         }
     }
 
-    private void addProduct(String name, String desc, double price, int amount, JPanel panel){
-        JPanel panelProducto = new JPanel();
-        panelProducto.setLayout(new BorderLayout());
-        panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelProducto.setPreferredSize(new Dimension(770, 100));
+    private void addProduct(String name, String desc, double price, JPanel panel){
+        JPanel panelProduco = new JPanel();
+        panelProduco.setLayout(new BorderLayout());
+        panelProduco.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelProduco.setPreferredSize(new Dimension(770, 100));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton buttonMenos = new JButton("Eliminar");
+        buttonMenos.setBackground(new Color(153, 233, 255));
+        buttonMenos.setPreferredSize(new Dimension(105, 45));
 
         JLabel labelNombre = new JLabel("Nombre: " + name);
         JLabel labelDescripcion = new JLabel("Descripción: " + desc);
         JLabel labelPrecio = new JLabel("Precio: " + price + "€");
 
 
-        panelProducto.add(labelNombre, BorderLayout.NORTH);
-        panelProducto.add(labelDescripcion, BorderLayout.WEST);
-        panelProducto.add(labelPrecio, BorderLayout.EAST);
-        panelProducto.add(panelBotones, BorderLayout.CENTER);
+        panelProduco.add(labelNombre, BorderLayout.NORTH);
+        panelProduco.add(labelDescripcion, BorderLayout.WEST);
+        panelProduco.add(labelPrecio, BorderLayout.EAST);
+        panelProduco.add(panelBotones, BorderLayout.CENTER);
 
-        panel.add(panelProducto);
+
+        panelBotones.add(buttonMenos);
+
+        buttonMenos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                    int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres eliminar el producto del carrito?", "Producto del carrito", JOptionPane.YES_NO_OPTION);
+
+                    if(opcion == JOptionPane.YES_OPTION){
+                        deleteProductFromWish(name);
+                    }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonMenos.setBackground(new Color(73, 231, 255));
+                buttonMenos.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                buttonMenos.setBackground(new Color(153, 233, 255));
+                buttonMenos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
+        panel.add(panelProduco);
     }
 
+    public void deleteProductFromWish(String productName){
+
+        String url = "http://localhost:8080/wish/delete";
+        HttpClient client = HttpClient.newHttpClient();
+
+        try{
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("user_id", id);
+            productData.put("product_name", productName);
+            String jsonBody = new ObjectMapper().writeValueAsString(productData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+            if(statusCode == 200){
+                System.out.println("Elemento borrado de la lista de deseos correctamente");
+            }else{
+                System.out.println("Problema con la eliminación del producto, error:" + statusCode);
+            }
+
+            getDeseosProducts(id);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public void backMenu(){
         CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
         JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -188,8 +249,8 @@ public class ListaDeseos extends JFrame {
 
 
 
-        panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(panelProductos);
+        panelListDeseos.setLayout(new BoxLayout(panelListDeseos, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panelListDeseos);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
