@@ -3,23 +3,19 @@ package GUI;
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.webkit.perf.PerfLogger;
-import javafx.css.CssParser;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InfoProducto extends JFrame implements ObserverUserData {
@@ -38,6 +34,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private JLabel priceProduct;
     private JLabel carritoCompraButton;
     private JLabel favouriteButton;
+    private JComboBox comboboxFriends;
     private JFrame frame;
     private String name;
     private String email;
@@ -69,6 +66,8 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         priceProduct.setText("El precio es de: " + prodPrice + "€");
         categoryProduct.setText("Categoria: " + prodType);
         productDescription.setText(prodDescription);
+
+        addFriendsToComboBox(id);
 
         /*BUYBUTTON*/
 
@@ -275,6 +274,41 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
+    private void addFriendsToComboBox(int userId) {
+        String url = "http://localhost:8080/gift/friends/" + userId;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+
+            System.out.println("StatusCode: " + statusCode);
+
+            if (statusCode == 200) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.readTree(responseBody);
+
+                if (jsonNode.isArray()) {
+                    for (JsonNode friendNode : jsonNode) {
+                        comboboxFriends.addItem("Nuevo amigo");
+                        String friendName = friendNode.get("name").asText();
+                        comboboxFriends.addItem(friendName);
+                    }
+                }
+            } else {
+                System.out.println("Problem with client: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error al enviar la petición: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void addObserver(ObserverUserData observer) {
 
@@ -310,27 +344,32 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     }
     public int getProductId(String pName){
 
-        String url = "http://localhost:8080/product/getbyname/" + pName;
-        HttpClient client = HttpClient.newHttpClient();
         int productId = 0;
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            int statusCode = response.statusCode();
-            String responseBody = response.body();
-            if (statusCode == 200) {
-                System.out.println("GET request successful: " + statusCode);
-                System.out.println("GET request successful: " + responseBody);
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode jsonNode = mapper.readTree(responseBody);
 
-                productId = jsonNode.get("id").asInt();
-            } else {
-                System.out.println("Problem with client: " + statusCode);
-            }
+            String encodedProductName = URLEncoder.encode(pName , StandardCharsets.UTF_8.toString());
+            String url = "http://localhost:8080/product/getbyname/" + encodedProductName;
+
+            System.out.println(url);
+            HttpClient client = HttpClient.newHttpClient();
+
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .GET()
+                        .build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                int statusCode = response.statusCode();
+                String responseBody = response.body();
+                if (statusCode == 200) {
+                    System.out.println("GET request successful: " + statusCode);
+                    ObjectMapper mapper = new ObjectMapper();
+                    JsonNode jsonNode = mapper.readTree(responseBody);
+
+                    productId = jsonNode.get("id").asInt();
+                } else {
+                    System.out.println("Problem with client: " + statusCode);
+                }
         } catch (IOException | InterruptedException e) {
             System.out.println("Error al enviar la petición: " + e.getMessage());
             e.printStackTrace();

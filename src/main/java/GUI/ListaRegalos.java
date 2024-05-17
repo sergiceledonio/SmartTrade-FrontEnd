@@ -12,6 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import static GUI.CatalogoProductos.getUserData;
 
@@ -50,7 +52,6 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         panelRegalos.setPreferredSize(new Dimension(800, 500));
         panelRegalos.setBackground(new Color(198, 232, 251));
 
-        getGifts(id);
         inicializarComponentes();
         backButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -101,12 +102,16 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void getGifts(int userId){
+    public void getGifts(int userId, String friend){
         HttpClient httpClient = HttpClient.newHttpClient();
-        String url = "http://localhost:8080/cart/cartProducts?user_id=" + userId;
+        String url = "http://localhost:8080/gift/giftList";
         ObjectMapper objectMapper = new ObjectMapper();
 
+
         try{
+            Map<String, Object> body = new HashMap<>();
+            body.put("user_id", userId);
+            body.put("friend", friend);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
@@ -123,10 +128,7 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
                 panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
                 for (JsonNode productoNode : jsonResponse) {
-                    String user = productoNode.get("user_name").asText();
-                    String nombre = productoNode.get("name").asText();
-                    String descripcion = productoNode.get("description").asText();
-                    Double precio  = productoNode.get("price").asDouble();
+
                 }
 
                 panelRegalos.removeAll();
