@@ -28,6 +28,8 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JLabel perfilButton;
     private JLabel lupaButton;
     private JPanel panelCompras;
+    private JButton pagoButton;
+    private JPanel panelPago;
     private static String name;
     private static String password;
     private static String email;
@@ -92,6 +94,28 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
             }
             public void mouseExited(MouseEvent e) {
                 perfilButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        pagoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
+                JFrame ventanaAtras = new JFrame("Smart Trade");
+                ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+                ventanaAtras.pack();
+                ventanaAtras.setVisible(true);
+                JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+                ventanaActual.dispose();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                pagoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pagoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
