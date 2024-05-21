@@ -11,10 +11,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
 import Observer.ObserverUserData;
+import ObserverPattern.Observador;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,9 +53,12 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JFrame frame;
     private int cantidad;
     private double precio;
+    private List<Observador> observadoresPrecio = new ArrayList<>();
 
 
     public CarritoCompra(int t, int id) {
+
+
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
@@ -201,7 +207,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         JPanel panelProducto = new JPanel();
         panelProducto.setLayout(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelProducto.setPreferredSize(new Dimension(770, 100));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -270,9 +275,9 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                         labelAmount.setText("1");
                     }
                 }else{
+
                     labelAmount.setText(String.valueOf(cantidad));
-                    double precio = price * cantidad;
-                    labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
+                    labelPrecio.setText(cantidad * precio + "€");
                     changeItemAmount(name, -1);
                 }
             }
@@ -296,8 +301,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 int cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad++;
                 labelAmount.setText(String.valueOf(cantidad));
-                double precio = price * cantidad;
-                labelPrecio.setText("Precio: " + String.valueOf(precio) + "€");
+                labelPrecio.setText(cantidad * precio + "€");
                 changeItemAmount(name, 1);
             }
             @Override
@@ -332,7 +336,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
         panelCarrito.add(panelInfo, BorderLayout.NORTH);
         panelInfo.setPreferredSize(new Dimension(800, 150));
-
 
 
         panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));

@@ -47,12 +47,13 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         iniciosesion.addObserver(this);
 
         panelListaRegalos.setBackground(new Color(198, 233, 255));
+        panelListaRegalos.setPreferredSize(new Dimension(800, 600));
 
         panelRegalos = new JPanel();
-        panelRegalos.setPreferredSize(new Dimension(800, 500));
         panelRegalos.setBackground(new Color(198, 232, 251));
 
         inicializarComponentes();
+        getFriends(id);
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -102,47 +103,90 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void getGifts(int userId, String friend){
+    public void getFriends(int userId) {
         HttpClient httpClient = HttpClient.newHttpClient();
-        String url = "http://localhost:8080/gift/giftList";
+        String url = "http://localhost:8080/gift/friends?user_id=" + userId;
         ObjectMapper objectMapper = new ObjectMapper();
 
-
-        try{
-            Map<String, Object> body = new HashMap<>();
-            body.put("user_id", userId);
-            body.put("friend", friend);
+        try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
                     .build();
+
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
             int statusCode = response.statusCode();
             System.out.println("Código es: " + statusCode);
-            if(statusCode == 200){
-                JsonNode jsonResponse = objectMapper.readTree(responseBody);
-                System.out.println("Ha devuelto la lista de regalos: " + responseBody);
 
-                JPanel panelProductos = new JPanel();
-                panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+            if (statusCode == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(responseBody);
+                System.out.println("Ha devuelto la lista de amigos: " + responseBody);
+
+                JPanel panelAmigo = new JPanel();
+                panelAmigo.setLayout(new BoxLayout(panelAmigo, BoxLayout.Y_AXIS));
 
                 for (JsonNode productoNode : jsonResponse) {
-
+                    String nombre = productoNode.asText();
+                    addFriend(nombre,panelAmigo);
                 }
 
                 panelRegalos.removeAll();
-                panelRegalos.add(panelProductos);
+                panelRegalos.add(panelAmigo);
                 panelRegalos.revalidate();
                 panelRegalos.repaint();
-
             } else {
                 System.out.println("No devuelve nada");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void addFriend(String friend, JPanel panel){
+        JPanel panelAmigo = new JPanel();
+        panelAmigo.setLayout(new BorderLayout());
+        panelAmigo.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        panelAmigo.setPreferredSize(new Dimension(770, 100));
+
+        JLabel nombre = new JLabel(friend);
+        JButton verLista = new JButton("Ver lista de " + friend);
+        verLista.setBackground(new Color(153, 233, 255));
+
+        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelSuperior.add(nombre);
+
+        panelAmigo.add(panelSuperior, BorderLayout.NORTH);
+        panelAmigo.add(verLista, BorderLayout.SOUTH);
+
+        verLista.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                accederLista(id, friend);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                verLista.setBackground(new Color(73, 231, 255));
+                verLista.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                verLista.setBackground(new Color(153, 233, 255));
+                verLista.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        panel.add(panelAmigo);
+    }
+
+    private void accederLista(int user, String friend){
+        verListaAmigo dialog = new verListaAmigo(user, friend);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+
 
     private void inicializarComponentes(){
         panelListaRegalos.setLayout(new BorderLayout());

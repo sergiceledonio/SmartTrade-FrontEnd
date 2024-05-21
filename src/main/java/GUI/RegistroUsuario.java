@@ -252,15 +252,6 @@ public class RegistroUsuario extends JFrame implements ObserverRegister {
         }
         return verified;
     }
-    public void deleteFields(){
-            nombreTF.setText("");
-            passTF.setText("");
-            repetirContraseñaTF.setText("");
-            dniTF.setText("");
-            emailTF.setText("");
-            cifTF.setText("");
-            ibanTF.setText("");
-    }
     private boolean isAdmin(String contra, String gmail){
         if(gmail.equals("admin@admin.com") && contra.equals("12345678")){
             return true;

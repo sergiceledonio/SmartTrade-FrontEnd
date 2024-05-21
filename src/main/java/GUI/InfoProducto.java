@@ -72,8 +72,10 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         priceProduct.setText("El precio es de: " + prodPrice + "€");
         categoryProduct.setText("Categoria: " + prodType);
         productDescription.setText(prodDescription);
+        comboboxFriends.addItem("Nuevo amigo");
+        prodId = getProductId(prodName);
 
-        addFriendsToComboBox(id);
+        //addFriendsToComboBox(id);
 
         /*BUYBUTTON*/
 
@@ -153,7 +155,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         buyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                prodId = getProductId(prodName);
                 addToCart(id, prodId, 1);
                 backMenu(tipo);
             }
@@ -172,7 +173,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         favouriteButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                prodId = getProductId(prodName);
+
                 addToFav(id, prodId);
                 backMenu(tipo);
             }
@@ -184,6 +185,26 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             @Override
             public void mouseExited(MouseEvent e) {
                 favouriteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        });
+
+        comboboxFriends.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedFriend = (String) comboboxFriends.getSelectedItem();
+
+                if ("Nuevo amigo".equals(selectedFriend)) {
+
+                    String nuevoAmigoNombre = JOptionPane.showInputDialog(null, "Introduce el nombre del nuevo amigo:");
+
+                    System.out.println("El nombre del amigo es: " + nuevoAmigoNombre);
+                    System.out.println("El nombre del producto es: " + prodName);
+
+                    newGift(id, nuevoAmigoNombre, prodId);
+
+                }else{
+                    newGift(id, selectedFriend, prodId);
+                }
             }
         });
     }
@@ -281,14 +302,23 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    private void addFriendsToComboBox(int userId) {
-        String url = "http://localhost:8080/gift/friends/" + userId;
+    private void newGift(int userId, String friend, int prod) {
+        String url = "http://localhost:8080/gift/newGiftProduct";
         HttpClient client = HttpClient.newHttpClient();
 
         try {
+            Map<String, Object> body = new HashMap<>();
+            body.put("user_id", userId);
+            body.put("p_id", prod);
+            body.put("friend", friend);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonBody = mapper.writeValueAsString(body);
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .GET()
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
@@ -297,12 +327,11 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             System.out.println("StatusCode: " + statusCode);
 
             if (statusCode == 200) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode jsonNode = mapper.readTree(responseBody);
+                ObjectMapper responseMapper = new ObjectMapper();
+                JsonNode jsonNode = responseMapper.readTree(responseBody);
 
                 if (jsonNode.isArray()) {
                     for (JsonNode friendNode : jsonNode) {
-                        comboboxFriends.addItem("Nuevo amigo");
                         String friendName = friendNode.get("name").asText();
                         comboboxFriends.addItem(friendName);
                     }
@@ -398,5 +427,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                 }
         );
     }
+
+
 
 }
