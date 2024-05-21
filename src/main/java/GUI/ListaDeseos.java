@@ -9,10 +9,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,6 +166,9 @@ public class ListaDeseos extends JFrame {
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton buttonMenos = new JButton("Eliminar");
+        JButton buyButton = new JButton("Añadir al carrito");
+        buyButton.setBackground(new Color(153, 233, 255));
+        buyButton.setPreferredSize(new Dimension(185, 45));
         buttonMenos.setBackground(new Color(153, 233, 255));
         buttonMenos.setPreferredSize(new Dimension(105, 45));
 
@@ -176,7 +182,7 @@ public class ListaDeseos extends JFrame {
         panelProduco.add(labelPrecio, BorderLayout.EAST);
         panelProduco.add(panelBotones, BorderLayout.CENTER);
 
-
+        panelBotones.add(buyButton);
         panelBotones.add(buttonMenos);
 
         buttonMenos.addMouseListener(new MouseAdapter() {
@@ -198,6 +204,24 @@ public class ListaDeseos extends JFrame {
             public void mouseExited(MouseEvent e) {
                 buttonMenos.setBackground(new Color(153, 233, 255));
                 buttonMenos.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+        buyButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                 Integer prodId = getProductId(name);
+                 addToCart(id, prodId, 1);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e){
+                 buyButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                 buyButton.setBackground(new Color(73,231,255));
+            }
+            @Override
+            public void mouseExited(MouseEvent e){
+                  buyButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                  buyButton.setBackground(new Color(153,233,255));
             }
         });
 
@@ -273,5 +297,76 @@ public class ListaDeseos extends JFrame {
                     }
                 }
         );
+    }
+    public void addToCart(int userId, int prodId, int amount){
+
+        String url = "http://localhost:8080/cart/newCartProduct";
+        HttpClient client = HttpClient.newHttpClient();
+
+        try{
+            Map<String, Integer> data = new HashMap<>();
+            data.put("user_id", userId);
+            data.put("p_id", prodId);
+            data.put("amount", amount);
+            String jsonBody = new ObjectMapper().writeValueAsString(data);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode() == 200){
+                System.out.println("La respuesta es: " + response.body());
+                if(Integer.parseInt(response.body()) == 1){
+                    System.out.println("Se añade el producto sin problemas");
+                    JOptionPane.showMessageDialog(null,"El producto se ha añadido al carrito correctamente", "Producto añadido al carrito", JOptionPane.INFORMATION_MESSAGE );
+                }else{
+                    System.out.println("El producto ya está añadido al carrito");
+                    JOptionPane.showMessageDialog(null,"El producto estaba ya añadido al carrito", "Producto ya añadido anteriormentegitgit ", JOptionPane.INFORMATION_MESSAGE );
+                }
+            }else{
+                System.out.println("ERROR EN LA PETICIÓN");
+            }
+        }catch(IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+
+    }
+    public int getProductId(String pName){
+
+        int productId = 0;
+        try {
+
+            String encodedProductName = URLEncoder.encode(pName , StandardCharsets.UTF_8.toString());
+            String url = "http://localhost:8080/product/getbyname/" + encodedProductName;
+
+            System.out.println(url);
+            HttpClient client = HttpClient.newHttpClient();
+
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            if (statusCode == 200) {
+                System.out.println("GET request successful: " + statusCode);
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.readTree(responseBody);
+
+                productId = jsonNode.get("id").asInt();
+            } else {
+                System.out.println("Problem with client: " + statusCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error al enviar la petición: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return productId;
+
     }
 }
