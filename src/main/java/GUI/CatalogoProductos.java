@@ -447,7 +447,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 storableSearchButton1.setBounds(10, 210, 465, 30);
                 storableSearchButton2.setBounds(10, 245, 465, 30);
                 storableSearchButton3.setBounds(10, 280, 465, 30);
-                getStorableSearch();
+                //getStorableSearch();
                 storableSearchButton1.addActionListener(
                         actionEvent -> {
                             //ir a la información del producto
