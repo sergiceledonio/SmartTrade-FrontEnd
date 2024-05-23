@@ -14,23 +14,35 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class verListaAmigo extends JDialog {
+public class VerListaAmigo extends JDialog {
     private JPanel contentPane;
     private JPanel panelListaAmigo;
     private JLabel title;
     private String friend;
     private int id;
     private int prodId;
+    private byte[] img;
 
 
-    public verListaAmigo(int i, String f) {
+    public VerListaAmigo(int i, String f) {
+
         this.friend = f;
         this.id = i;
+
         panelListaAmigo = new JPanel();
-        contentPane.setPreferredSize(new Dimension(500, 500));
+        panelListaAmigo.setBackground(new Color(198,232,251));
+        panelListaAmigo.setLayout(new BoxLayout(panelListaAmigo, BoxLayout.Y_AXIS));
+
+        contentPane = new JPanel();
+        contentPane.setPreferredSize(new Dimension(700, 700));
+        contentPane.setLayout(new BorderLayout());
+
         setContentPane(contentPane);
-        setModal(true);
         title.setText("Lista de " + friend);
+        contentPane.add(title, BorderLayout.PAGE_START);
+        contentPane.add(new JScrollPane(panelListaAmigo), BorderLayout.CENTER);
+
+        setModal(true);
         getGifts(id, friend);
 
     }
@@ -38,23 +50,23 @@ public class verListaAmigo extends JDialog {
 
 
     public static void main(String[] args) {
-        verListaAmigo dialog = new verListaAmigo(0,"Mi colegón");
+        VerListaAmigo dialog = new VerListaAmigo(0,"Mi colegón");
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
     }
 
-    public void getGifts(int userId, String friend){
+    public void getGifts(int userId, String friend) {
         HttpClient httpClient = HttpClient.newHttpClient();
         String url = "http://localhost:8080/gift/giftList";
         ObjectMapper objectMapper = new ObjectMapper();
 
-        try{
-
-            System.out.println("Amigo: " + friend + " ID user: " + userId);
+        try {
+            System.out.println("Amigo: " + friend + ", ID user: " + userId);
             Map<String, Object> body = new HashMap<>();
             body.put("user_id", userId);
             body.put("friend", friend);
+
             String jsonBody = new ObjectMapper().writeValueAsString(body);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -66,60 +78,74 @@ public class verListaAmigo extends JDialog {
             int statusCode = response.statusCode();
             System.out.println("Código es: " + statusCode);
             System.out.println(responseBody);
-            if(statusCode == 200){
+            if (statusCode == 200) {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 System.out.println("Ha devuelto la lista de regalos: " + responseBody);
 
-                JPanel panelProductos = new JPanel();
-                panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+                panelListaAmigo.removeAll();
 
                 for (JsonNode productoNode : jsonResponse) {
-                String nombre = productoNode.get("name").asText();
-                int price = productoNode.get("price").asInt();
-                String description = productoNode.get("description").asText();
-                prodId = productoNode.get("id").asInt();
+                    String nombre = productoNode.get("name").asText();
+                    int price = productoNode.get("price").asInt();
+                    String description = productoNode.get("description").asText();
+                    prodId = productoNode.get("id").asInt();
+                    img = productoNode.get("image").binaryValue();
 
-                addProduct(nombre, description, price, panelProductos);
+                    addProduct(nombre, description, price, panelListaAmigo, img);
                 }
 
-                panelListaAmigo.removeAll();
-                panelListaAmigo.add(panelProductos);
                 panelListaAmigo.revalidate();
                 panelListaAmigo.repaint();
-
             } else {
                 System.out.println("No devuelve nada");
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
-
-    private void addProduct(String name, String desc, int price, JPanel panel){
-
+    private void addProduct(String name, String desc, int price, JPanel panel, byte[] img){
         JPanel panelProducto = new JPanel();
+        panelProducto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
         panelProducto.setLayout(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelProducto.setPreferredSize(new Dimension(770, 100));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        JPanel panelDes = new JPanel(new BorderLayout());
 
-        JLabel labelNombre = new JLabel("Nombre: " + name);
-        JLabel labelDescripcion = new JLabel("Descripción: " + desc);
+        JLabel labelNombre = new JLabel(name);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel labelDescripcion = new JLabel(desc);
         JLabel labelPrecio = new JLabel("Precio: " + price + "€");
 
-        JButton addToCart = new JButton("Añadir al carrito");
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        JLabel labelImg = new JLabel(resizedIcon);
+
+        JButton addProduct = new JButton("Añadir al carrito");
         JButton delete = new JButton("Eliminar de la lista");
 
-        addToCart.setBackground(new Color(153, 233, 255));
         delete.setBackground(new Color(153, 233, 255));
+        addProduct.setBackground(new Color(153, 233, 255));
 
-        panelProducto.add(labelNombre, BorderLayout.NORTH);
-        panelProducto.add(labelDescripcion, BorderLayout.WEST);
+        addProduct.setPreferredSize(new Dimension(150, 35));
+        delete.setPreferredSize(new Dimension(150, 35));
+
+        panelPrincipal.add(labelImg, BorderLayout.NORTH);
+        panelPrincipal.add(labelNombre, BorderLayout.CENTER);
+
+        panelDes.add(labelDescripcion, BorderLayout.CENTER);
+        panelDes.add(panelBotones, BorderLayout.SOUTH);
+
+        panelProducto.add(panelPrincipal, BorderLayout.WEST);
+        panelProducto.add(panelDes, BorderLayout.CENTER);
         panelProducto.add(labelPrecio, BorderLayout.EAST);
-        panelProducto.add(panelBotones, BorderLayout.CENTER);
 
-        panelBotones.add(addToCart);
+        panelBotones.add(addProduct);
         panelBotones.add(delete);
 
         delete.addMouseListener(new MouseAdapter() {
@@ -143,7 +169,7 @@ public class verListaAmigo extends JDialog {
             }
         });
 
-        addToCart.addMouseListener(new MouseAdapter() {
+        addProduct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int opcion = JOptionPane.showConfirmDialog(null, "¿Quieres añadir el producto al carrito?", "Producto de amigo", JOptionPane.YES_NO_OPTION);
@@ -154,17 +180,17 @@ public class verListaAmigo extends JDialog {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-                addToCart.setBackground(new Color(73, 231, 255));
-                addToCart.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                addProduct.setBackground(new Color(73, 231, 255));
+                addProduct.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                addToCart.setBackground(new Color(153, 233, 255));
-                addToCart.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                addProduct.setBackground(new Color(153, 233, 255));
+                addProduct.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        panel.add(panelProducto);
+        panel.add(panelProducto, BorderLayout.SOUTH);
     }
 
 
@@ -174,8 +200,6 @@ public class verListaAmigo extends JDialog {
         HttpClient client = HttpClient.newHttpClient();
 
         try{
-            System.out.println("user id: " + id);
-            System.out.println("product name: " + prodName);
             Map<String, Object> data = new HashMap<>();
             data.put("product_name", prodName);
             data.put("user_id", id);
@@ -189,6 +213,7 @@ public class verListaAmigo extends JDialog {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             int statusCode = response.statusCode();
+
             if(statusCode == 200){
                 System.out.println("Elemento borrado de la lista correctamente");
             }else{

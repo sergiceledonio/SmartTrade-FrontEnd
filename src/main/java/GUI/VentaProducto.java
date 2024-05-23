@@ -1,6 +1,7 @@
 package GUI;
 
 import Observer.ObserverUserData;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -17,11 +19,17 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.awt.event.KeyEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VentaProducto extends JFrame implements ObserverUserData {
 
@@ -55,16 +63,17 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private String flat;
     private String num;
     private String type;
-    private String[] attributes;
+    private Object[] attributes;
     private InicioSesion iniciosesion;
     private int tipo;
     private int id;
-
+    private byte[] imageBytes;
     public VentaProducto(String[] userData, int tipo, int id){
         this.tipo = tipo;
         this.id = id;
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
+        imageBytes = null;
 
         /*PANELPRODUCTOVENTA*/
 
@@ -99,6 +108,14 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         /*VALIDATEPRODUCTBUTTON*/
 
         validateProductButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(acceptProduct()){
+                    tryValidation();
+                    backMenu(tipo);
+                }
+            }
             @Override
             public void mouseEntered(MouseEvent e) {
                 validateProductButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -108,14 +125,6 @@ public class VentaProducto extends JFrame implements ObserverUserData {
             public void mouseExited(MouseEvent e) {
                 validateProductButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 validateProductButton.setBackground(new Color(153,233,255));
-            }
-            @Override
-            public void mouseClicked(MouseEvent e){
-                if(acceptProduct()){
-                    tryValidation();
-                    System.out.println(tipo);
-                    backMenu(tipo);
-                }
             }
         });
 
@@ -216,9 +225,12 @@ public class VentaProducto extends JFrame implements ObserverUserData {
 
         addImgButton.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseClicked(MouseEvent e){openFiles();}
+            @Override
             public void mouseEntered(MouseEvent e) {
                 addImgButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
+            @Override
             public void mouseExited(MouseEvent e) {
                 addImgButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -342,8 +354,12 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         if(!validationComboBox(categorySelector.getSelectedItem().toString())){
             if(isValidName(productNameTF.getText())){
                 if(isValidPrice(productPriceTF.getText())){
-                    attributes = getData(productNameTF.getText(),productPriceTF.getText(), productDescription.getText(), categorySelector.getSelectedItem().toString());
-                    return true;
+                    if(validateImg()){
+                        attributes = getData(productNameTF.getText(),productPriceTF.getText(), productDescription.getText(), categorySelector.getSelectedItem().toString(), imageBytes);
+                        return true;
+                    }else{
+                        System.out.println("No se está leyendo bien la imagen");
+                    }
                 }else{
                     JOptionPane.showMessageDialog(frame, "Precio con formato incorrecto", "Error",JOptionPane.ERROR_MESSAGE);
                 }
@@ -373,29 +389,28 @@ public class VentaProducto extends JFrame implements ObserverUserData {
     private void tryValidation(){
 
         String url = "http://localhost:8080/product/newproducts";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode jsonBody = objectMapper.createObjectNode();
-
-        jsonBody.put("name", attributes[0]);
-        jsonBody.put("price", attributes[1]);
-        jsonBody.put("description", attributes[2]);
-        jsonBody.put("type", attributes[3]);
-        jsonBody.put("pending", true);
-        jsonBody.put("validation", false);
-        jsonBody.put("user_id", id);
-
-        String jsonString = jsonBody.toString();
-
         HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonString))
-                .build();
+        Map<String, Object> data = new HashMap<>();
 
-        try {
+        System.out.println(attributes[4]);
+
+        data.put("name",attributes[0]);
+        data.put("price",attributes[1]);
+        data.put("desc",attributes[2]);
+        data.put("type",attributes[3]);
+        data.put("pending", true);
+        data.put("validation", false);
+        data.put("user_id", id);
+        data.put("image", attributes[4]);
+
+        try{
+            String jsonBody = new ObjectMapper().writeValueAsString(data);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             System.out.println("Response code: " + response.statusCode());
@@ -403,12 +418,62 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         } catch (IOException | InterruptedException e) {
             System.out.println("Error al enviar la solicitud POST: " + e.getMessage());
         }
-
-
     }
-    private String[] getData(String nameProd, String price, String description, String category){
-        String[] res = {nameProd, price, description, category};
+
+    private void openFiles(){
+        JFileChooser fileChooser = new JFileChooser();
+
+        FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
+                "Archivos jpg", "jpg" , "jpeg", "png");
+        fileChooser.setFileFilter(imageFilter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+
+        int select = fileChooser.showOpenDialog(getPanel());
+        if(select == JFileChooser.APPROVE_OPTION){
+            File archivo = fileChooser.getSelectedFile();
+            String direccion = archivo.getAbsolutePath();
+
+            System.out.println("Archivo seleccionado: " + direccion);
+
+            imageBytes = null;
+
+            try {
+                FileInputStream fis = new FileInputStream(archivo);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+                int readNum;
+                while ((readNum = fis.read(buf)) != -1) {
+                    bos.write(buf, 0, readNum);
+                }
+                imageBytes = bos.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "Error al leer el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if(imageBytes != null){
+                ImageIcon originalIcon = new ImageIcon(imageBytes);
+                Image originalImage = originalIcon.getImage();
+                Image resizedImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                ImageIcon resizedIcon = new ImageIcon(resizedImage);
+                addImgButton.setIcon(resizedIcon);
+                añade.setText("");
+            }
+
+        }
+    }
+
+
+
+
+
+    private Object[] getData(String nameProd, String price, String description, String category, byte[] img){
+        Object[] res = {nameProd, price, description, category, img};
         return res;
+    }
+
+    private boolean validateImg(){
+        return imageBytes != null;
     }
 
 }

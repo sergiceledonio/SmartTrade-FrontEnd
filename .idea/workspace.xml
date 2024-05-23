@@ -57,6 +57,7 @@
     &quot;Application.InicioProyecto.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW&quot;: &quot;true&quot;,
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -184,6 +185,11 @@
       <workItem from="1716308843654" duration="3115000" />
       <workItem from="1716478823987" duration="2198000" />
       <workItem from="1716489652094" duration="356000" />
+      <workItem from="1716302614695" duration="10006000" />
+      <workItem from="1716315023599" duration="3532000" />
+      <workItem from="1716356629194" duration="8612000" />
+      <workItem from="1716455930933" duration="2747000" />
+      <workItem from="1716477747701" duration="2428000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />

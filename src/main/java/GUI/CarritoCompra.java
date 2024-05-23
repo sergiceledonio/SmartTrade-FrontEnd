@@ -32,7 +32,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JLabel lupaButton;
     private JPanel panelCompras;
     private JButton pagoButton;
-    private JPanel panelPago;
     private static String name;
     private static String password;
     private static String email;
@@ -55,6 +54,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private JFrame frame;
     private int cantidad;
     private double precio;
+    private byte[] img;
     private List<Observador> observadoresPrecio = new ArrayList<>();
 
 
@@ -102,28 +102,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 perfilButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        pagoButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
-                JFrame ventanaAtras = new JFrame("Smart Trade");
-                ventanaAtras.setContentPane(ventanaCatalog.getPanel());
-                ventanaAtras.pack();
-                ventanaAtras.setVisible(true);
-                JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
-                ventanaActual.dispose();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                pagoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                pagoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
 
     }
 
@@ -168,15 +146,16 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 JPanel panelProductos = new JPanel();
                 panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
+
                 for (JsonNode productoNode : jsonResponse) {
 
                     String nombre = productoNode.get("name").asText();
                     String descripcion = productoNode.get("description").asText();
                     precio = productoNode.get("price").asDouble();
-                    precio = productoNode.get("price").asDouble();
+                    img = productoNode.get("image").binaryValue();
                     int amount = getAmount(nombre, id);
 
-                    addProduct(nombre, descripcion, precio, amount, panelProductos);
+                    addProduct(nombre, descripcion, precio, amount, panelProductos, img);
                 }
 
                 panelCompras.removeAll();
@@ -227,16 +206,27 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
 
-    private void addProduct(String name, String desc, double price, int amount, JPanel panel){
+    private void addProduct(String name, String desc, double price, int amount, JPanel panel, byte[] img){
         JPanel panelProducto = new JPanel();
+        panelProducto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
         panelProducto.setLayout(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        JPanel panelDes = new JPanel(new BorderLayout());
 
-        JLabel labelNombre = new JLabel("Nombre: " + name);
-        JLabel labelDescripcion = new JLabel("Descripción: " + desc);
+        JLabel labelNombre = new JLabel(name);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel labelDescripcion = new JLabel(desc);
         JLabel labelPrecio = new JLabel("Precio: " + price * cantidad + "€");
+
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        JLabel labelImg = new JLabel(resizedIcon);
 
         JButton buttonMas = new JButton("+");
         JLabel labelAmount = new JLabel(String.valueOf(amount));
@@ -251,10 +241,15 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         buttonMas.setPreferredSize(new Dimension(45, 35));
         buttonEliminar.setPreferredSize(new Dimension(100, 35));
 
-        panelProducto.add(labelNombre, BorderLayout.NORTH);
-        panelProducto.add(labelDescripcion, BorderLayout.WEST);
+        panelPrincipal.add(labelImg, BorderLayout.NORTH);
+        panelPrincipal.add(labelNombre, BorderLayout.CENTER);
+
+        panelDes.add(labelDescripcion, BorderLayout.CENTER);
+        panelDes.add(panelBotones, BorderLayout.SOUTH);
+
+        panelProducto.add(panelPrincipal, BorderLayout.WEST);
+        panelProducto.add(panelDes, BorderLayout.CENTER);
         panelProducto.add(labelPrecio, BorderLayout.EAST);
-        panelProducto.add(panelBotones, BorderLayout.CENTER);
 
         panelBotones.add(buttonEliminar);
         panelBotones.add(buttonMenos);
@@ -361,7 +356,6 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         panelCarrito.add(panelInfo, BorderLayout.NORTH);
         panelInfo.setPreferredSize(new Dimension(800, 150));
 
-
         panelCompras.setLayout(new BoxLayout(panelCompras, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(panelCompras);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -369,7 +363,28 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
         panelCarrito.add(scrollPane, BorderLayout.CENTER);
         panelCarrito.setBackground(new Color(198, 232, 251));
+        JButton pagoButton = new JButton("Pagar");
+        panelCarrito.add(pagoButton, BorderLayout.SOUTH);
+        pagoButton.setBackground(new Color(153, 233, 255));
 
+        pagoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToPayment();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                pagoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                pagoButton.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pagoButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                pagoButton.setBackground(new Color(153, 233, 255));
+            }
+        });
 
     }
 
@@ -434,6 +449,16 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void goToPayment(){
+        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
+        JFrame ventanaAtras = new JFrame("Smart Trade");
+        ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+        ventanaAtras.pack();
+        ventanaAtras.setVisible(true);
+        JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
+        ventanaActual.dispose();
     }
 
     @Override

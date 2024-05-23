@@ -47,6 +47,7 @@ public class ListaDeseos extends JFrame {
     private static String nameProd;
     private static String category;
     private InicioSesion iniciosesion;
+    private byte[] img;
     private int tipo;
     private int id;
 
@@ -141,8 +142,9 @@ public class ListaDeseos extends JFrame {
                     String nombre = productoNode.get("name").asText();
                     String descripcion = productoNode.get("description").asText();
                     double precio = productoNode.get("price").asDouble();
+                    img = productoNode.get("image").binaryValue();
 
-                    addProduct(nombre, descripcion, precio, panelProduct);
+                    addProduct(nombre, descripcion, precio, panelProduct, img);
                 }
 
                 panelListDeseos.removeAll();
@@ -158,29 +160,45 @@ public class ListaDeseos extends JFrame {
         }
     }
 
-    private void addProduct(String name, String desc, double price, JPanel panel){
-        JPanel panelProduco = new JPanel();
-        panelProduco.setLayout(new BorderLayout());
-        panelProduco.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelProduco.setPreferredSize(new Dimension(770, 100));
+    private void addProduct(String name, String desc, double price, JPanel panel, byte[] img){
+        JPanel panelProducto = new JPanel();
+        panelProducto.setLayout(new BorderLayout());
+        panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelProducto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 250));
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        JPanel panelDes = new JPanel(new BorderLayout());
+
         JButton buttonMenos = new JButton("Eliminar");
         JButton buyButton = new JButton("Añadir al carrito");
+
         buyButton.setBackground(new Color(153, 233, 255));
         buyButton.setPreferredSize(new Dimension(185, 45));
         buttonMenos.setBackground(new Color(153, 233, 255));
         buttonMenos.setPreferredSize(new Dimension(105, 45));
 
-        JLabel labelNombre = new JLabel("Nombre: " + name);
-        JLabel labelDescripcion = new JLabel("Descripción: " + desc);
+        JLabel labelNombre = new JLabel(name);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel labelDescripcion = new JLabel(desc);
         JLabel labelPrecio = new JLabel("Precio: " + price + "€");
 
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
-        panelProduco.add(labelNombre, BorderLayout.NORTH);
-        panelProduco.add(labelDescripcion, BorderLayout.WEST);
-        panelProduco.add(labelPrecio, BorderLayout.EAST);
-        panelProduco.add(panelBotones, BorderLayout.CENTER);
+        JLabel labelImg = new JLabel(resizedIcon);
+
+        panelPrincipal.add(labelImg, BorderLayout.NORTH);
+        panelPrincipal.add(labelNombre, BorderLayout.CENTER);
+
+        panelDes.add(labelDescripcion, BorderLayout.CENTER);
+        panelDes.add(panelBotones, BorderLayout.SOUTH);
+
+        panelProducto.add(panelPrincipal, BorderLayout.WEST);
+        panelProducto.add(panelDes, BorderLayout.CENTER);
+        panelProducto.add(labelPrecio, BorderLayout.EAST);
 
         panelBotones.add(buyButton);
         panelBotones.add(buttonMenos);
@@ -225,7 +243,7 @@ public class ListaDeseos extends JFrame {
             }
         });
 
-        panel.add(panelProduco);
+        panel.add(panelProducto);
     }
 
     public void deleteProductFromWish(String productName){
