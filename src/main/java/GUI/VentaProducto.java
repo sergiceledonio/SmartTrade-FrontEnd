@@ -424,7 +424,7 @@ public class VentaProducto extends JFrame implements ObserverUserData {
         JFileChooser fileChooser = new JFileChooser();
 
         FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
-                "Archivos jpg", "jpg");
+                "Archivos jpg", "jpg" , "jpeg", "png");
         fileChooser.setFileFilter(imageFilter);
         fileChooser.setAcceptAllFileFilterUsed(false);
 
