@@ -37,7 +37,7 @@ public class ValidacionProductosLista extends JFrame{
     private JFrame frame;
     private JScrollPane scrollPane;
     private JPanel panelContenedor;
-
+    private byte[] img;
     public ValidacionProductosLista(){
         iniciarComponentes();
 
@@ -125,10 +125,10 @@ public class ValidacionProductosLista extends JFrame{
         panelListaValidos.setPreferredSize(new Dimension(800, 400));
     }
 
-    public void goValidate(String nombre, String precio, String categoria, String descripcion, int identificador) {
+    public void goValidate(String nombre, String precio, String categoria, String descripcion, int identificador, byte[] img) {
         System.out.println(nombre + " " + precio + " " + categoria + " " + descripcion);
 
-        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion, identificador);
+        ProductoPendiente ventanaValidar = new ProductoPendiente(nombre, precio, categoria, descripcion, identificador,img);
         JFrame registro = new JFrame("Smart Trade");
         registro.setContentPane(ventanaValidar.getPanel());
         registro.pack();
@@ -284,6 +284,7 @@ public class ValidacionProductosLista extends JFrame{
             type = jsonNode.get("type").asText();
             desc = jsonNode.get("description").asText();
             id = jsonNode.get("id").asInt();
+            img = jsonNode.get("image").binaryValue();
 
         } catch (Exception e) {
             System.out.println("Error al enviar la solicitud GET: " + e.getMessage());
@@ -293,7 +294,7 @@ public class ValidacionProductosLista extends JFrame{
         System.out.println("El id del producto es: " + id);
 
 
-        goValidate(nameProduct, price, type, desc, id);
+        goValidate(nameProduct, price, type, desc, id, img);
     }
 
     public static String encodeName(String name) {

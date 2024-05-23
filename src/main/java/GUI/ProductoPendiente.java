@@ -33,13 +33,16 @@ public class ProductoPendiente {
     private String prodType;
     private String prodPrice;
     private int prodId;
+    private byte[] img;
 
-    public ProductoPendiente(String name, String price, String type, String description, int id){
+    public ProductoPendiente(String name, String price, String type, String description, int id, byte[] img){
         this.prodName = name;
         this.prodDescription = description;
         this.prodPrice = price;
         this.prodType = type;
         this.prodId = id;
+        this.img = img;
+
         validarPanel.setPreferredSize(new Dimension(800,600));
         productDescription.setPreferredSize(new Dimension(500, 200));
 
@@ -47,6 +50,16 @@ public class ProductoPendiente {
         productDescription.setText(prodDescription);
         productDescription.setForeground(new Color(0, 0,0));
         productDescription.setEditable(false);
+
+        System.out.println(img);
+
+
+
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        productImg.setIcon(resizedIcon);
 
         backValidating.addMouseListener(new MouseAdapter() {
             @Override
@@ -102,7 +115,7 @@ public class ProductoPendiente {
     }
 
     public static void main(String[] args) {
-        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "", 0);
+        ProductoPendiente ventanaInfoValidate = new ProductoPendiente("Caralmendra", "", "", "", 0, new byte[]{});
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfoValidate.getPanel());

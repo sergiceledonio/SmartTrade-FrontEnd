@@ -12,7 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 
 import static GUI.CatalogoProductos.getUserData;
@@ -107,17 +108,22 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
         HttpClient httpClient = HttpClient.newHttpClient();
         String url = "http://localhost:8080/gift/friends?user_id=" + userId;
         ObjectMapper objectMapper = new ObjectMapper();
+        HashSet<String> amigos = new HashSet<>();
 
         try {
+            String requestBody = objectMapper.writeValueAsString(Map.of("user_id", userId));
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .GET()
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
             String responseBody = response.body();
             int statusCode = response.statusCode();
-            System.out.println("Código es: " + statusCode);
+            System.out.println("Código de getFriends es: " + statusCode);
 
             if (statusCode == 200) {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
@@ -128,7 +134,11 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
 
                 for (JsonNode productoNode : jsonResponse) {
                     String nombre = productoNode.asText();
-                    addFriend(nombre,panelAmigo);
+
+                    amigos.add(nombre);
+                }
+                for(String amigo : amigos){
+                    addFriend(amigo,panelAmigo);
                 }
 
                 panelRegalos.removeAll();
@@ -144,44 +154,45 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
     }
 
     private void addFriend(String friend, JPanel panel){
-        JPanel panelAmigo = new JPanel();
-        panelAmigo.setLayout(new BorderLayout());
-        panelAmigo.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JPanel friendPanel = new JPanel();
+        friendPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+        friendPanel.setLayout(new BorderLayout());
+        friendPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        panelAmigo.setPreferredSize(new Dimension(770, 100));
+        JLabel labelNombre = new JLabel(friend);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
 
-        JLabel nombre = new JLabel(friend);
-        JButton verLista = new JButton("Ver lista de " + friend);
-        verLista.setBackground(new Color(153, 233, 255));
+        JButton buttonLista = new JButton("Ver lista");
+        buttonLista.setBackground(new Color(153, 233, 255));
+        buttonLista.setPreferredSize(new Dimension(100, 40));
 
-        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelSuperior.add(nombre);
+        friendPanel.add(labelNombre, BorderLayout.NORTH);
+        friendPanel.add(buttonLista, BorderLayout.SOUTH);
 
-        panelAmigo.add(panelSuperior, BorderLayout.NORTH);
-        panelAmigo.add(verLista, BorderLayout.SOUTH);
+        panel.add(friendPanel);
 
-        verLista.addMouseListener(new MouseAdapter() {
+        buttonLista.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 accederLista(id, friend);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-                verLista.setBackground(new Color(73, 231, 255));
-                verLista.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                buttonLista.setBackground(new Color(73, 231, 255));
+                buttonLista.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                verLista.setBackground(new Color(153, 233, 255));
-                verLista.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                buttonLista.setBackground(new Color(153, 233, 255));
+                buttonLista.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        panel.add(panelAmigo);
+
     }
 
     private void accederLista(int user, String friend){
-        verListaAmigo dialog = new verListaAmigo(user, friend);
+        VerListaAmigo dialog = new VerListaAmigo(user, friend);
         dialog.pack();
         dialog.setVisible(true);
     }

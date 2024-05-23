@@ -17,6 +17,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class InfoProducto extends JFrame implements ObserverUserData {
@@ -36,6 +37,8 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private JLabel carritoCompraButton;
     private JLabel favouriteButton;
     private JComboBox comboboxFriends;
+    private JButton addFriendList;
+    private JLabel imageProduct;
     private JFrame frame;
     private String name;
     private String email;
@@ -55,27 +58,34 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private String category;
     private int prodId;
     private int id;
+    private byte[] img;
     private InicioSesion iniciosesion;
-    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser){
+    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser, byte[] img){
         panelInfo.setFocusable(true);
         panelInfo.requestFocusInWindow();
         panelInfo.setPreferredSize(new Dimension(800,600));
         goBackWithEsc(panelInfo);
         goBackWithEsc(searchTF);
 
-        /*SETTING VARIABLES TO WHAT WAS CLICKED*/
         this.id = id;
         this.tipo = tipoUser;
+        this.img = img;
+
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        imageProduct.setIcon(resizedIcon);
+        imageProduct.setText("");
+
+        initiateCB(id);
 
 
         nameProduct.setText(prodName);
         priceProduct.setText("El precio es de: " + prodPrice + "€");
         categoryProduct.setText("Categoria: " + prodType);
         productDescription.setText(prodDescription);
-        comboboxFriends.addItem("Nuevo amigo");
         prodId = getProductId(prodName);
-
-        //addFriendsToComboBox(id);
 
         /*BUYBUTTON*/
 
@@ -187,29 +197,26 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                 favouriteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
         });
-
-        comboboxFriends.addActionListener(new ActionListener() {
+        addFriendList.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedFriend = (String) comboboxFriends.getSelectedItem();
+            public void mouseClicked(MouseEvent e) {
+                addFriendProduct();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addFriendList.setBackground(new Color(73,231,255));
+                addFriendList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
 
-                if ("Nuevo amigo".equals(selectedFriend)) {
-
-                    String nuevoAmigoNombre = JOptionPane.showInputDialog(null, "Introduce el nombre del nuevo amigo:");
-
-                    System.out.println("El nombre del amigo es: " + nuevoAmigoNombre);
-                    System.out.println("El nombre del producto es: " + prodName);
-
-                    newGift(id, nuevoAmigoNombre, prodId);
-
-                }else{
-                    newGift(id, selectedFriend, prodId);
-                }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addFriendList.setBackground(new Color(153,233,255));
+                addFriendList.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1, 1);
+        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1, 1, new byte[]{});
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -222,6 +229,19 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
     public JPanel getPanel(){
         return this.panelInfo;
+    }
+
+    private void addFriendProduct(){
+        String selectedFriend = (String) comboboxFriends.getSelectedItem();
+
+        if ("Nuevo amigo".equals(selectedFriend)) {
+
+            String nuevoAmigoNombre = JOptionPane.showInputDialog(null, "Introduce el nombre del nuevo amigo:");
+            newGift(id, nuevoAmigoNombre, prodId);
+
+        }else{
+            newGift(id, selectedFriend, prodId);
+        }
     }
 
     public void addToCart(int userId, int prodId, int amount){
@@ -305,6 +325,8 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private void newGift(int userId, String friend, int prod) {
         String url = "http://localhost:8080/gift/newGiftProduct";
         HttpClient client = HttpClient.newHttpClient();
+        String friendName = "";
+        HashSet<String> nombres = new HashSet<>();
 
         try {
             Map<String, Object> body = new HashMap<>();
@@ -330,12 +352,25 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                 ObjectMapper responseMapper = new ObjectMapper();
                 JsonNode jsonNode = responseMapper.readTree(responseBody);
 
+                if(Integer.parseInt(responseBody) == 1){
+                    JOptionPane.showMessageDialog(null, "El producto se ha añadido a la lista de " + friend);
+                }else if(Integer.parseInt(responseBody) == 0){
+                    JOptionPane.showMessageDialog(null, "Producto añadido a tu nuevo amigo " + friend);
+                }else{
+                    JOptionPane.showMessageDialog(null, "El producto se ha añadido a la lista de " + friend);
+                }
+
                 if (jsonNode.isArray()) {
                     for (JsonNode friendNode : jsonNode) {
-                        String friendName = friendNode.get("name").asText();
-                        comboboxFriends.addItem(friendName);
+                        friendName = friendNode.get("name").asText();
+                        nombres.add(friendName);
+                    }
+                    for(String amigo : nombres){
+                        comboboxFriends.addItem(amigo);
                     }
                 }
+                initiateCB(userId);
+                backMenu(tipo);
             } else {
                 System.out.println("Problem with client: " + statusCode);
             }
@@ -344,6 +379,51 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             e.printStackTrace();
         }
     }
+
+    public void initiateCB(int identificador){
+
+        comboboxFriends.addItem("Nuevo amigo");
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        String url = "http://localhost:8080/gift/friends";
+        HashSet<String> amigos = new HashSet<>();
+
+        try {
+            Map<String, Integer> requestBody = new HashMap<>();
+            System.out.println(identificador);
+            requestBody.put("user_id", identificador);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonRequestBody = objectMapper.writeValueAsString(requestBody);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Código de estado del CB: " + response.statusCode());
+            System.out.println("Cuerpo de la respuesta del CB: " + response.body());
+
+            if (response.statusCode() == 200) {
+                JsonNode jsonResponse = objectMapper.readTree(response.body());
+                for(JsonNode friend : jsonResponse) {
+                    amigos.add(friend.asText());
+                }
+                for(String nombre : amigos){
+                    comboboxFriends.addItem(nombre);
+                }
+            } else {
+                System.out.println("Error en la solicitud: " + response.statusCode());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void addObserver(ObserverUserData observer) {
@@ -386,7 +466,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
             String encodedProductName = URLEncoder.encode(pName , StandardCharsets.UTF_8.toString());
             String url = "http://localhost:8080/product/getbyname/" + encodedProductName;
 
-            System.out.println(url);
             HttpClient client = HttpClient.newHttpClient();
 
 

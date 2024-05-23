@@ -53,6 +53,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     JButton storableSearchButton2 = new JButton(storableSearchButtonText[1]);
     JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
     private JDialog filterPopUp;
+    private byte[] img;
 
     public CatalogoProductos(String[] userData, int tipo, int id) {
         iniciosesion = new InicioSesion();
@@ -638,7 +639,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void infoProduct(String nombre, Double price, String descripcion,  String category) {
+    public void infoProduct(String nombre, Double price, String descripcion,  String category, byte[] img) {
 
         System.out.println("*************************************");
         System.out.println("Nombre: " + nombre);
@@ -646,7 +647,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Categoria: " + category);
         System.out.println("Descripción: " + descripcion);
 
-        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo);
+        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo, img);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -684,29 +685,64 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
                         prodType = productNode.get("type").asText();
-                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                        img = productNode.get("image").binaryValue();
+
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType, img);
                     }
                 }
             } else {
                 System.out.println("Error: " + response.statusCode());
+                System.out.println(response.body());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void agregarProducto(String nombre, Double precio, String descripcion, String type) {
+    private void agregarProducto(String nombre, Double precio, String descripcion, String type, byte[] img) {
         JPanel panelProducto = new JPanel(new BorderLayout());
         panelProducto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelProducto.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+
+
         JLabel labelNombre = new JLabel(nombre);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JLabel labelImg = new JLabel();
+        labelImg.setHorizontalAlignment(SwingConstants.CENTER);
+
+        ImageIcon originalIcon = new ImageIcon(img);
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        labelImg.setIcon(resizedIcon);
+
         JLabel labelPrecio = new JLabel(precio + "€");
         JLabel labelDescripcion = new JLabel("<html>" + descripcion + "</html>");
-        panelProducto.setMinimumSize(new Dimension(300,200));
-        panelProducto.setMaximumSize(new Dimension(300,200));
+
+        JPanel panelSec = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        panelSec.add(labelNombre, gbc);
+        panelSec.add(labelDescripcion, gbc);
+        panelSec.add(labelPrecio, gbc);
+
+        panelProducto.add(labelImg, BorderLayout.NORTH);
+        panelProducto.add(panelSec, BorderLayout.CENTER);
+
+        panelProductos.add(panelProducto);
+        panelProductos.revalidate();
+        panelProductos.repaint();
+
         panelProducto.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                infoProduct(nombre, precio, descripcion, type);
+                infoProduct(nombre, precio, descripcion, type, img);
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -718,19 +754,6 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 panelProducto.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-
-        labelNombre.setHorizontalAlignment(JLabel.CENTER);
-        labelDescripcion.setHorizontalAlignment(JLabel.CENTER);
-        labelPrecio.setHorizontalAlignment(JLabel.CENTER);
-        labelNombre.setPreferredSize(new Dimension(200, 30));
-        labelPrecio.setPreferredSize(new Dimension(200, 30));
-        labelDescripcion.setPreferredSize(new Dimension(200, 30));
-        panelProducto.add(labelNombre, BorderLayout.NORTH);
-        panelProducto.add(labelPrecio, BorderLayout.CENTER);
-        panelProducto.add(labelDescripcion, BorderLayout.SOUTH);
-        panelProductos.add(panelProducto);
-        panelProductos.revalidate();
-        panelProductos.repaint();
     }
 
     public void getProductsSortedByPrice() {
@@ -751,7 +774,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
                         prodType = productNode.get("type").asText();
-                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType, img);
                     }
                 }
             } else {
@@ -780,7 +803,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
                         prodType = productNode.get("type").asText();
-                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType, img);
                     }
                 }
             } else {
@@ -809,7 +832,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
                         prodType = productNode.get("type").asText();
-                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
+                        agregarProducto(prodName, prodPrice, prodDescription, prodType, img);
                     }
                 }
             } else {
