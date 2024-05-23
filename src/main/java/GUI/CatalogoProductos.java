@@ -1,6 +1,7 @@
 package GUI;
 
 import Observer.ObserverUserData;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,6 +13,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CatalogoProductos extends JFrame implements ObserverUserData {
@@ -53,6 +56,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     JButton storableSearchButton2 = new JButton(storableSearchButtonText[1]);
     JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
     private JDialog filterPopUp;
+    double minPrice;
+    double maxPrice;
 
     public CatalogoProductos(String[] userData, int tipo, int id) {
         iniciosesion = new InicioSesion();
@@ -441,7 +446,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 storableSearchButton1.setBounds(10, 210, 465, 30);
                 storableSearchButton2.setBounds(10, 245, 465, 30);
                 storableSearchButton3.setBounds(10, 280, 465, 30);
-                getStorableSearch();
+                //getStorableSearch();
                 storableSearchButton1.addActionListener(
                         actionEvent -> {
                             //ir a la información del producto
@@ -464,8 +469,8 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 okButton.setBounds(395, 325, 80, 30);
                 okButton.addActionListener(
                     actionEvent -> {
-                        double minPrice = 0.0;
-                        double maxPrice = 0.0;
+                        minPrice = 0.0;
+                        maxPrice = 0.0;
                         greaterOrlowerPriceErrorLabel.setVisible(false);
                         try {
                             minPrice = Double.parseDouble(minPriceTextField.getText());
@@ -497,9 +502,9 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                         }
 
                         if (ascendingToggleButton.isSelected()) {
-                            getProductsSortedByAscendingCategory();
+                            //getProductsSortedByAscenidngCategory();
                         } else if (descendingToggleButton.isSelected()) {
-                            getProductsSortedByDescendingCategory();
+                            //getProductsSortedByCategory("descending");
                         }
 
                         getProductsSortedByPrice();
@@ -736,10 +741,23 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     public void getProductsSortedByPrice() {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/search/price"))
-                .GET()
-                .build();
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("minPrice", minPrice);
+        requestBody.put("maxPrice", maxPrice);
+
+        panelProductos.removeAll();
+
+        HttpRequest request = null;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/search/price"))
+                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(requestBody)))
+                    .header("Content-Type", "application/json")
+                    .build();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
@@ -747,6 +765,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 if (jsonResponse.isArray()) {
                     for (JsonNode productNode : jsonResponse) {
+                        System.out.println(productNode.toString());
                         prodName = productNode.get("name").asText();
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
@@ -762,12 +781,19 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         }
     }
 
-    private void getProductsSortedByAscendingCategory() {
+    /*
+    public void getProductsSortedByAscenidngCategory() {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
-        HttpRequest request = HttpRequest.newBuilder()
+
+        panelProductos.removeAll();
+
+        Map<String, Object> requestBody = new HashMap<>();
+        //requestBody.put("Products", getProducts());
+
+        HttpRequest request = null;
+        request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/search/ascending"))
-                .GET()
                 .build();
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -776,35 +802,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
                 if (jsonResponse.isArray()) {
                     for (JsonNode productNode : jsonResponse) {
-                        prodName = productNode.get("name").asText();
-                        prodPrice = productNode.get("price").asDouble();
-                        prodDescription = productNode.get("description").asText();
-                        prodType = productNode.get("type").asText();
-                        agregarProducto(prodName, prodPrice, prodDescription, prodType);
-                    }
-                }
-            } else {
-                System.out.println("Error: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getProductsSortedByDescendingCategory() {
-        HttpClient httpClient = HttpClient.newHttpClient();
-        ObjectMapper objectMapper = new ObjectMapper();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/search/descending"))
-                .GET()
-                .build();
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            String responseBody = response.body();
-            if (response.statusCode() == 200) {
-                JsonNode jsonResponse = objectMapper.readTree(responseBody);
-                if (jsonResponse.isArray()) {
-                    for (JsonNode productNode : jsonResponse) {
+                        System.out.println(productNode.toString());
                         prodName = productNode.get("name").asText();
                         prodPrice = productNode.get("price").asDouble();
                         prodDescription = productNode.get("description").asText();
@@ -862,6 +860,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
             e.printStackTrace();
         }
     }
+     */
 
     @Override
     public void addObserver(ObserverUserData observer) {

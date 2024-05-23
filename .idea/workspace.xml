@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/verListaAmigo.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/GUI/verListaAmigo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ObserverPattern/Observador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +23,22 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bcb64&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Z3LEE/SmartTrade-FrontEnd.git&quot;,
+    &quot;accountId&quot;: &quot;d86451a4-cd6f-4bd9-864a-7178fbe191a0&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -79,7 +89,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -170,6 +181,9 @@
       <workItem from="1716136030676" duration="861000" />
       <workItem from="1716215094040" duration="7588000" />
       <workItem from="1716277160030" duration="144000" />
+      <workItem from="1716308843654" duration="3115000" />
+      <workItem from="1716478823987" duration="2198000" />
+      <workItem from="1716489652094" duration="356000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
