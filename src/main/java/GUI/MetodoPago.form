@@ -110,7 +110,7 @@
             </constraints>
             <properties>
               <background color="-6690305"/>
-              <text value="Aceptar"/>
+              <text value="Pagar"/>
             </properties>
           </component>
           <component id="d906" class="javax.swing.JButton" binding="addPaypalButton">
