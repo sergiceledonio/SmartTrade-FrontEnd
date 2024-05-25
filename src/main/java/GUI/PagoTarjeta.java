@@ -21,12 +21,14 @@ public class PagoTarjeta {
     private int tipo;
     private int id;
     private double precio;
+    private String nombre;
 
-    public PagoTarjeta(int t, int id, double precio) {
+    public PagoTarjeta(int t, int id, double precio, String nombre) {
         iniciosesion = new InicioSesion();
         cardPanel.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
         this.id = id;
+        this.nombre = nombre;
         this.precio = precio;
         precioLabel.setText("Precio final: " + precio + " €");
         cardPanel.setFocusable(true);
@@ -51,7 +53,7 @@ public class PagoTarjeta {
     }
 
     public void backMenu(){
-        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
+        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

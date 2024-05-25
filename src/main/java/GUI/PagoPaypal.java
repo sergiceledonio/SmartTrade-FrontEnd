@@ -21,12 +21,13 @@ public class PagoPaypal {
     private int tipo;
     private int id;
     private double precio;
-
-    public PagoPaypal(int t, int id, double precio) {
+    private String nombre;
+    public PagoPaypal(int t, int id, double precio, String nombre) {
         iniciosesion = new InicioSesion();
         paypalPanel.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
         this.id = id;
+        this.nombre = nombre;
         this.precio = precio;
         precioLabel.setText("Precio final: " + precio + " €");
         paypalPanel.setFocusable(true);
@@ -51,7 +52,7 @@ public class PagoPaypal {
     }
 
     public void backMenu(){
-        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
+        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

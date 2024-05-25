@@ -94,7 +94,7 @@ public class MetodoPago {
         ventanaActual.dispose();
     }
     public void goToPaypal(){
-        PagoPaypal ventanaCatalog = new PagoPaypal(tipo, id, precio);
+        PagoPaypal ventanaCatalog = new PagoPaypal(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -104,7 +104,7 @@ public class MetodoPago {
     }
 
     public void goToCard(){
-        PagoTarjeta ventanaCatalog = new PagoTarjeta(tipo, id, precio);
+        PagoTarjeta ventanaCatalog = new PagoTarjeta(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
