@@ -59,8 +59,9 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private int prodId;
     private int id;
     private byte[] img;
+    private String nombre;
     private InicioSesion iniciosesion;
-    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser, byte[] img){
+    public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser, byte[] img, String nombre){
         panelInfo.setFocusable(true);
         panelInfo.requestFocusInWindow();
         panelInfo.setPreferredSize(new Dimension(800,600));
@@ -70,6 +71,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         this.id = id;
         this.tipo = tipoUser;
         this.img = img;
+        this.nombre = nombre;
 
         ImageIcon originalIcon = new ImageIcon(img);
         Image originalImage = originalIcon.getImage();
@@ -216,7 +218,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         });
     }
     public static void main(String[] args) {
-        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1, 1, new byte[]{});
+        InfoProducto ventanaInfo = new InfoProducto("",(double) 0,"","", 1, 1, new byte[]{}, "");
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaInfo.panelInfo);
@@ -313,7 +315,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
 
     public void backMenu(int tipo){
 
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

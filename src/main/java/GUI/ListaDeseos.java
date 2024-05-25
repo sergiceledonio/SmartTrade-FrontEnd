@@ -19,8 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static GUI.CatalogoProductos.getUserData;
-
 public class ListaDeseos extends JFrame {
 
     private JPanel panelDeseos;
@@ -50,14 +48,17 @@ public class ListaDeseos extends JFrame {
     private byte[] img;
     private int tipo;
     private int id;
+    private String nombre;
 
 
 
-    public ListaDeseos(int t, int id) {
+    public ListaDeseos(int t, int id, String n) {
         iniciosesion = new InicioSesion();
         panelDeseos.setPreferredSize(new Dimension(800, 600));
+
         this.tipo = t;
         this.id = id;
+        this.nombre = n;
 
         panelListDeseos = new JPanel();
         panelDeseos.setFocusable(true);
@@ -98,7 +99,7 @@ public class ListaDeseos extends JFrame {
 
 
     public static void main(String[] args) {
-        ListaDeseos listaDeseos = new ListaDeseos(0, 0);
+        ListaDeseos listaDeseos = new ListaDeseos(0, 0, "");
         listaDeseos.setMain();
     }
 
@@ -109,7 +110,7 @@ public class ListaDeseos extends JFrame {
     }
 
     private void setMain(){
-        ListaDeseos ventanaDeseo = new ListaDeseos(tipo, id);
+        ListaDeseos ventanaDeseo = new ListaDeseos(tipo, id, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaDeseo.getPanel());
@@ -278,7 +279,7 @@ public class ListaDeseos extends JFrame {
         }
     }
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

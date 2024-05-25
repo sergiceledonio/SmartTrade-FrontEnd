@@ -2,9 +2,7 @@ package GUI;
 
 import Estado.Closed;
 import Estado.StatePattern;
-import Estado.Closed;
 import Estado.Open;
-import Observer.ObserverRegister;
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -302,7 +300,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     }
 
     public void goToCatalog(String[] userData, int tipo){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(userData, tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, name);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

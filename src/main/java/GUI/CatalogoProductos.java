@@ -1,5 +1,6 @@
 package GUI;
 
+import Email.EmailSender;
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,8 +12,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class CatalogoProductos extends JFrame implements ObserverUserData {
     private JPanel panelCatalogo;
@@ -54,13 +53,14 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     JButton storableSearchButton3 = new JButton(storableSearchButtonText[2]);
     private JDialog filterPopUp;
     private byte[] img;
-
-    public CatalogoProductos(String[] userData, int tipo, int id) {
+    private String nombre;
+    public CatalogoProductos(int tipo, int id, String nombre) {
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
         this.tipo = tipo;
         this.id = id;
+        this.nombre = nombre;
 
         ImageIcon fav = new ImageIcon("img/favLleno.jpeg");
         ImageIcon user = new ImageIcon("img/user.png");
@@ -78,7 +78,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         inicializarComponentes(fav, user);
         organizarInterfaz(tipo);
         getProducts();
-
+        sendEmail(id, nombre);
 
 
         ventaProducto.addMouseListener(new MouseAdapter() {
@@ -562,12 +562,12 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public static void main(String[] args) {
-        CatalogoProductos catalogoProductos = new CatalogoProductos(new String[]{}, 0, 0);
+        CatalogoProductos catalogoProductos = new CatalogoProductos(0, 0, "");
         catalogoProductos.setMain();
     }
 
     public void setMain() {
-        CatalogoProductos ventanaCatalogo = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalogo = new CatalogoProductos(tipo, id, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCatalogo.panelCatalogo);
@@ -580,7 +580,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void goToValidated(){
-       VendedorProductosValidos ventanaVendedor = new VendedorProductosValidos(id, tipo);
+       VendedorProductosValidos ventanaVendedor = new VendedorProductosValidos(id, tipo, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaVendedor.getPanel());
@@ -591,7 +591,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void goCarrito(int t, int i){
-        CarritoCompra ventanaCarrito = new CarritoCompra(t, i);
+        CarritoCompra ventanaCarrito = new CarritoCompra(t, i, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCarrito.getPanel());
@@ -602,7 +602,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(int param) {
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), param, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(param, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
@@ -611,7 +611,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
     public void goFavs(int tipo, int id){
-        ListaDeseos ventanaFav = new ListaDeseos( tipo, id);
+        ListaDeseos ventanaFav = new ListaDeseos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaFav.getPanel());
         ventanaAtras.pack();
@@ -621,7 +621,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public void goGifts(int tipo, int id){
-        ListaRegalos ventanaRegalos = new ListaRegalos( tipo, id);
+        ListaRegalos ventanaRegalos = new ListaRegalos( tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaRegalos.getPanel());
         ventanaAtras.pack();
@@ -630,7 +630,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
     public void sellProduct() {
-        VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo, id);
+        VentaProducto ventanaVenta = new VentaProducto(getUserData(), tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaVenta.getPanel());
         ventanaAtras.pack();
@@ -647,7 +647,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Categoria: " + category);
         System.out.println("Descripción: " + descripcion);
 
-        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo, img);
+        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo, img, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -933,7 +933,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         JPanel panelVenta = new JPanel();
         panelVenta.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        perfilButton = new JComboBox<>(new Object[]{"Lista de regalos", "Lista de deseados",});
+        perfilButton = new JComboBox<>(new Object[]{"Lista de regalos", "Lista de deseados"});
         perfilButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedValue = (String) perfilButton.getSelectedItem();
@@ -1014,7 +1014,29 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
 
     }
 
-    public void goBackFromFilterWithEsc(JComponent component){
+    public void sendEmail(int identificador, String nombre) {
+        String url = "http://localhost:8080/user/email?user_id=" + identificador;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            System.out.println("El nombre es: " + nombre);
+            if (statusCode == 200) {
+                EmailSender.enviarCorreo(responseBody,nombre);
+                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
+        }
+    }
+                public void goBackFromFilterWithEsc(JComponent component){
         component.addKeyListener(
                 new KeyAdapter() {
                     @Override
@@ -1027,3 +1049,4 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         );
     }
 }
+

@@ -15,8 +15,6 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static GUI.CatalogoProductos.getUserData;
-
 public class VendedorProductosValidos extends JFrame implements ObserverUserData {
     private JPanel panelInfo;
     private JLabel backButton;
@@ -39,14 +37,17 @@ public class VendedorProductosValidos extends JFrame implements ObserverUserData
     private static String num;
     private static String type;
     private static int id;
+    private String nombre;
 
 
-    public VendedorProductosValidos(int id, int t){
+    public VendedorProductosValidos(int id, int t, String n){
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
 
         this.user_id = id;
         this.tipo = t;
+        this.nombre = n;
+
         panelVendedor = new JPanel();
         panelVendedor.setPreferredSize(new Dimension(800, 600));
         panelValidos = new JPanel();
@@ -159,7 +160,7 @@ public class VendedorProductosValidos extends JFrame implements ObserverUserData
         panel.add(panelProducto);
     }
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, user_id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, user_id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

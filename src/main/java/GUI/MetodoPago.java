@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static GUI.CatalogoProductos.getUserData;
-
 public class MetodoPago {
     private JPanel panelMetodo;
     private JPanel panelTitulo;
@@ -22,14 +20,16 @@ public class MetodoPago {
     private int tipo;
     private int id;
     private double precio;
+    private String nombre;
 
-    public MetodoPago(int t, int id, double precio)
+    public MetodoPago(int t, int id, double precio, String n)
     {
         iniciosesion = new InicioSesion();
         panelMetodo.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
         this.id = id;
         this.precio = precio;
+        this.nombre = n;
         precioLabel.setText("Precio final: " + precio + " €");
         panelMetodo.setFocusable(true);
         panelMetodo.requestFocusInWindow();
@@ -51,7 +51,7 @@ public class MetodoPago {
         });
     }
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
