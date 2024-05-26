@@ -9,8 +9,19 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/GUI/RealizarPedido.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Email/EmailSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Email/EmailSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Email/ServidorSmtp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Email/ServidorSmtp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VendedorProductosValidos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VendedorProductosValidos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -48,6 +59,12 @@
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/RealizarPedido.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" root0="SKIP_INSPECTION" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Users\javichr11\Desktop\maven\apache-maven-3.9.6" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -73,10 +90,15 @@
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/javichr11/Desktop/Asignaturas Universidad 3ro Curso/2o Cuatrimestre/Proyecto PSW-DDS/lib&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.33448276&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -102,8 +124,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
   </component>
@@ -194,14 +215,15 @@
       <workItem from="1716136030676" duration="861000" />
       <workItem from="1716215094040" duration="7588000" />
       <workItem from="1716277160030" duration="144000" />
-      <workItem from="1716308843654" duration="3115000" />
-      <workItem from="1716478823987" duration="2198000" />
-      <workItem from="1716489652094" duration="356000" />
       <workItem from="1716302614695" duration="10006000" />
       <workItem from="1716315023599" duration="3532000" />
       <workItem from="1716356629194" duration="8612000" />
       <workItem from="1716455930933" duration="2747000" />
       <workItem from="1716477747701" duration="2428000" />
+      <workItem from="1716626537667" duration="2172000" />
+      <workItem from="1716629729801" duration="4419000" />
+      <workItem from="1716652901417" duration="300000" />
+      <workItem from="1716656459071" duration="1934000" />
       <workItem from="1716547595648" duration="4064000" />
       <workItem from="1716652470513" duration="7548000" />
       <workItem from="1716740430105" duration="8939000" />

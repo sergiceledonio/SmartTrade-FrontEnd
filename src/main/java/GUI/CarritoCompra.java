@@ -21,8 +21,6 @@ import ObserverPattern.Observador;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static GUI.CatalogoProductos.getUserData;
-
 public class CarritoCompra extends JFrame implements ObserverUserData{
     private JPanel panelCarrito;
     private JPanel panelInfo;
@@ -56,16 +54,19 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private double precio;
     private byte[] img;
     private List<Observador> observadoresPrecio = new ArrayList<>();
+    private String nombre;
 
 
-    public CarritoCompra(int t, int id) {
+    public CarritoCompra(int t, int id, String n) {
 
 
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
         panelCarrito.setPreferredSize(new Dimension(800, 600));
+
         this.tipo = t;
         this.id = id;
+        this.nombre = nombre;
 
         panelCompras = new JPanel();
         panelCompras.setBackground(new Color(198, 232, 251));
@@ -106,7 +107,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public static void main(String[] args) {
-        CarritoCompra carritoCompra = new CarritoCompra(0, 0);
+        CarritoCompra carritoCompra = new CarritoCompra(0, 0, "");
         carritoCompra.setMain();
     }
 
@@ -117,7 +118,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     private void setMain(){
-        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id);
+        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaCarrito.getPanel());
@@ -341,7 +342,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

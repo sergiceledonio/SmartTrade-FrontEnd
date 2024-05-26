@@ -12,11 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
-
-import static GUI.CatalogoProductos.getUserData;
 
 public class ListaRegalos extends JFrame implements ObserverUserData {
     private JPanel panelInfo;
@@ -39,10 +36,12 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
     private int tipo;
     private int id;
     private InicioSesion iniciosesion;
+    private String nombre;
 
-    public ListaRegalos(int t, int i){
+    public ListaRegalos(int t, int i, String n){
         this.tipo = t;
         this.id = i;
+        this.nombre = n;
 
         iniciosesion = new InicioSesion();
         iniciosesion.addObserver(this);
@@ -75,7 +74,7 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
     }
 
     public static void main(String[] args) {
-        ListaRegalos ventanaRegalos = new ListaRegalos(0, 0);
+        ListaRegalos ventanaRegalos = new ListaRegalos(0, 0, "");
         ventanaRegalos.setMain();
     }
 
@@ -86,7 +85,7 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
     }
 
     private void setMain(){
-        ListaRegalos ventanaRegalos = new ListaRegalos(tipo, id);
+        ListaRegalos ventanaRegalos = new ListaRegalos(tipo, id, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaRegalos.getPanel());
@@ -95,7 +94,7 @@ public class ListaRegalos extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();
