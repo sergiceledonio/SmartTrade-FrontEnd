@@ -39,26 +39,28 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
     private String[] addressNames = new String[2];
     private int orderNumber = 1;
     private double precio;
+    private String nombre;
 
-    public RealizarPedido(int t, int id, double precio) {
+    public RealizarPedido(int t, int id, double precio, String nombre) {
         inicioSesion = new InicioSesion();
         inicioSesion.addObserver(this);
         panelPedido.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
         this.id = id;
         this.precio = precio;
+        this.nombre = nombre;
 
         inicializarComponentes();
         goBackWithEsc(panelPedido);
     }
 
     public static void main(String[] args) {
-        RealizarPedido realizarPedido = new RealizarPedido(0, 0, 0);
+        RealizarPedido realizarPedido = new RealizarPedido(0, 0, 0, "");
         realizarPedido.setMain();
     }
 
     private void setMain(){
-        RealizarPedido ventanaPedido = new RealizarPedido(tipo, id, precio);
+        RealizarPedido ventanaPedido = new RealizarPedido(tipo, id, precio, nombre);
         JFrame frame = new JFrame("Smart Trade");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(ventanaPedido.getPanel());
@@ -315,7 +317,7 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(){
-        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id);
+        CarritoCompra ventanaCarrito = new CarritoCompra(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCarrito.getPanel());
         ventanaAtras.pack();
@@ -325,7 +327,7 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
     }
 
     private void goToPayment(){
-        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio);
+        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
         ventanaAtras.pack();

@@ -453,7 +453,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     private void goToMakeOrder(){
-        RealizarPedido ventanaRealizarPedido = new RealizarPedido(tipo, id, precio);
+        RealizarPedido ventanaRealizarPedido = new RealizarPedido(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaRealizarPedido.getPanel());
         ventanaAtras.pack();

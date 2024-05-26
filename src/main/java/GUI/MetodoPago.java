@@ -91,7 +91,7 @@ public class MetodoPago {
         });
     }
     public void backMenu(){
-        RealizarPedido realizarPedido = new CatalogoProductos(tipo, id, nombre);
+        RealizarPedido realizarPedido = new RealizarPedido(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(realizarPedido.getPanel());
         ventanaAtras.pack();
