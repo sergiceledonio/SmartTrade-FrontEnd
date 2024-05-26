@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +32,10 @@ public class MetodoPago {
         this.tipo = t;
         this.id = id;
         this.precio = precio;
+        goBackWithEsc(panelMetodo);
+        goBackWithEsc(addPaypalButton);
+        goBackWithEsc(addTrajetaButton);
+        goBackWithEsc(aceptarButton);
         precioLabel.setText("Precio final: " + precio + " €");
         panelMetodo.setFocusable(true);
         panelMetodo.requestFocusInWindow();
@@ -51,9 +57,9 @@ public class MetodoPago {
         });
     }
     public void backMenu(){
-        CatalogoProductos ventanaCatalog = new CatalogoProductos(getUserData(), tipo, id);
+        RealizarPedido realizarPedido = new RealizarPedido(tipo, id, precio);
         JFrame ventanaAtras = new JFrame("Smart Trade");
-        ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+        ventanaAtras.setContentPane(realizarPedido.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
@@ -61,5 +67,18 @@ public class MetodoPago {
     }
     public JPanel getPanel(){
         return panelMetodo;
+    }
+
+    public void goBackWithEsc(JComponent component){
+        component.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                            backMenu();
+                        }
+                    }
+                }
+        );
     }
 }

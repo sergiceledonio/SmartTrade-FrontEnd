@@ -914,7 +914,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
     }
 
     public static String[] getUserData() {
-        return new String[]{name, email, password, type, iban, cif, dni, city, street, door, flat, num};
+        return new String[]{ name, email, password, type, iban, cif, dni, city, street, door, flat, num };
     }
 
     private void inicializarComponentes(ImageIcon fav, ImageIcon user) {
