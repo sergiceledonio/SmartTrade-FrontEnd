@@ -78,7 +78,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         inicializarComponentes(fav, user);
         organizarInterfaz(tipo);
         getProducts();
-        sendEmail(id, nombre);
+        //sendEmail(id, nombre);
 
 
         ventaProducto.addMouseListener(new MouseAdapter() {

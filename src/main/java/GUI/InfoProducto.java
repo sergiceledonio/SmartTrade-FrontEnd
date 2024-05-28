@@ -299,11 +299,16 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Código " + response.statusCode());
+            System.out.println("Código de lista de deseados " + response.statusCode());
+            System.out.println(response.body());
             if(response.statusCode() == 200){
-                JOptionPane.showMessageDialog(frame, "El producto ha sido añadido a la lista de favoritos", "Producto añadido a la lista de deseados", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("SE HA AÑADIDO A LA LISTA DE FAV");
-                System.out.println("BODY: " + response.body());
+                if(Integer.parseInt(response.body()) == 1){
+                    System.out.println("Se añade el producto sin problemas");
+                    JOptionPane.showMessageDialog(null,"El producto se ha añadido a la lista de deseados", "Producto añadido a lista", JOptionPane.INFORMATION_MESSAGE );
+                }else{
+                    System.out.println("El producto ya está añadido a la lista de deseados");
+                    JOptionPane.showMessageDialog(null,"El producto estaba ya añadido a la lista de deseados", "Producto ya añadido anteriormente", JOptionPane.INFORMATION_MESSAGE );
+                }
             }else{
                 System.out.println("ERROR EN LA PETICIÓN");
             }

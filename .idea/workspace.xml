@@ -6,18 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Email/EmailSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Email/EmailSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Email/ServidorSmtp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Email/ServidorSmtp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InicioSesion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaDeseos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ListaRegalos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VendedorProductosValidos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VendedorProductosValidos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/VentaProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,6 +187,7 @@
       <workItem from="1716629729801" duration="4419000" />
       <workItem from="1716652901417" duration="300000" />
       <workItem from="1716656459071" duration="1934000" />
+      <workItem from="1716903696190" duration="2387000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
