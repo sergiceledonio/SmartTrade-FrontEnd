@@ -371,7 +371,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         pagoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                goToPayment();
+                goToMakeOrder();
             }
 
             @Override
@@ -452,10 +452,10 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         }
     }
 
-    private void goToPayment(){
-        MetodoPago ventanaCatalog = new MetodoPago(tipo, id, precio, nombre);
+    private void goToMakeOrder(){
+        RealizarPedido ventanaRealizarPedido = new RealizarPedido(tipo, id, precio, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
-        ventanaAtras.setContentPane(ventanaCatalog.getPanel());
+        ventanaAtras.setContentPane(ventanaRealizarPedido.getPanel());
         ventanaAtras.pack();
         ventanaAtras.setVisible(true);
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
