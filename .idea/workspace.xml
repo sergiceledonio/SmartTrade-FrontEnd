@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
+    <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/PagoTarjeta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/PagoTarjeta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/ValidacionProductosLista.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,12 +27,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Users\javichr11\Desktop\maven\apache-maven-3.9.6" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bcb64&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Z3LEE/SmartTrade-FrontEnd.git&quot;,
+    &quot;accountId&quot;: &quot;d86451a4-cd6f-4bd9-864a-7178fbe191a0&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -43,28 +54,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.InfoProducto.executor&quot;: &quot;Run&quot;,
-    &quot;Application.InicioProyecto.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW&quot;: &quot;true&quot;,
-    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/javichr11/Desktop/Asignaturas Universidad 3ro Curso/2o Cuatrimestre/Proyecto PSW-DDS/lib&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.33448276&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.InfoProducto.executor": "Run",
+    "Application.InicioProyecto.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW": "true",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW": "true",
+    "git-widget-placeholder": "Rebasing main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\javichr11\IdeaProjects\SmartTrade-FrontEnd\src\main\java" />
@@ -87,7 +93,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-51586f01" />
       </set>
     </attachedChunks>
   </component>
@@ -178,16 +184,22 @@
       <workItem from="1716136030676" duration="861000" />
       <workItem from="1716215094040" duration="7588000" />
       <workItem from="1716277160030" duration="144000" />
+      <workItem from="1716308843654" duration="3115000" />
+      <workItem from="1716478823987" duration="2198000" />
+      <workItem from="1716489652094" duration="356000" />
       <workItem from="1716302614695" duration="10006000" />
       <workItem from="1716315023599" duration="3532000" />
       <workItem from="1716356629194" duration="8612000" />
       <workItem from="1716455930933" duration="2747000" />
       <workItem from="1716477747701" duration="2428000" />
-      <workItem from="1716626537667" duration="2172000" />
-      <workItem from="1716629729801" duration="4419000" />
-      <workItem from="1716652901417" duration="300000" />
-      <workItem from="1716656459071" duration="1934000" />
-      <workItem from="1716903696190" duration="3218000" />
+      <workItem from="1716643558672" duration="680000" />
+      <workItem from="1716831688246" duration="2393000" />
+      <workItem from="1716884741603" duration="5549000" />
+      <workItem from="1716892979437" duration="384000" />
+      <workItem from="1716908407067" duration="3996000" />
+      <workItem from="1716965090017" duration="19000" />
+      <workItem from="1716967157867" duration="3095000" />
+      <workItem from="1717092729641" duration="5576000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />

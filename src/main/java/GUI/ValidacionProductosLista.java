@@ -152,10 +152,12 @@ public class ValidacionProductosLista extends JFrame{
 
     private List<JPanel> createProductoPanels(List<Map<String, Object>> productList) {
         List<JPanel> productoPanels = new ArrayList<>();
-
+        System.out.println("aqui llega-----------------------------------------");
         for (Map<String, Object> product : productList) {
+            System.out.println("aqui tmb-----------------------------------------");
             JPanel productoPanel = createProductoPanel(product);
             productoPanels.add(productoPanel);
+            System.out.println("aqui llega2222-----------------------------------------");
         }
 
         return productoPanels;
