@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/PagoTarjeta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/PagoTarjeta.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,15 +190,17 @@
       <workItem from="1716652901417" duration="300000" />
       <workItem from="1716656459071" duration="1934000" />
       <workItem from="1716903696190" duration="3218000" />
+      <workItem from="1717134769408" duration="462000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
-      <created>1715544773421</created>
+      <created>1717133995599</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1715544773421</updated>
+      <updated>1717133995599</updated>
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

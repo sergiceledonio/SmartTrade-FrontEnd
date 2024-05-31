@@ -1,5 +1,6 @@
 package GUI;
 
+import Email.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
@@ -57,11 +58,32 @@ public class PagoTarjeta {
             @Override
             public void mouseEntered(MouseEvent e) {
                 backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                backButton.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                backButton.setBackground(new Color(153, 233, 255));
+            }
+        });
+
+        pagarButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goToFinPago();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                pagarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                pagarButton.setBackground(new Color(73, 231, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pagarButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                pagarButton.setBackground(new Color(153, 233, 255));
             }
         });
     }
@@ -75,13 +97,38 @@ public class PagoTarjeta {
         JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
         ventanaActual.dispose();
     }
+    public void sendEmail(int identificador, String nombre) {
+        String url = "http://localhost:8080/user/email?user_id=" + identificador;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            System.out.println("El nombre es: " + nombre);
+            if (statusCode == 200) {
+                EmailSender.enviarCorreo(responseBody,nombre);
+                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
+        }
+    }
 
     public void goToFinPago(){
         if(checkCorrectContent())
         {
             JOptionPane.showMessageDialog(null, errorMes);
         }else{
-            if(guardaCheckBox.isSelected()){ saveCard();}
+            if(guardaCheckBox.isSelected()){
+                saveCard();
+                sendEmail(id, nombre);
+            }
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -92,7 +139,6 @@ public class PagoTarjeta {
             ventanaActual.dispose();
         }
     }
-
     public void saveCard()
     {
         String url = "http://localhost:8080/card/addcard";

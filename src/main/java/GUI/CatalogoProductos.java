@@ -1013,29 +1013,6 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         }
 
     }
-
-    public void sendEmail(int identificador, String nombre) {
-        String url = "http://localhost:8080/user/email?user_id=" + identificador;
-        HttpClient client = HttpClient.newHttpClient();
-
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            int statusCode = response.statusCode();
-            String responseBody = response.body();
-            System.out.println(responseBody + " el código es: " + statusCode);
-            System.out.println("El nombre es: " + nombre);
-            if (statusCode == 200) {
-                EmailSender.enviarCorreo(responseBody,nombre);
-                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
-            }
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
-        }
-    }
                 public void goBackFromFilterWithEsc(JComponent component){
         component.addKeyListener(
                 new KeyAdapter() {

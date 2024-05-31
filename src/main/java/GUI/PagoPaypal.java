@@ -1,5 +1,6 @@
 package GUI;
 
+import Email.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
@@ -52,12 +53,14 @@ public class PagoPaypal {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                pagarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                pagarButton.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                pagarButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                pagarButton.setBackground(new Color(153, 233, 255));
             }
         });
         backButton.addMouseListener(new MouseAdapter() {
@@ -92,7 +95,10 @@ public class PagoPaypal {
         {
             JOptionPane.showMessageDialog(null, "Porfavor compruebe que el email sea valido");
         }else{
-            if(guardaCheckBox.isSelected()){ savePaypal();}
+            if(guardaCheckBox.isSelected()){
+                savePaypal();
+                sendEmail(id, nombre);
+            }
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -101,6 +107,29 @@ public class PagoPaypal {
             ventanaAtras.setVisible(true);
             JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
             ventanaActual.dispose();
+        }
+    }
+
+    public void sendEmail(int identificador, String nombre) {
+        String url = "http://localhost:8080/user/email?user_id=" + identificador;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            System.out.println("El nombre es: " + nombre);
+            if (statusCode == 200) {
+                EmailSender.enviarCorreo(responseBody,nombre);
+                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
         }
     }
 

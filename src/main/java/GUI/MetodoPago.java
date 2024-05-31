@@ -121,7 +121,9 @@ public class MetodoPago {
             }
         });
 
-        panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
+       // panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
+
+        panelLista.setLayout(new ScrollPaneLayout());
 
         // Populate the panel with labels
         String[] strings = getStrings();
