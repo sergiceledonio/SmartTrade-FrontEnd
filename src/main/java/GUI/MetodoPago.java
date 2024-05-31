@@ -297,7 +297,7 @@ public class MetodoPago {
             String responseBody = response.body();
             System.out.println(responseBody + " el código es: " + statusCode);
             if (statusCode == 200) {
-                EmailSender.enviarCorreo(responseBody, nombre);
+                EmailSender.enviarCorreo(responseBody, nombre, precio);
             } else {
                 JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
             }

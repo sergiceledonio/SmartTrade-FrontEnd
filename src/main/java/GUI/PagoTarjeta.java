@@ -111,13 +111,12 @@ public class PagoTarjeta {
             int statusCode = response.statusCode();
             String responseBody = response.body();
             System.out.println(responseBody + " el código es: " + statusCode);
-            System.out.println("El nombre es: " + nombre);
             if (statusCode == 200) {
-                EmailSender.enviarCorreo(responseBody,nombre);
-                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
+                EmailSender.enviarCorreo(responseBody,nombre, precio);
+                JOptionPane.showMessageDialog(null, "El pedido se ha hecho correctamente, en breves llegará un correo electrónico");
             }
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
+            JOptionPane.showMessageDialog(null, "El pedido no es correcto");
         }
     }
 
@@ -127,11 +126,10 @@ public class PagoTarjeta {
             JOptionPane.showMessageDialog(null, errorMes);
         }else{
             if(guardaCheckBox.isSelected()){
-                saveCard();
-                sendEmail(id, nombre);
-                deleteProducts(id);
+                saveCard(numeroField.getText(), nombreField.getText(), cvvField.getText(), fechaField.getText(), id);
             }
-
+            sendEmail(id, nombre);
+            deleteProducts(id);
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
             ventanaAtras.setContentPane(ventanaCatalog.getPanel());
@@ -141,7 +139,7 @@ public class PagoTarjeta {
             ventanaActual.dispose();
         }
     }
-    public void saveCard()
+    public void saveCard(String number, String name, String cvv, String date, int id)
     {
         String url = "http://localhost:8080/card/addcard";
         HttpClient client = HttpClient.newHttpClient();
@@ -150,10 +148,10 @@ public class PagoTarjeta {
 
         System.out.println(numeroField.getText() + " " + nombreField.getText() + " " + cvvField.getText() + " " + fechaField.getText());
 
-        data.put("number", numeroField.getText());
-        data.put("name",nombreField.getText());
-        data.put("cvv",cvvField.getText());
-        data.put("expireDate",fechaField.getText());
+        data.put("number", number);
+        data.put("name",name);
+        data.put("cvv",cvv);
+        data.put("expireDate",date);
         data.put("id",id);
 
         try{
@@ -214,6 +212,7 @@ public class PagoTarjeta {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

@@ -85,7 +85,7 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         panelPedido.add(scrollPane, BorderLayout.CENTER);
-        panelPedido.setBackground(new Color(198, 232, 251));
+        panelPedido.setBackground(new Color(153, 233, 255));
 
         JButton pagoButton = new JButton("Elegir método de pago");
         panelFondo.add(pagoButton);

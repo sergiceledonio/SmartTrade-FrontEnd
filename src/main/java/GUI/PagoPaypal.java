@@ -99,10 +99,10 @@ public class PagoPaypal {
             JOptionPane.showMessageDialog(null, "Porfavor compruebe que el email sea valido");
         }else{
             if(guardaCheckBox.isSelected()){
-                savePaypal();
-                sendEmail(id, nombre);
-                deleteProducts(id);
+                savePaypal(emailField.getText(), passwordField.getText(), id);
             }
+            sendEmail(id, nombre);
+            deleteProducts(id);
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -124,6 +124,7 @@ public class PagoPaypal {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -153,7 +154,7 @@ public class PagoPaypal {
             System.out.println(responseBody + " el código es: " + statusCode);
             System.out.println("El nombre es: " + nombre);
             if (statusCode == 200) {
-                EmailSender.enviarCorreo(responseBody,nombre);
+                EmailSender.enviarCorreo(responseBody,nombre, precio);
                 JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
             }
         }catch(Exception e){
@@ -161,7 +162,7 @@ public class PagoPaypal {
         }
     }
 
-    public void savePaypal()
+    public void savePaypal(String email, String pass, int id)
     {
         String url = "http://localhost:8080/paypal/addPaypal";
         HttpClient client = HttpClient.newHttpClient();
@@ -170,8 +171,8 @@ public class PagoPaypal {
 
         System.out.println(emailField.getText() + "  " + passwordField.getText());
 
-        data.put("email",emailField.getText());
-        data.put("password",passwordField.getText());
+        data.put("email",email);
+        data.put("password",pass);
         data.put("id",id);
 
         try{
