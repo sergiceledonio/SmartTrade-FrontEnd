@@ -298,7 +298,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 }else{
 
                     labelAmount.setText(String.valueOf(cantidad));
-                    labelPrecio.setText(cantidad * precio + "€");
+                    labelPrecio.setText("Precio: " + cantidad * price + "€");
                     changeItemAmount(name, -1);
                 }
             }
@@ -322,7 +322,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 int cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad++;
                 labelAmount.setText(String.valueOf(cantidad));
-                labelPrecio.setText(cantidad * precio + "€");
+                labelPrecio.setText("Precio: " + cantidad * price + "€");
                 changeItemAmount(name, 1);
             }
             @Override
