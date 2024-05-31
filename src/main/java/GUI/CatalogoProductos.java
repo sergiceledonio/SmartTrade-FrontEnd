@@ -639,7 +639,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         ventanaActual.dispose();
     }
 
-    public void infoProduct(String nombre, Double price, String descripcion,  String category, byte[] img) {
+    public void infoProduct(String pname, Double price, String descripcion,  String category, byte[] img) {
 
         System.out.println("*************************************");
         System.out.println("Nombre: " + nombre);
@@ -647,7 +647,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         System.out.println("Categoria: " + category);
         System.out.println("Descripción: " + descripcion);
 
-        InfoProducto ventanaInfo = new InfoProducto(nombre, price, category, descripcion, id, tipo, img, nombre);
+        InfoProducto ventanaInfo = new InfoProducto(pname, price, category, descripcion, id, tipo, img, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaInfo.getPanel());
         ventanaAtras.pack();
@@ -1013,7 +1013,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         }
 
     }
-                public void goBackFromFilterWithEsc(JComponent component){
+    public void goBackFromFilterWithEsc(JComponent component){
         component.addKeyListener(
                 new KeyAdapter() {
                     @Override
