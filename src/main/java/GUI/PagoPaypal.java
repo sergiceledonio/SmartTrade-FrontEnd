@@ -36,6 +36,8 @@ public class PagoPaypal {
     private String nombre;
     public PagoPaypal(int t, int id, double precio, String nombre) {
         System.out.println("El nombre es: " + nombre);
+        System.out.println("El id es: " + id);
+
         iniciosesion = new InicioSesion();
         paypalPanel.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
@@ -99,6 +101,7 @@ public class PagoPaypal {
             if(guardaCheckBox.isSelected()){
                 savePaypal();
                 sendEmail(id, nombre);
+                deleteProducts(id);
             }
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
@@ -109,6 +112,30 @@ public class PagoPaypal {
             JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
             ventanaActual.dispose();
         }
+    }
+    public void deleteProducts(int ident){
+        String url = "http://localhost:8080/cart/deleteCart";
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("u_id", ident);
+            String jsonBody = new ObjectMapper().writeValueAsString(productData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            if (statusCode == 200) {
+                System.out.println("Los productos se han eliminado del carrito");
+            }
+        }catch(Exception e){
+            e.printStackTrace();}
+
     }
 
     public void sendEmail(int identificador, String nombre) {

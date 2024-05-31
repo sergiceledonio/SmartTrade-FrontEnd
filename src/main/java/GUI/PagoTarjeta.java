@@ -129,6 +129,7 @@ public class PagoTarjeta {
             if(guardaCheckBox.isSelected()){
                 saveCard();
                 sendEmail(id, nombre);
+                deleteProducts(id);
             }
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
@@ -201,6 +202,30 @@ public class PagoTarjeta {
             }
         }
         return 0 == aux;
+    }
+    public void deleteProducts(int ident){
+        String url = "http://localhost:8080/cart/deleteCart";
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("u_id", ident);
+            String jsonBody = new ObjectMapper().writeValueAsString(productData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            if (statusCode == 200) {
+                System.out.println("Los productos se han eliminado del carrito");
+            }
+        }catch(Exception e){
+            e.printStackTrace();}
+
     }
     public boolean isValidCreditCard(String cardNumber){
         Pattern pat = null;
