@@ -39,6 +39,7 @@ public class PagoTarjeta {
     private String nombre;
 
     public PagoTarjeta(int t, int id, double precio, String nombre) {
+        System.out.println("El nombre es: " + nombre);
         iniciosesion = new InicioSesion();
         cardPanel.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;

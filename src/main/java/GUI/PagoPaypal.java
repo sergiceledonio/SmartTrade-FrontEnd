@@ -35,6 +35,7 @@ public class PagoPaypal {
     private double precio;
     private String nombre;
     public PagoPaypal(int t, int id, double precio, String nombre) {
+        System.out.println("El nombre es: " + nombre);
         iniciosesion = new InicioSesion();
         paypalPanel.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
@@ -165,9 +166,9 @@ public class PagoPaypal {
     public boolean checkCorrectContent() {
         if(isValidEmail(emailField.getText()))
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     public boolean isValidEmail(String email){
         Pattern pat = null;

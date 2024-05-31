@@ -1,5 +1,6 @@
 package GUI;
 
+import Email.EmailSender;
 import Observer.ObserverUserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,7 +22,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static GUI.CatalogoProductos.getUserData;
-import static com.sun.glass.ui.Cursor.setVisible;
 
 public class MetodoPago {
     private JPanel panelMetodo;
@@ -42,8 +42,8 @@ public class MetodoPago {
     private JLabel lastSelectedLabel;
     private String nombre;
 
-    public MetodoPago(int t, int id, double precio, String nombre)
-    {
+    public MetodoPago(int t, int id, double precio, String nombre) {
+        System.out.println("El nombre es: " + nombre);
         iniciosesion = new InicioSesion();
         panelMetodo.setPreferredSize(new Dimension(800, 600));
         this.tipo = t;
@@ -78,12 +78,14 @@ public class MetodoPago {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                aceptarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                aceptarButton.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                aceptarButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                aceptarButton.setBackground(new Color(153, 233, 255));
             }
         });
 
@@ -95,12 +97,14 @@ public class MetodoPago {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                addPaypalButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                addPaypalButton.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                addPaypalButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                addPaypalButton.setBackground(new Color(153, 233, 255));
             }
         });
 
@@ -112,12 +116,14 @@ public class MetodoPago {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                addTrajetaButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                addTrajetaButton.setBackground(new Color(73, 231, 255));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                addTrajetaButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                addTrajetaButton.setBackground(new Color(153, 233, 255));
             }
         });
 
@@ -128,8 +134,6 @@ public class MetodoPago {
         // Populate the panel with labels
         String[] strings = getStrings();
         addLabelsToPanel(strings);
-
-        setVisible(true);
     }
 
     private void addLabelsToPanel(String[] strings) {
@@ -173,7 +177,7 @@ public class MetodoPago {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/pagos/cardbyuser?user_id=" + id))
+                .uri(URI.create("http://localhost:8080/card/cardsbyuser?user_id=" + id))
                 .GET()
                 .build();
         try {
@@ -207,7 +211,7 @@ public class MetodoPago {
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/pagos/Paypalsbyuser?id=" + id))
+                .uri(URI.create("http://localhost:8080/paypal/paypalsbyuser?id=" + id))
                 .GET()
                 .build();
         try {
@@ -267,7 +271,9 @@ public class MetodoPago {
         {
             JOptionPane.showMessageDialog(null, "Escoja un metodo de pago o añada uno nuevo");
         }else{
-            String id_Pago = lastSelectedLabel.getText();
+
+            sendEmail(id);
+
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
             ventanaAtras.setContentPane(ventanaCatalog.getPanel());
@@ -275,6 +281,30 @@ public class MetodoPago {
             ventanaAtras.setVisible(true);
             JFrame ventanaActual = (JFrame) SwingUtilities.getWindowAncestor(getPanel());
             ventanaActual.dispose();
+        }
+    }
+    public void sendEmail(int identificador) {
+        String url = "http://localhost:8080/user/email?user_id=" + identificador;
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            String responseBody = response.body();
+            System.out.println(responseBody + " el código es: " + statusCode);
+            if (statusCode == 200) {
+                EmailSender.enviarCorreo(responseBody, nombre);
+            } else {
+                JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     public JPanel getPanel(){

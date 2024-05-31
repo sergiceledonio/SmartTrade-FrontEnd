@@ -42,6 +42,7 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
     private String nombre;
 
     public RealizarPedido(int t, int id, double precio, String nombre) {
+        System.out.println("El nombre es: " + nombre);
         inicioSesion = new InicioSesion();
         inicioSesion.addObserver(this);
         panelPedido.setPreferredSize(new Dimension(800, 600));
