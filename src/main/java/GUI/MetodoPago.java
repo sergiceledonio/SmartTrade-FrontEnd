@@ -34,6 +34,7 @@ public class MetodoPago {
     private JPanel panelInfo;
     private JScrollPane panelLista;
     private JLabel precioLabel;
+    private JPanel panelFinal;
     private InicioSesion iniciosesion;
     private int tipo;
     private int id;
@@ -127,34 +128,42 @@ public class MetodoPago {
             }
         });
 
-       // panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
+        JPanel listaPanel = new JPanel();
+        listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
 
-        panelLista.setLayout(new ScrollPaneLayout());
+        // Agregar el contenedor al JScrollPane
+        panelLista.setViewportView(listaPanel);
 
-        // Populate the panel with labels
+        // Poblar el panel con etiquetas
         String[] strings = getStrings();
-        addLabelsToPanel(strings);
+        addLabelsToPanel(listaPanel, strings);
     }
 
-    private void addLabelsToPanel(String[] strings) {
+    private void addLabelsToPanel(JPanel listaPanel, String[] strings) {
         for (String str : strings) {
+            System.out.println(str);
+            JPanel panel = new JPanel();
+            panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+            panel.setLayout(new BorderLayout());
+            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
             JLabel label = new JLabel(str);
-            label.setOpaque(true);
-            label.setBackground(Color.LIGHT_GRAY);
-            label.setPreferredSize(new Dimension(250, 30));
-            label.addMouseListener(new MouseAdapter() {
+            label.setFont(new Font("Arial", Font.BOLD, 16));
+            panel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     updateSelectedLabel(label);
                 }
             });
-            panelLista.add(label);
+            panel.add(label, BorderLayout.CENTER);
+            listaPanel.add(panel);
         }
-        panelLista.revalidate();
-        panelLista.repaint();
+        listaPanel.revalidate();
+        listaPanel.repaint();
     }
 
     private void updateSelectedLabel(JLabel label) {
+        System.out.println(label.getText());
         if (lastSelectedLabel != null) {
             lastSelectedLabel.setBackground(Color.LIGHT_GRAY);
         }
@@ -167,8 +176,20 @@ public class MetodoPago {
     private String[] getStrings() {
         String[] aux = getCards();
         String[] aux2 = getPaypals();
-        String[] result = Arrays.copyOf(aux, aux.length + aux2.length);
+
+        if (aux == null) {
+            aux = new String[0];
+        }
+        if (aux2 == null) {
+            aux2 = new String[0];
+        }
+
+        String[] result = new String[aux.length + aux2.length];
+
+        System.arraycopy(aux, 0, result, 0, aux.length);
         System.arraycopy(aux2, 0, result, aux.length, aux2.length);
+
+        System.out.println(Arrays.toString(result));
         return result;
     }
     public String[] getCards(){
@@ -180,25 +201,19 @@ public class MetodoPago {
                 .uri(URI.create("http://localhost:8080/card/cardsbyuser?user_id=" + id))
                 .GET()
                 .build();
-        try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        try {HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
+            System.out.println(responseBody);
             if (response.statusCode() == 200) {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
-                if (jsonResponse.isArray()) {
-                    int size = jsonResponse.size();
-                    auxArray = new String[size];
-                    int index = 0;
-                    for (JsonNode cardNode : jsonResponse) {
-                        aux = cardNode.get("number").asText();
+                int index = 0;
+                auxArray = new String[jsonResponse.size()];
+                for(JsonNode item : jsonResponse){
+                        aux = item.get("number").asText();
                         aux = "Tarjeta: " + aux;
                         auxArray[index++] = aux;
                     }
                 }
-            } else {
-                System.out.println("Error: " + response.statusCode());
-                System.out.println(response.body());
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,7 +222,7 @@ public class MetodoPago {
 
     public String[] getPaypals(){
         String aux;
-        String[] auxArray = null;
+        String[] auxArray = new String[]{};
         HttpClient httpClient = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpRequest request = HttpRequest.newBuilder()
@@ -217,22 +232,18 @@ public class MetodoPago {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
+            System.out.println(responseBody);
             if (response.statusCode() == 200) {
                 JsonNode jsonResponse = objectMapper.readTree(responseBody);
-                if (jsonResponse.isArray()) {
-                    int size = jsonResponse.size();
-                    auxArray = new String[size];
                     int index = 0;
-                    for (JsonNode paypalNode : jsonResponse) {
-                        aux = paypalNode.get("email").asText();
+                    auxArray = new String[jsonResponse.size()];
+                    for(JsonNode item : jsonResponse){
+                        aux = item.get("email").asText();
                         aux = "Paypal: " + aux;
-                        auxArray[index++] = aux;
+                        auxArray[index] = aux;
+                        index++;
                     }
                 }
-            } else {
-                System.out.println("Error: " + response.statusCode());
-                System.out.println(response.body());
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
