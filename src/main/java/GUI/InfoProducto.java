@@ -487,7 +487,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                     System.out.println("GET request successful: " + statusCode);
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode jsonNode = mapper.readTree(responseBody);
-
                     productId = jsonNode.get("id").asInt();
                 } else {
                     System.out.println("Problem with client: " + statusCode);
