@@ -301,8 +301,6 @@ public class MetodoPago {
             } else {
                 JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
