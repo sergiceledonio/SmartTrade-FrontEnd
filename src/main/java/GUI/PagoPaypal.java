@@ -169,7 +169,7 @@ public class PagoPaypal {
 
         Map<String, Object> data = new HashMap<>();
 
-        System.out.println(emailField.getText() + "  " + passwordField.getText());
+        System.out.println(emailField.getText() + "  " + passwordField.getText() + id);
 
         data.put("email",email);
         data.put("password",pass);
