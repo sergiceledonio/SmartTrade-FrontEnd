@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/InfoProducto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -87,7 +89,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-221dcadf" />
       </set>
     </attachedChunks>
   </component>
@@ -188,6 +190,9 @@
       <workItem from="1716652901417" duration="300000" />
       <workItem from="1716656459071" duration="1934000" />
       <workItem from="1716903696190" duration="3218000" />
+      <workItem from="1716916555065" duration="2970000" />
+      <workItem from="1717354693131" duration="663000" />
+      <workItem from="1717357429333" duration="50000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
