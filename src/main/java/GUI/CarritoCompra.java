@@ -56,6 +56,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     private List<Observador> observadoresPrecio = new ArrayList<>();
     private String nombre;
 
+    private int precioFinal;
 
     public CarritoCompra(int t, int id, String n) {
 
@@ -66,7 +67,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
 
         this.tipo = t;
         this.id = id;
-        this.nombre = nombre;
+        this.nombre = n;
 
         panelCompras = new JPanel();
         panelCompras.setBackground(new Color(198, 232, 251));
@@ -297,7 +298,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 }else{
 
                     labelAmount.setText(String.valueOf(cantidad));
-                    labelPrecio.setText(cantidad * precio + "€");
+                    labelPrecio.setText("Precio: " + cantidad * price + "€");
                     changeItemAmount(name, -1);
                 }
             }
@@ -321,7 +322,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
                 int cantidad = Integer.parseInt(labelAmount.getText());
                 cantidad++;
                 labelAmount.setText(String.valueOf(cantidad));
-                labelPrecio.setText(cantidad * precio + "€");
+                labelPrecio.setText("Precio: " + cantidad * price + "€");
                 changeItemAmount(name, 1);
             }
             @Override
@@ -339,6 +340,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
         goBackWithEsc(buttonMenos);
 
         panel.add(panelProducto);
+        precioFinal += price * amount;
     }
 
     public void backMenu(){
@@ -453,7 +455,7 @@ public class CarritoCompra extends JFrame implements ObserverUserData{
     }
 
     private void goToMakeOrder(){
-        RealizarPedido ventanaRealizarPedido = new RealizarPedido(tipo, id, precio, nombre);
+        RealizarPedido ventanaRealizarPedido = new RealizarPedido(tipo, id, precioFinal, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaRealizarPedido.getPanel());
         ventanaAtras.pack();

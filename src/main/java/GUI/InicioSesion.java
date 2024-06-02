@@ -29,6 +29,7 @@ public class InicioSesion extends JFrame implements ObserverUserData {
     private JLabel logo;
     private JLabel registrateButton;
     private JCheckBox visibilityButton;
+    private JLabel ayudaLabel;
     private JFrame   frame;
 
 
@@ -130,6 +131,22 @@ public class InicioSesion extends JFrame implements ObserverUserData {
             }
         });
 
+        ayudaLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                getHelp();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                registrateButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                registrateButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        });
 
         /*REGISTRATEBUTTON*/
         registrateButton.addMouseListener(new MouseAdapter() {
@@ -398,5 +415,15 @@ public class InicioSesion extends JFrame implements ObserverUserData {
                     }
                 }
         );
+    }
+    public void getHelp()
+    {   //no es un rickrol lo juro
+        try {
+            URI uri = new URI("https://youtu.be/qa6yUlkc6wA?si=NlbnjKlRjCnbEHkk");
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(uri);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -4,7 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class EmailSender {
-    public static void enviarCorreo(String destinatario, String nombre) {
+    public static void enviarCorreo(String destinatario, String nombre, double valor) {
         String host = ServidorSmtp.HOST;
         int port = ServidorSmtp.PORT;
         boolean tlsEnabled = ServidorSmtp.TLS_ENABLED;
@@ -28,7 +28,7 @@ public class EmailSender {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Confirmación de pedido");
-            message.setText("Gracias por confiar en nosotros " + nombre + " el pedido realizado está en proceso de envio y llegará en los próximos dias.");
+            message.setText("Gracias por confiar en nosotros " + nombre + " el pedido realizado está en proceso de envio y llegará en los próximos dias.\n El valor del pedido es de: " + valor + "€");
             Transport.send(message);
             System.out.println("Correo enviado correctamente.");
         } catch (MessagingException e) {

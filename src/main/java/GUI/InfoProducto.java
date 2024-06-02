@@ -62,6 +62,7 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     private String nombre;
     private InicioSesion iniciosesion;
     public InfoProducto(String prodName, Double prodPrice, String prodType, String prodDescription, int id, int tipoUser, byte[] img, String nombre){
+
         panelInfo.setFocusable(true);
         panelInfo.requestFocusInWindow();
         panelInfo.setPreferredSize(new Dimension(800,600));
@@ -72,6 +73,8 @@ public class InfoProducto extends JFrame implements ObserverUserData {
         this.tipo = tipoUser;
         this.img = img;
         this.nombre = nombre;
+
+        System.out.println("nombre: " + nombre);
 
         ImageIcon originalIcon = new ImageIcon(img);
         Image originalImage = originalIcon.getImage();
@@ -319,7 +322,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
     }
 
     public void backMenu(int tipo){
-
         CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
         JFrame ventanaAtras = new JFrame("Smart Trade");
         ventanaAtras.setContentPane(ventanaCatalog.getPanel());
@@ -487,7 +489,6 @@ public class InfoProducto extends JFrame implements ObserverUserData {
                     System.out.println("GET request successful: " + statusCode);
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode jsonNode = mapper.readTree(responseBody);
-
                     productId = jsonNode.get("id").asInt();
                 } else {
                     System.out.println("Problem with client: " + statusCode);
