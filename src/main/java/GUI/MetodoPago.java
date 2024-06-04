@@ -40,7 +40,8 @@ public class MetodoPago {
     private int id;
     private double precio;
     private String selectedLabelName;
-    private JLabel lastSelectedLabel;
+    private JPanel lastSelectedPanel;
+    private JPanel selectedPanel;
     private String nombre;
 
     public MetodoPago(int t, int id, double precio, String nombre) {
@@ -140,37 +141,49 @@ public class MetodoPago {
     }
 
     private void addLabelsToPanel(JPanel listaPanel, String[] strings) {
+        int auxi = 0;
         for (String str : strings) {
             System.out.println(str);
             JPanel panel = new JPanel();
             panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
             panel.setLayout(new BorderLayout());
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-            JLabel label = new JLabel(str);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
             panel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    updateSelectedLabel(label);
+
+                updateSelectedLabel(panel);
+
+                }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
+
+            JLabel label = new JLabel(str);
+            label.setFont(new Font("Arial", Font.BOLD, 16));
             panel.add(label, BorderLayout.CENTER);
             listaPanel.add(panel);
+            panel.setName("panel_" + auxi);
         }
         listaPanel.revalidate();
         listaPanel.repaint();
     }
 
-    private void updateSelectedLabel(JLabel label) {
-        System.out.println(label.getText());
-        if (lastSelectedLabel != null) {
-            lastSelectedLabel.setBackground(Color.LIGHT_GRAY);
+    private void updateSelectedLabel(JPanel panel) {
+        panel.setBackground(new Color(128, 191, 255)); // Cambiar el fondo del panel seleccionado al nuevo color
+        lastSelectedPanel = selectedPanel; // Actualizar la referencia del último panel seleccionado
+        selectedPanel = panel; // Actualizar la referencia del panel actualmente seleccionado
+        System.out.println("Selected Label: " + panel.getName());
+        if (lastSelectedPanel != null) {
+            lastSelectedPanel.setBackground(Color.WHITE); // Restaurar el fondo del último panel seleccionado a blanco
         }
-        label.setBackground(Color.YELLOW);
-        selectedLabelName = label.getText();
-        lastSelectedLabel = label;
-        System.out.println("Selected Label: " + selectedLabelName);
     }
 
     private String[] getStrings() {
@@ -278,7 +291,7 @@ public class MetodoPago {
         ventanaActual.dispose();
     }
     public void goToFinPago(){
-        if(lastSelectedLabel == null)
+        if(lastSelectedPanel == null)
         {
             JOptionPane.showMessageDialog(null, "Escoja un metodo de pago o añada uno nuevo");
         }else{
