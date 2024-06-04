@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_05_2024_16_41__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_05_2024_16_41__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/RealizarPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/RealizarPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +37,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CarritoCompra.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/CatalogoProductos.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/DireccionEnvioRegister.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/RealizarPedido.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/GUI/RegistroUsuario.java" root0="SKIP_INSPECTION" />
   </component>
@@ -277,7 +272,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="funcionalidad productos" />
     <MESSAGE value="changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes" />
+    <MESSAGE value="arreglo boton" />
+    <option name="LAST_COMMIT_MESSAGE" value="arreglo boton" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
