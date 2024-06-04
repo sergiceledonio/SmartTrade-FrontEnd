@@ -2,6 +2,9 @@ package GUI;
 
 import Email.EmailSender;
 import Observer.ObserverUserData;
+import Strategy.Card;
+import Strategy.Payment;
+import Strategy.Paypal;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +46,8 @@ public class MetodoPago {
     private JPanel lastSelectedPanel;
     private JPanel selectedPanel;
     private String nombre;
+
+    private Payment context = new Payment();
 
     public MetodoPago(int t, int id, double precio, String nombre) {
         System.out.println("El nombre es: " + nombre);
@@ -94,7 +99,8 @@ public class MetodoPago {
         addPaypalButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                goToPaypal();
+                context.setMethod(new Paypal());
+                context.executePayment(tipo, id, precio, nombre, getPanel());
             }
 
             @Override
@@ -113,7 +119,8 @@ public class MetodoPago {
         addTrajetaButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                goToCard();
+                context.setMethod(new Card());
+                context.executePayment(tipo, id, precio, nombre, getPanel());
             }
 
             @Override

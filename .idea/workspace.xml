@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-=======
       <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
->>>>>>> a563078cbf84ee66358ba26270f0f25b87550909
+      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/PaymentMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Strategy/Paypal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,14 +27,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="customMavenHome" value="C:\Users\javichr11\Desktop\maven\apache-maven-3.9.6" />
-        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -195,13 +184,12 @@
       <workItem from="1716652901417" duration="300000" />
       <workItem from="1716656459071" duration="1934000" />
       <workItem from="1716903696190" duration="3218000" />
-<<<<<<< HEAD
       <workItem from="1716916555065" duration="2970000" />
       <workItem from="1717354693131" duration="663000" />
       <workItem from="1717357429333" duration="50000" />
-=======
       <workItem from="1717134769408" duration="10294000" />
->>>>>>> a563078cbf84ee66358ba26270f0f25b87550909
+      <workItem from="1717413331389" duration="1196000" />
+      <workItem from="1717423809102" duration="272000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
