@@ -200,9 +200,15 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (addressButton1.isSelected() && !addressButton2.isSelected()) {
-                    addressButton1.setText(addressButton2.getText());
-                    addressButton2.setText("");
-                    addressButton2.setVisible(false);
+                    if (!addressButton2.getText().equals("")) {
+                        addressButton1.setText(addressButton2.getText());
+                        addressButton1.setVisible(true);
+                        addressButton2.setText("");
+                        addressButton2.setVisible(false);
+                    } else {
+                        addressButton1.setText("");
+                        addressButton1.setVisible(false);
+                    }
                 } else if (!addressButton1.isSelected() && addressButton2.isSelected()) {
                     addressButton2.setText("");
                     addressButton2.setVisible(false);

@@ -1013,6 +1013,7 @@ public class CatalogoProductos extends JFrame implements ObserverUserData {
         }
 
     }
+
     public void goBackFromFilterWithEsc(JComponent component){
         component.addKeyListener(
                 new KeyAdapter() {
