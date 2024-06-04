@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9afc5234-b0ea-4a5e-a687-ae1b478a88a4" name="Changes" comment="changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/MetodoPago.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GUI/PagoPaypal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,14 +22,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="customMavenHome" value="C:\Users\javichr11\Desktop\maven\apache-maven-3.9.6" />
-        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -191,6 +180,8 @@
       <workItem from="1716656459071" duration="1934000" />
       <workItem from="1716903696190" duration="3218000" />
       <workItem from="1717134769408" duration="10294000" />
+      <workItem from="1717341028701" duration="377000" />
+      <workItem from="1717344829218" duration="333000" />
     </task>
     <task id="LOCAL-00001" summary="changes">
       <option name="closed" value="true" />
