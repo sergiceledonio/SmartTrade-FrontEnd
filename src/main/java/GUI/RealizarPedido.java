@@ -40,6 +40,8 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
     private int orderNumber = 1;
     private double precio;
     private String nombre;
+    private JToggleButton addressButton1;
+    private JToggleButton addressButton2;
 
     public RealizarPedido(int t, int id, double precio, String nombre) {
         System.out.println("El nombre en realizar pedido es: " + nombre);
@@ -127,8 +129,8 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
         deleteAddressButton.setBounds(355, 250, 90, 30);
         goBackWithEsc(deleteAddressButton);
 
-        JToggleButton addressButton1 = new JToggleButton();
-        JToggleButton addressButton2 = new JToggleButton();
+        addressButton1 = new JToggleButton();
+        addressButton2 = new JToggleButton();
         panelFondo.add(addressButton1);
         panelFondo.add(addressButton2);
         addressButton1.setVisible(false);
@@ -200,17 +202,18 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (addressButton1.isSelected() && !addressButton2.isSelected()) {
-                    addressButton1.setText(addressButton2.getText());
-                    addressButton2.setText("");
-                    addressButton2.setVisible(false);
+                    if (!addressButton2.getText().isEmpty()) {
+                        addressButton1.setText(addressButton2.getText());
+                        addressButton1.setVisible(true);
+                        restartToggleButton(addressButton2);
+                    } else {
+                        restartToggleButton(addressButton1);
+                    }
                 } else if (!addressButton1.isSelected() && addressButton2.isSelected()) {
-                    addressButton2.setText("");
-                    addressButton2.setVisible(false);
+                    restartToggleButton(addressButton2);
                 } else if (addressButton1.isSelected() && addressButton2.isSelected()) {
-                    addressButton1.setText("");
-                    addressButton1.setVisible(false);
-                    addressButton2.setText("");
-                    addressButton2.setVisible(false);
+                    restartToggleButton(addressButton1);
+                    restartToggleButton(addressButton2);
                 }
             }
 
@@ -356,5 +359,10 @@ public class RealizarPedido extends JFrame implements ObserverUserData {
 
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public void restartToggleButton(JToggleButton button) {
+        button.setText("");
+        button.setVisible(false);
     }
 }
