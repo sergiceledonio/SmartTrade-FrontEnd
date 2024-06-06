@@ -113,7 +113,7 @@ public class PagoTarjeta {
             System.out.println(responseBody + " el código es: " + statusCode);
             if (statusCode == 200) {
                 EmailSender.enviarCorreo(responseBody,nombre, precio);
-                JOptionPane.showMessageDialog(null, "El pedido se ha hecho correctamente, en breves llegará un correo electrónico");
+                JOptionPane.showMessageDialog(null, "El pago se ha realizado correctamente, en breves le llegará un correo confirmándolo");
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "El pedido no es correcto");

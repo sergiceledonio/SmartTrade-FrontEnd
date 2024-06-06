@@ -303,7 +303,7 @@ public class MetodoPago {
             JOptionPane.showMessageDialog(null, "Escoja un metodo de pago o añada uno nuevo");
         }else{
 
-            sendEmail(id);
+            sendEmail(id, nombre);
 
             CatalogoProductos ventanaCatalog = new CatalogoProductos(tipo, id, nombre);
             JFrame ventanaAtras = new JFrame("Smart Trade");
@@ -314,7 +314,7 @@ public class MetodoPago {
             ventanaActual.dispose();
         }
     }
-    public void sendEmail(int identificador) {
+    public void sendEmail(int identificador, String nombre) {
         String url = "http://localhost:8080/user/email?user_id=" + identificador;
         HttpClient client = HttpClient.newHttpClient();
 
@@ -327,13 +327,13 @@ public class MetodoPago {
             int statusCode = response.statusCode();
             String responseBody = response.body();
             System.out.println(responseBody + " el código es: " + statusCode);
+            System.out.println("El nombre es: " + nombre);
             if (statusCode == 200) {
-                EmailSender.enviarCorreo(responseBody, nombre, precio);
-            } else {
-                JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
+                EmailSender.enviarCorreo(responseBody,nombre, precio);
+                JOptionPane.showMessageDialog(null, "El pago se ha realizado correctamente, en breves le llegará un correo confirmándolo");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
         }
     }
     public JPanel getPanel(){

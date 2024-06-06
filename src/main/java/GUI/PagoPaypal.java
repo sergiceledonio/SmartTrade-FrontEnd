@@ -155,7 +155,7 @@ public class PagoPaypal {
             System.out.println("El nombre es: " + nombre);
             if (statusCode == 200) {
                 EmailSender.enviarCorreo(responseBody,nombre, precio);
-                JOptionPane.showMessageDialog(null, "El correo se ha enviado con éxito");
+                JOptionPane.showMessageDialog(null, "El pago se ha realizado correctamente, en breves le llegará un correo confirmándolo");
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "El correo no se ha podido enviar con éxito");
